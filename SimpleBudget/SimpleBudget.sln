@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBudget", "SimpleBudget.csproj", "{DF6A3E59-1BB6-47EE-AEAF-4648BEEABA0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewModels", "..\ViewModels\ViewModels.csproj", "{92FE4618-AD9E-41E3-B073-7D522D57BCBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "..\Models\Models.csproj", "{D512A107-A02A-4003-979E-853DF7BEBCC8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DF6A3E59-1BB6-47EE-AEAF-4648BEEABA0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF6A3E59-1BB6-47EE-AEAF-4648BEEABA0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF6A3E59-1BB6-47EE-AEAF-4648BEEABA0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF6A3E59-1BB6-47EE-AEAF-4648BEEABA0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92FE4618-AD9E-41E3-B073-7D522D57BCBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92FE4618-AD9E-41E3-B073-7D522D57BCBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92FE4618-AD9E-41E3-B073-7D522D57BCBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92FE4618-AD9E-41E3-B073-7D522D57BCBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D512A107-A02A-4003-979E-853DF7BEBCC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D512A107-A02A-4003-979E-853DF7BEBCC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D512A107-A02A-4003-979E-853DF7BEBCC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D512A107-A02A-4003-979E-853DF7BEBCC8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
