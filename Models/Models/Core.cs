@@ -1,4 +1,6 @@
 ﻿using Prism.Mvvm;
+using System.Collections.Generic;
+using System;
 
 namespace Models
 {
@@ -49,6 +51,38 @@ namespace Models
                 //OnPropertyChanged(() => FinishedPool);
                 //OnPropertyChanged(() => Routines);
             }
+        }      
+
+        public List<string> GetTopCategories()
+        {
+            List<string> topCategories = new List<string>();
+            // TODO stub
+            topCategories.Add("Top 1");
+            topCategories.Add("Top 2");
+            // !
+            return topCategories;
+        }
+
+        public List<string> GetSubcategories(string parent)
+        {
+            List<string> categories = new List<string>();
+            // TODO stub
+            categories.Add("sub 1");
+            categories.Add("sub 2");
+            // !
+            return categories;
+        }
+
+        public bool AddCategory(string name, string parent)
+        {
+            // TODO stub
+            return true;
+        }
+
+        public bool DeleteCategory(string name, string parent)
+        {
+            // TODO stub
+            return true;
         }
 
         //ctor

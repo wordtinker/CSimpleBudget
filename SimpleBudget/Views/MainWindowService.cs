@@ -39,8 +39,11 @@ namespace SimpleBudget
 
         public void ManageCategories()
 		{
-		    // TODO
-            MessageBox.Show("TODO cats !");	
+            CategoriesViewModel vm = new CategoriesViewModel();
+            CategoriesManager window = new CategoriesManager();
+            window.DataContext = vm;
+            window.Owner = mainWindow;
+            window.ShowDialog();
 		}
 
 		public void ManageBudget()
