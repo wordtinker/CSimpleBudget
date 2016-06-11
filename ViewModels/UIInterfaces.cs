@@ -16,4 +16,9 @@ namespace ViewModels
         string SaveFileDialog(string fileExtension);
         string OpenFileDialog(string fileExtension);
     }
+
+    public interface IUIBudgetWindowService
+    {
+        // TODO
+    }
 }

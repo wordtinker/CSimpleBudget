@@ -1,5 +1,4 @@
 ﻿using Microsoft.Win32;
-using System;
 using System.Windows;
 using ViewModels;
 
@@ -48,8 +47,12 @@ namespace SimpleBudget
 
 		public void ManageBudget()
 		{
-			// TODO
-            MessageBox.Show("TODO budget !");
+            BudgetManagerService service = new BudgetManagerService();
+            BudgetManagerViewModel vm = new BudgetManagerViewModel(service);
+            BudgetManager window = new BudgetManager();
+            window.DataContext = vm;
+            window.Owner = mainWindow;
+            window.ShowDialog();
 		}
 
         public void Shutdown()
@@ -94,7 +97,5 @@ namespace SimpleBudget
         {
             return Config.ReadSetting(key);
         }
-
-        // TODO
     }
 }

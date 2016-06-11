@@ -81,10 +81,18 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Config.cs" />
+    <Compile Include="Views\BudgetManager.xaml.cs">
+      <DependentUpon>BudgetManager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BudgetManagerService.cs" />
     <Compile Include="Views\CategoriesManager.xaml.cs">
       <DependentUpon>CategoriesManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindowService.cs" />
+    <Page Include="Views\BudgetManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CategoriesManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
