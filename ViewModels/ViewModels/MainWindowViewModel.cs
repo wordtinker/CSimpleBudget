@@ -199,6 +199,20 @@ namespace ViewModels
             }
         }
 
+        public void LoadLastOpenedFile()
+        {
+            string fileName = windowService.GetConfig("LastFile");
+            if (fileName != string.Empty)
+            {
+                FileReader fileHandler = new SQLiteReader();
+                if (fileHandler.LoadFile(fileName))
+                {
+                    core.Storage = fileHandler;
+                    OpenedFile = fileName;
+                }
+            }
+        }
+
         public void SaveLastOpenedFile(string fileName)
         {
             OpenedFile = fileName;
@@ -210,8 +224,7 @@ namespace ViewModels
         {
             this.windowService = windowService;
             core = Core.Instance;
-            //LoadLastOpenedFile();
-            // TODO 
+            LoadLastOpenedFile();
         }
     }
 }
