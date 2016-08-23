@@ -31,7 +31,6 @@ namespace ViewModels
             }
         }
 
-        // TODO menu commands
         public ICommand ShowHelp
         {
             get
@@ -54,7 +53,10 @@ namespace ViewModels
                 (showBudgetReport = new DelegateCommand(() =>
                 {
                     windowService.ShowBudgetReport();
-                }));
+                }, () =>
+                {
+                    return !string.IsNullOrEmpty(OpenedFile);
+                }).ObservesProperty(() => OpenedFile));
             }
         }
 
@@ -66,7 +68,10 @@ namespace ViewModels
                 (showBalanceReport = new DelegateCommand(() =>
                 {
                     windowService.ShowBalanceReport();
-                }));
+                }, () =>
+                {
+                    return !string.IsNullOrEmpty(OpenedFile);
+                }).ObservesProperty(() => OpenedFile));
             }
         }
 		
@@ -78,7 +83,10 @@ namespace ViewModels
                 (manageAccounts = new DelegateCommand(() =>
                 {
                     windowService.ManageAccounts();
-                }));
+                }, () =>
+                {
+                    return !string.IsNullOrEmpty(OpenedFile);
+                }).ObservesProperty(() => OpenedFile));
             }
         }
 		
@@ -90,7 +98,10 @@ namespace ViewModels
                 (manageCategories = new DelegateCommand(() =>
                 {
                     windowService.ManageCategories();
-                }));
+                }, () =>
+                {
+                    return !string.IsNullOrEmpty(OpenedFile);
+                }).ObservesProperty(() => OpenedFile));
             }
         }
 		
@@ -102,7 +113,10 @@ namespace ViewModels
                 (manageBudget = new DelegateCommand(() =>
                 {
                     windowService.ManageBudget();
-                }));
+                }, () =>
+                {
+                    return !string.IsNullOrEmpty(OpenedFile);
+                }).ObservesProperty(() => OpenedFile));
             }
         }
 
@@ -178,7 +192,10 @@ namespace ViewModels
                 {
                     SaveLastOpenedFile(string.Empty);
                     core.Storage = null;
-                }));
+                }, () =>
+                {
+                    return !string.IsNullOrEmpty(OpenedFile);
+                }).ObservesProperty(() => OpenedFile));
             }
         }
 
