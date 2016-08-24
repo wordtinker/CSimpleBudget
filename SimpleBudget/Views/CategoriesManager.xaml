@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimpleBudget"
         mc:Ignorable="d"
-        Title="CategoriesManager" Height="300" Width="300">
+        Title="Categories" Height="300" Width="300">
     <DockPanel>
         <TreeView DockPanel.Dock="Left" ItemsSource="{Binding Categories}">
             <TreeView.ItemTemplate>

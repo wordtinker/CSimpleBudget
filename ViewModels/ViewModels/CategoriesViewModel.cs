@@ -2,90 +2,64 @@
 using System.Collections.ObjectModel;
 using Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ViewModels
 {
     public class Node
     {
-        public string Title { get; set; }
-        public ObservableCollection<Node> Items { get; set; }
-        public Node Parent{ get; set; }
+        public Category category;
 
-        public Node()
+        public string Title { get { return category.Name; } }
+        public ObservableCollection<Node> Items { get; }
+
+        public Node(Category cat)
         {
-            this.Items = new ObservableCollection<Node>();
+            category = cat;
+            Items = new ObservableCollection<Node>();
+            foreach (Category item in cat.Children)
+            {
+                Items.Add(new Node(item));
+            }
         }
     }
 
     public class CategoriesViewModel : BindableBase
     {
-        public ObservableCollection<Node> Categories { get; }
-        public ObservableCollection<string> TopCategories{ get; }
+        public IEnumerable<Node> Categories {
+            get
+            {
+                return from c in Core.Instance.Categories
+                       where c.Parent == null && c.Name != string.Empty
+                       select new Node(c);
+            }
+        }
+        public IEnumerable<string> TopCategories{
+            get
+            {
+                return from c in Core.Instance.Categories
+                       where c.Parent == null
+                       select c.Name;
+            }
+        }
 
-        public bool DeleteCategory(Node category)
+        public bool DeleteCategory(Node node)
         {
-            if (Core.Instance.DeleteCategory(category.Title, category.Parent?.Title ?? string.Empty))
-            {
-                if(category.Parent == null)
-                {
-                    TopCategories.Remove(category.Title);
-                    Categories.Remove(category);
-                }
-                else
-                {
-                    category.Parent.Items.Remove(category);
-                }
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return Core.Instance.DeleteCategory(node.category);
         }
 
         public bool AddCategory(string name, string parent)
         {
-            if(Core.Instance.AddCategory(name, parent))
-            {
-                if(parent == string.Empty)
-                {
-                    TopCategories.Insert(TopCategories.Count - 1, name);
-                    Categories.Add(new Node { Title = name });
-                } else
-                {
-                    foreach (Node cat in Categories)
-                    {
-                        if (cat.Title == parent)
-                        {
-                            cat.Items.Add(new Node { Title = name, Parent = cat });
-                            break;
-                        }
-                    }
-                }
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return Core.Instance.AddCategory(name, parent);
         }
 
         public CategoriesViewModel()
         {
-            List<string> parents = Core.Instance.GetTopCategories();
-            TopCategories = new ObservableCollection<string>(parents);
-            TopCategories.Add(string.Empty);
-
-            Categories = new ObservableCollection<Node>();
-            foreach (string parent in parents)
+            Core.Instance.PropertyChanged += (object sender, System.ComponentModel.PropertyChangedEventArgs e) =>
             {
-                Node top = new Node { Title = parent };
-                Categories.Add(top);
-                foreach (string child in Core.Instance.GetSubcategories(parent))
-                {
-                    top.Items.Add(new Node { Title = child, Parent = top });
-                }
-            }
+                OnPropertyChanged(() => Categories);
+                OnPropertyChanged(() => TopCategories);
+            };
         }
     }
 }

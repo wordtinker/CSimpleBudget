@@ -12,23 +12,37 @@ namespace Models
         public override string Extension { get; } = "Budget files (*.sbdb)|*.sbdb";
 
         /************** Categories *****************/
-        public override List<string> SelectCategories()
+        public override List<Category> SelectCategories()
         {
-            List<string> categories = new List<string>();
+            // Get top categories
+            List<Category> topCategories = new List<Category>();
             string sql = "SELECT name FROM Categories ORDER BY name ASC";
             using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
             {
                 SQLiteDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
-                    categories.Add(dr.GetString(0));
+                    topCategories.Add(new Category { Name = dr.GetString(0), Parent = null });
                 }
                 dr.Close();
             }
+            // Get sucategories
+            List<Category> categories = new List<Category>(topCategories);
+            foreach (Category top in topCategories)
+            {
+                foreach (string name in SelectSubcategoriesFor(top.Name))
+                {
+                    Category item = new Category { Name = name, Parent = top };
+                    categories.Add(item);
+                    top.Children.Add(item);
+                }
+            }
+            // Get empty top category
+            categories.Add(new Category { Name = string.Empty, Parent = null });
             return categories;
         }
 
-        public override List<string> SelectSubcategoriesFor(string parent)
+        private List<string> SelectSubcategoriesFor(string parent)
         {
             List<string> categories = new List<string>();
             string sql = "SELECT name FROM Subcategories WHERE parent=@parent";
@@ -72,42 +86,62 @@ namespace Models
             }
         }
 
-        public override bool AddCategory(string name)
+        public override bool AddCategory(string name, string parent)
         {
-            string sql = "INSERT INTO Categories VALUES(@name)";
-            return ManageCategory(sql, name);
-        }
-
-        public override bool DeleteCategory(string name)
-        {
-            // TODO 
-            // # Can't delete if there is a child category
-            if (ExistsSubcategoryFor(name))
+            if (parent == string.Empty)
             {
-                return false;
+                string sql = "INSERT INTO Categories VALUES(@name)";
+                return ManageCategory(sql, name);
             }
             else
             {
-                string sql = "DELETE FROM Categories WHERE name=@name";
-                return ManageCategory(sql, name);
+                string sql = "INSERT INTO Subcategories VALUES(@name, @parent)";
+                return ManageSubcategory(sql, name, parent);
             }
         }
 
-        private bool ExistsSubcategoryFor(string parent)
+        public override bool DeleteCategory(Category cat)
         {
-            string sql = "SELECT COUNT(*) FROM Subcategories WHERE parent=@parent";
-            using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+            // Top category with no children
+            if (cat.Parent == null && cat.Children.Count == 0)
             {
-                cmd.Parameters.Add(new SQLiteParameter()
-                {
-                    ParameterName = "@parent",
-                    DbType = System.Data.DbType.String,
-                    Value = parent
-                });
-                Int32 count = Convert.ToInt32(cmd.ExecuteScalar());
-                return count > 0;
+                string sql = "DELETE FROM Categories WHERE name=@name";
+                return ManageCategory(sql, cat.Name);
+            }
+            else if (cat.Parent != null)
+            {
+                // TODO
+                //# Can't delete if there is a transaction or budget record
+                //            if (self.exists_transaction_for_category(category_id) or
+                //                self.exists_record_for_category(category_id)):
+                //            return False
+
+                // TODO
+                string sql = "";
+                throw new NotImplementedException();
+            }
+            else
+            {   // Can't delete if there is a child category
+                return false;
             }
         }
+
+        // TODO drop obsolete
+        //private bool ExistsSubcategoryFor(string parent)
+        //{
+        //    string sql = "SELECT COUNT(*) FROM Subcategories WHERE parent=@parent";
+        //    using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+        //    {
+        //        cmd.Parameters.Add(new SQLiteParameter()
+        //        {
+        //            ParameterName = "@parent",
+        //            DbType = System.Data.DbType.String,
+        //            Value = parent
+        //        });
+        //        Int32 count = Convert.ToInt32(cmd.ExecuteScalar());
+        //        return count > 0;
+        //    }
+        //}
 
         private bool ManageSubcategory(string sql, string name, string parent)
         {
@@ -135,25 +169,6 @@ namespace Models
             {
                 return false;
             }
-        }
-
-        public override bool AddSubcategory(string name, string parent)
-        {
-            string sql = "INSERT INTO Subcategories VALUES(@name, @parent)";
-            return ManageSubcategory(sql, name, parent);
-        }
-
-        public override bool DeleteSubcategory(string name, string parent)
-        {
-            // TODO
-            //# Can't delete if there is a transaction or budget record
-            //            if (self.exists_transaction_for_category(category_id) or
-            //                self.exists_record_for_category(category_id)):
-            //            return False
-
-            // TODO
-            string sql = "";
-            throw new NotImplementedException();
         }
 
         public override bool InitializeFile(string fileName)
@@ -215,7 +230,6 @@ namespace Models
                 connection = new SQLiteConnection(cString);
                 connection.Open();
                 return true;
-                // TODO unload file
             }
             catch (Exception)
             {

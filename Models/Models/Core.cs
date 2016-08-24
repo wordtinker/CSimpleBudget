@@ -1,6 +1,5 @@
 ﻿using Prism.Mvvm;
 using System.Collections.Generic;
-using System;
 
 namespace Models
 {
@@ -17,6 +16,22 @@ namespace Models
             }
         }
 
+        private List<Category> categories = new List<Category>();
+        public List<Category> Categories {
+            get
+            {
+                categories.Clear();
+                if (storage != null)
+                {
+                    foreach (Category cat in storage.SelectCategories())
+                    {
+                        categories.Add(cat);
+                    }
+                }
+                return categories;
+            }
+        }
+
         public FileReader Storage
         {
             get
@@ -25,76 +40,35 @@ namespace Models
             }
             set
             {
-                // TODO ! old code
-                //// Clear Pool
-                //Pool.Clear();
-                //FinishedPool.Clear();
-                //Routines.Clear();
-                //// Set new storage and load tasks.
                 storage = value;
-                //if (storage != null)
-                //{
-                //    foreach (TDTask task in storage.GetTasks())
-                //    {
-                //        Pool.Add(task);
-                //    }
-                //    foreach (TDTask task in storage.GetFinishedTasks())
-                //    {
-                //        FinishedPool.Add(task);
-                //    }
-                //    foreach (Routine item in storage.GetRoutines())
-                //    {
-                //        Routines.Add(item);
-                //    }
-                //}
-                //OnPropertyChanged(() => Pool);
-                //OnPropertyChanged(() => FinishedPool);
-                //OnPropertyChanged(() => Routines);
+                OnPropertyChanged(() => Categories);
             }
-        }      
-
-        public List<string> GetTopCategories()
-        {
-            return storage.SelectCategories();
-        }
-
-        public List<string> GetSubcategories(string parent)
-        {
-            return storage.SelectSubcategoriesFor(parent);
         }
 
         public bool AddCategory(string name, string parent)
         {
-            if (parent == string.Empty)
+            if (storage.AddCategory(name, parent))
             {
-                return storage.AddCategory(name);
+                OnPropertyChanged(() => Categories);
+                return true;
             }
             else
             {
-                return storage.AddSubcategory(name, parent);
+                return false;
             }
         }
 
-        public bool DeleteCategory(string name, string parent)
+        public bool DeleteCategory(Category cat)
         {
-            if (parent == string.Empty)
+            if (storage.DeleteCategory(cat))
             {
-                return storage.DeleteCategory(name);
+                OnPropertyChanged(() => Categories);
+                return true;
             }
             else
             {
-                return storage.DeleteSubcategory(name, parent);
+                return false;
             }
-        }
-
-        //ctor
-        private Core()
-        {
-            // TODO ! old code
-            //Pool = new List<TDTask>();
-            //FinishedPool = new List<TDTask>();
-            //Routines = new List<Routine>();
-
         }
     }
 }
