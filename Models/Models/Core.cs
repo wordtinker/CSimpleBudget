@@ -32,6 +32,21 @@ namespace Models
             }
         }
 
+        private List<Account> accounts = new List<Account>();
+        public List<Account> Accounts
+        {
+            get
+            {
+                accounts.Clear();
+                if (storage != null)
+                {
+                    // TODO Stub
+                    accounts.Add(new Account {Name="abc", Closed=true, Excluded=false, Type=AccType.Cash });
+                }
+                return accounts;
+            }
+        }
+
         public FileReader Storage
         {
             get

@@ -6,7 +6,29 @@
         xmlns:local="clr-namespace:SimpleBudget"
         mc:Ignorable="d"
         Title="Accounts" Height="300" Width="300">
-    <Grid>
-        
-    </Grid>
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Right">
+            <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding AccTypes}"/>
+            <CheckBox></CheckBox>
+            <Label></Label>
+            <CheckBox></CheckBox>
+            <Label></Label>
+            <TextBlock x:Name="AccName" Width="100"/>
+            <Button Content="New Account" Click="AddButton_Click"/>
+        </DockPanel>
+        <ListBox DockPanel.Dock="Left"
+                 ItemsSource="{Binding Accounts}"
+                 SelectionMode="Single">
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Delete Account" Click="DeleteAccount_Click"/>
+                </ContextMenu>
+            </ListBox.ContextMenu>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </DockPanel>
 </Window>

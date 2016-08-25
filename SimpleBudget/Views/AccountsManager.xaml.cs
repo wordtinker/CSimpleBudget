@@ -12,6 +12,14 @@ namespace SimpleBudget
             InitializeComponent();
         }
 
-        // TODO !!!
+        private void DeleteAccount_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO !!!
+        }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO
+        }
     }
 }
