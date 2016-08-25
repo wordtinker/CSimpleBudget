@@ -32,9 +32,12 @@ namespace SimpleBudget
 		
 		public void ManageAccounts()
 		{
-			// TODO
-            MessageBox.Show("TODO Acc !");
-		}
+            AccountsViewModel vm = new AccountsViewModel();
+            AccountsManager window = new AccountsManager();
+            window.DataContext = vm;
+            window.Owner = mainWindow;
+            window.ShowDialog();
+        }
 
         public void ManageCategories()
 		{
