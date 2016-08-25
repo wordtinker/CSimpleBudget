@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using ViewModels;
 
 namespace SimpleBudget
@@ -25,7 +26,7 @@ namespace SimpleBudget
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Controls.MenuItem mi = (System.Windows.Controls.MenuItem)sender;
+            MenuItem mi = (MenuItem)sender;
             Node node = (Node)mi.DataContext;
 
             if (!((CategoriesViewModel)this.DataContext).DeleteCategory(node))

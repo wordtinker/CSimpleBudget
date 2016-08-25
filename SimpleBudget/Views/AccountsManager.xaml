@@ -8,17 +8,24 @@
         Title="Accounts" Height="300" Width="300">
     <DockPanel>
         <DockPanel DockPanel.Dock="Right">
-            <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding AccTypes}"/>
-            <CheckBox></CheckBox>
-            <Label></Label>
-            <CheckBox></CheckBox>
-            <Label></Label>
-            <TextBlock x:Name="AccName" Width="100"/>
-            <Button Content="New Account" Click="AddButton_Click"/>
+            <StackPanel Orientation="Vertical" DockPanel.Dock="Bottom">
+                <TextBox x:Name="AccName" Width="100"/>
+                <Button Content="New Account" Click="AddButton_Click"/>
+            </StackPanel>
+            <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding AccTypes}"
+                      SelectedIndex="{Binding SelectedAccount.Type}"/>
+            <CheckBox DataContext="{Binding SelectedAccount}"
+                      x:Name="AccClosed" IsChecked="{Binding Closed}"/>
+            <Label Content="Closed"/>
+            <CheckBox DataContext="{Binding SelectedAccount}"
+                      x:Name="AccOut" IsChecked="{Binding Excluded}"/>
+            <Label Content="Excluded from budget"/>
         </DockPanel>
         <ListBox DockPanel.Dock="Left"
                  ItemsSource="{Binding Accounts}"
-                 SelectionMode="Single">
+                 SelectionMode="Single"
+                 SelectionChanged="ListBox_SelectionChanged"
+                 SelectedIndex="0">
             <ListBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Delete Account" Click="DeleteAccount_Click"/>

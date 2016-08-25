@@ -41,10 +41,16 @@ namespace Models
                 if (storage != null)
                 {
                     // TODO Stub
-                    accounts.Add(new Account {Name="abc", Closed=true, Excluded=false, Type=AccType.Cash });
+                    accounts.Add(new Account { Name="abc", Closed=true, Excluded=false, Type=AccType.Cash });
+                    accounts.Add(new Account { Name = "B account", Closed = false, Excluded = true, Type = AccType.Bank });
                 }
                 return accounts;
             }
+        }
+
+        public void UpdateAccount(Account acc)
+        {
+            // TODO
         }
 
         public FileReader Storage
