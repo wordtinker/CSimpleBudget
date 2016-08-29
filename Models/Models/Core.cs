@@ -1,5 +1,7 @@
 ﻿using Prism.Mvvm;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System;
 
 namespace Models
 {
@@ -15,6 +17,8 @@ namespace Models
                 return instance;
             }
         }
+
+        public ObservableCollection<Account> Accounts { get; } = new ObservableCollection<Account>();
 
         private List<Category> categories = new List<Category>();
         public List<Category> Categories {
@@ -32,25 +36,23 @@ namespace Models
             }
         }
 
-        private List<Account> accounts = new List<Account>();
-        public List<Account> Accounts
-        {
-            get
-            {
-                accounts.Clear();
-                if (storage != null)
-                {
-                    // TODO Stub
-                    accounts.Add(new Account { Name="abc", Closed=true, Excluded=false, Type=AccType.Cash });
-                    accounts.Add(new Account { Name = "B account", Closed = false, Excluded = true, Type = AccType.Bank });
-                }
-                return accounts;
-            }
-        }
-
         public void UpdateAccount(Account acc)
         {
             // TODO
+        }
+
+        public bool AddAccount(string accName)
+        {
+            // TODO stub
+            Accounts.Add(new Account { Name = accName, Type = AccType.Bank });
+            return true;
+        }
+
+        public bool DeleteAccount(Account account)
+        {
+            // TODO stub
+            Accounts.RemoveAt(0);
+            return true;
         }
 
         public FileReader Storage
@@ -62,6 +64,15 @@ namespace Models
             set
             {
                 storage = value;
+
+                Accounts.Clear();
+                if (storage != null)
+                {
+                    // TODO Stub
+                    Accounts.Add(new Account { Name = "abc", Closed = true, Excluded = false, Type = AccType.Cash });
+                    Accounts.Add(new Account { Name = "B account", Closed = false, Excluded = true, Type = AccType.Bank });
+                }
+
                 OnPropertyChanged(() => Categories);
             }
         }

@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using Models;
 using System.Linq;
+using System.Collections.Specialized;
+using System;
 
 namespace ViewModels
 {
     public class Item
     {
-        private Account account;
+        public Account account;
 
         public string Name { get { return account.Name; }}
         public int Type
@@ -74,13 +76,22 @@ namespace ViewModels
             OnPropertyChanged(() => SelectedAccount);
         }
 
-        // TODO
-        //public ICommand AddAccount
-        //{
-        //    get
-        //    {
-        //        // TODO !!!
-        //    }
-        //}
+        public bool AddAccount(string accName)
+        {
+            return Core.Instance.AddAccount(accName);
+        }
+
+        public bool DeleteAccount(Item item)
+        {
+            return Core.Instance.DeleteAccount(item.account);
+        }
+
+        public AccountsViewModel()
+        {
+            Core.Instance.Accounts.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
+            {
+                OnPropertyChanged(() => Accounts);
+            };
+        }
     }
 }

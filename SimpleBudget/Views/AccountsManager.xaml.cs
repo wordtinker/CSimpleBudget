@@ -17,12 +17,21 @@ namespace SimpleBudget
 
         private void DeleteAccount_Click(object sender, RoutedEventArgs e)
         {
-            // TODO !!!
+            MenuItem mi = (MenuItem)sender;
+            Item item = (Item)mi.DataContext;
+            if (!((AccountsViewModel)this.DataContext).DeleteAccount(item))
+            {
+                MessageBox.Show("Can't delete account.");
+            }
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            // TODO
+            string accName = AccName.Text;
+            if (!((AccountsViewModel)this.DataContext).AddAccount(accName))
+            {
+                MessageBox.Show("Can't add account.");
+            }
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

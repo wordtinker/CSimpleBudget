@@ -26,14 +26,15 @@
                  SelectionMode="Single"
                  SelectionChanged="ListBox_SelectionChanged"
                  SelectedIndex="0">
-            <ListBox.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Delete Account" Click="DeleteAccount_Click"/>
-                </ContextMenu>
-            </ListBox.ContextMenu>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
+                    <TextBlock Text="{Binding Name}">
+                        <TextBlock.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Delete Account" Click="DeleteAccount_Click"/>
+                            </ContextMenu>
+                        </TextBlock.ContextMenu>
+                    </TextBlock>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
