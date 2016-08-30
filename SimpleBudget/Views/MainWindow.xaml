@@ -31,5 +31,14 @@
                 <MenuItem Header="_About" Command="{Binding ShowHelp}"/>
             </MenuItem>
         </Menu>
+        <ListView DockPanel.Dock="Left" ItemsSource="{Binding Accounts}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Header="Type" DisplayMemberBinding="{Binding SType}"/>
+                    <GridViewColumn Header="Balance" DisplayMemberBinding="{Binding Balance}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </DockPanel>
 </Window>

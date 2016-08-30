@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using Models;
 using System.Linq;
-using System.Collections.Specialized;
-using System;
 
 namespace ViewModels
 {
-    public class Item
+    public class Item : BindableBase
     {
         public Account account;
 
@@ -18,7 +16,13 @@ namespace ViewModels
             set
             {
                 account.Type = (AccType)value;
-                Core.Instance.UpdateAccount(account);
+            }
+        }
+        public string SType
+        {
+            get
+            {
+                return AccountsViewModel.AccTypes.ElementAt(Type);
             }
         }
         public bool Closed
@@ -27,7 +31,6 @@ namespace ViewModels
             set
             {
                 account.Closed = value;
-                Core.Instance.UpdateAccount(account);
             }
         }
         public bool Excluded
@@ -36,8 +39,12 @@ namespace ViewModels
             set
             {
                 account.Excluded = value;
-                Core.Instance.UpdateAccount(account);
             }
+        }
+
+        public decimal Balance
+        {
+            get { return account.Balance; }
         }
 
         public Item(Account acc)
@@ -49,7 +56,7 @@ namespace ViewModels
 
     public class AccountsViewModel : BindableBase
     {
-        public IEnumerable<string> AccTypes
+        public static IEnumerable<string> AccTypes
         {
             get
             {
@@ -88,7 +95,7 @@ namespace ViewModels
 
         public AccountsViewModel()
         {
-            Core.Instance.Accounts.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
+            Core.Instance.Accounts.ListChanged += (sender, e) =>
             {
                 OnPropertyChanged(() => Accounts);
             };

@@ -1,7 +1,6 @@
 ﻿using Prism.Mvvm;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System;
+using System.ComponentModel;
 
 namespace Models
 {
@@ -18,7 +17,7 @@ namespace Models
             }
         }
 
-        public ObservableCollection<Account> Accounts { get; } = new ObservableCollection<Account>();
+        public BindingList<Account> Accounts { get; } = new BindingList<Account>();
 
         private List<Category> categories = new List<Category>();
         public List<Category> Categories {
@@ -38,14 +37,20 @@ namespace Models
 
         public void UpdateAccount(Account acc)
         {
-            // TODO
+            Storage.UpdateAccount(acc);
         }
 
         public bool AddAccount(string accName)
         {
-            // TODO stub
-            Accounts.Add(new Account { Name = accName, Type = AccType.Bank });
-            return true;
+            if (storage.AddAccount(accName))
+            {
+                Accounts.Add(new Account { Name = accName, Type = AccType.Bank });
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public bool DeleteAccount(Account account)
@@ -68,9 +73,7 @@ namespace Models
                 Accounts.Clear();
                 if (storage != null)
                 {
-                    // TODO Stub
-                    Accounts.Add(new Account { Name = "abc", Closed = true, Excluded = false, Type = AccType.Cash });
-                    Accounts.Add(new Account { Name = "B account", Closed = false, Excluded = true, Type = AccType.Bank });
+                    storage.SelectAccounts().ForEach(Accounts.Add);
                 }
 
                 OnPropertyChanged(() => Categories);

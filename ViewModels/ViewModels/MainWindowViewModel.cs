@@ -2,6 +2,8 @@
 using Prism.Mvvm;
 using System.Windows.Input;
 using Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ViewModels
 {
@@ -199,6 +201,17 @@ namespace ViewModels
             }
         }
 
+        // TODO total line
+        public IEnumerable<Item> Accounts
+        {
+            get
+            {
+                return from acc in core.Accounts
+                       where acc.Closed == false
+                       select new Item(acc);
+            }
+        }
+
         public void LoadLastOpenedFile()
         {
             string fileName = windowService.GetConfig("LastFile");
@@ -224,6 +237,10 @@ namespace ViewModels
         {
             this.windowService = windowService;
             core = Core.Instance;
+            core.Accounts.ListChanged += (sender, e) =>
+            {
+                OnPropertyChanged(() => Accounts);
+            };
             LoadLastOpenedFile();
         }
     }

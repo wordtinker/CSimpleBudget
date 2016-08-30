@@ -171,6 +171,109 @@ namespace Models
             }
         }
 
+        /************** Accounts *****************/
+
+        public override List<Account> SelectAccounts()
+        {
+            List<Account> accounts = new List<Account>();
+            string sql = "SELECT *, rowid FROM Accounts";
+            using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+            {
+                SQLiteDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    accounts.Add(new Account {
+                        Name = dr.GetString(0),
+                        Type = (AccType)Enum.Parse(typeof(AccType), dr.GetString(1)),
+                        Balance = dr.GetDecimal(2)/100,
+                        Closed = Convert.ToBoolean(dr.GetInt32(3)),
+                        Excluded = Convert.ToBoolean(dr.GetInt32(4)),
+                        Id = dr.GetInt32(5)
+                    });
+                }
+                dr.Close();
+            }
+            return accounts;
+        }
+
+        public override bool AddAccount(string name)
+        {
+            string sql = "INSERT INTO Accounts VALUES(@name, @type, 0, 0, 0)";
+            try
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+                {
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@name",
+                        DbType = System.Data.DbType.String,
+                        Value = name
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@type",
+                        DbType = System.Data.DbType.String,
+                        Value = AccType.Bank.ToString()
+                    });
+                    cmd.ExecuteNonQuery();
+                }
+                return true;
+            }
+            catch (SQLiteException)
+            {
+                return false;
+            }
+        }
+
+        public override void UpdateAccount(Account acc)
+        {
+            string sql = "UPDATE Accounts SET type=@type, balance=@balance, closed=@closed, " +
+                "exbudget=@excluded WHERE rowid=@rowid";
+            try
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+                {
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@type",
+                        DbType = System.Data.DbType.String,
+                        Value = acc.Type.ToString()
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@balance",
+                        DbType = System.Data.DbType.Int32,
+                        Value = decimal.ToInt32(acc.Balance * 100)
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@closed",
+                        DbType = System.Data.DbType.Int32,
+                        Value = Convert.ToInt32(acc.Closed)
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@excluded",
+                        DbType = System.Data.DbType.Int32,
+                        Value = Convert.ToInt32(acc.Excluded)
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@rowid",
+                        DbType = System.Data.DbType.Int32,
+                        Value = acc.Id
+                    });
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (SQLiteException)
+            {
+                //
+            }
+        }
+
+        /************** File *****************/
+
         public override bool InitializeFile(string fileName)
         {
             // TOTO Later : move to foreign key support and cascade delete;
