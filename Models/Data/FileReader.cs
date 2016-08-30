@@ -12,6 +12,7 @@ namespace Models
         public abstract List<Account> SelectAccounts();
         public abstract bool AddAccount(string name);
         public abstract void UpdateAccount(Account acc);
+        public abstract bool DeleteAccount(Account acc);
 
         public abstract List<Category> SelectCategories();
         public abstract bool AddCategory(string name, string parent);

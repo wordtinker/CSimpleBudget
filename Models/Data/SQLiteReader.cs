@@ -110,38 +110,23 @@ namespace Models
             }
             else if (cat.Parent != null)
             {
-                // TODO
-                //# Can't delete if there is a transaction or budget record
-                //            if (self.exists_transaction_for_category(category_id) or
-                //                self.exists_record_for_category(category_id)):
-                //            return False
-
-                // TODO
-                string sql = "";
-                throw new NotImplementedException();
+                // Can't delete if there is a transaction or budget record
+                if (ExistsTransaction(cat) || ExistsRecord(cat))
+                {
+                    return false;
+                }
+                else
+                {
+                    // TODO
+                    string sql = "";
+                    throw new NotImplementedException();
+                }
             }
             else
             {   // Can't delete if there is a child category
                 return false;
             }
         }
-
-        // TODO drop obsolete
-        //private bool ExistsSubcategoryFor(string parent)
-        //{
-        //    string sql = "SELECT COUNT(*) FROM Subcategories WHERE parent=@parent";
-        //    using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
-        //    {
-        //        cmd.Parameters.Add(new SQLiteParameter()
-        //        {
-        //            ParameterName = "@parent",
-        //            DbType = System.Data.DbType.String,
-        //            Value = parent
-        //        });
-        //        Int32 count = Convert.ToInt32(cmd.ExecuteScalar());
-        //        return count > 0;
-        //    }
-        //}
 
         private bool ManageSubcategory(string sql, string name, string parent)
         {
@@ -270,6 +255,67 @@ namespace Models
             {
                 //
             }
+        }
+
+        public override bool DeleteAccount(Account acc)
+        {
+            // Cant delete if there is a transaction on account
+            if (ExistsTransaction(acc))
+            {
+                return false;
+            }
+
+            string sql = "DELETE FROM Accounts WHERE rowid=@rowid";
+            try
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+                {
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@rowid",
+                        DbType = System.Data.DbType.Int32,
+                        Value = acc.Id
+                    });
+                    cmd.ExecuteNonQuery();
+                }
+                return true;
+            }
+            catch (SQLiteException)
+            {
+                return false;
+            }
+        }
+
+        /************** Transactions *****************/
+
+        private bool ExistsTransaction(Account acc)
+        {
+            string sql = "SELECT COUNT(*) FROM Transactions WHERE acc_id=@rowid";
+            using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+            {
+                cmd.Parameters.Add(new SQLiteParameter()
+                {
+                    ParameterName = "@rowid",
+                    DbType = System.Data.DbType.Int32,
+                    Value = acc.Id
+                });
+                Int32 count = Convert.ToInt32(cmd.ExecuteScalar());
+                return count > 0;
+            }
+        }
+
+        private bool ExistsTransaction(Category cat)
+        {
+            // TODO
+            return false;
+        }
+
+        /************** Records *****************/
+
+        private bool ExistsRecord(Category cat)
+        {
+            // TODO
+            return false;
         }
 
         /************** File *****************/

@@ -55,9 +55,15 @@ namespace Models
 
         public bool DeleteAccount(Account account)
         {
-            // TODO stub
-            Accounts.RemoveAt(0);
-            return true;
+            if (storage.DeleteAccount(account))
+            {
+                Accounts.Remove(account);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public FileReader Storage
