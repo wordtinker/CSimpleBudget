@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using ViewModels;
 
 
@@ -14,6 +16,14 @@ namespace SimpleBudget
             MainWindowService service = new MainWindowService(this);
             this.DataContext = new MainWindowViewModel(service);
             InitializeComponent();
+        }
+
+        public void Account_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ListViewItem lvi = (ListViewItem)sender;
+            Item item = (Item)lvi.Content;
+            MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
+            vm.ShowTransactionRoll(item);
         }
     }
 }

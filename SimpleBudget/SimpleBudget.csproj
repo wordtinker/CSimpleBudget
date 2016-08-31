@@ -92,6 +92,10 @@
       <DependentUpon>CategoriesManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindowService.cs" />
+    <Compile Include="Views\TransactionRoll.xaml.cs">
+      <DependentUpon>TransactionRoll.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TransactionRollService.cs" />
     <Page Include="Views\AccountsManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -116,6 +120,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\TransactionRoll.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

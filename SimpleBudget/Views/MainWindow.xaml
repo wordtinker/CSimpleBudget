@@ -39,6 +39,11 @@
                     <GridViewColumn Header="Balance" DisplayMemberBinding="{Binding Balance}"/>
                 </GridView>
             </ListView.View>
+            <ListView.Resources>
+                <Style TargetType="ListViewItem">
+                    <EventSetter Event="MouseDoubleClick" Handler="Account_DoubleClick"/>
+                </Style>
+            </ListView.Resources>
         </ListView>
     </DockPanel>
 </Window>

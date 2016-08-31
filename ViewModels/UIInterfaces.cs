@@ -3,10 +3,10 @@ namespace ViewModels
 {
     public interface IUIMainWindowService
     {
-        // TODO
         void ShowMessage(string message);
         void ShowBudgetReport();
         void ShowBalanceReport();
+        void ShowTransactionRoll(Item item);
 		void ManageAccounts();
 		void ManageCategories();
 		void ManageBudget();
@@ -15,6 +15,11 @@ namespace ViewModels
         string GetConfig(string key);
         string SaveFileDialog(string fileExtension);
         string OpenFileDialog(string fileExtension);
+    }
+
+    public interface IUITransactionRollService
+    {
+        // TODO
     }
 
     public interface IUIBudgetWindowService

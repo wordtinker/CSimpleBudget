@@ -201,6 +201,11 @@ namespace ViewModels
             }
         }
 
+        public void ShowTransactionRoll(Item item)
+        {
+            windowService.ShowTransactionRoll(item);
+        }
+
         // TODO total line
         public IEnumerable<Item> Accounts
         {
