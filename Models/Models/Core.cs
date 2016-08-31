@@ -42,9 +42,10 @@ namespace Models
 
         public bool AddAccount(string accName)
         {
-            if (storage.AddAccount(accName))
+            Account newAcc;
+            if (storage.AddAccount(accName, out newAcc))
             {
-                Accounts.Add(new Account { Name = accName, Type = AccType.Bank });
+                Accounts.Add(newAcc);
                 return true;
             }
             else
@@ -88,7 +89,8 @@ namespace Models
 
         public bool AddCategory(string name, string parent)
         {
-            if (storage.AddCategory(name, parent))
+            Category newCat;
+            if (storage.AddCategory(name, parent, out newCat))
             {
                 OnPropertyChanged(() => Categories);
                 return true;

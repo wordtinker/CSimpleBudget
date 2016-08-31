@@ -16,13 +16,13 @@ namespace Models
         {
             // Get top categories
             List<Category> topCategories = new List<Category>();
-            string sql = "SELECT name FROM Categories ORDER BY name ASC";
+            string sql = "SELECT name, rowid FROM Categories ORDER BY name ASC";
             using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
             {
                 SQLiteDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
-                    topCategories.Add(new Category { Name = dr.GetString(0), Parent = null });
+                    topCategories.Add(new Category { Name = dr.GetString(0), Parent = null, Id = dr.GetInt32(1) });
                 }
                 dr.Close();
             }
@@ -30,11 +30,11 @@ namespace Models
             List<Category> categories = new List<Category>(topCategories);
             foreach (Category top in topCategories)
             {
-                foreach (string name in SelectSubcategoriesFor(top.Name))
+                foreach (Category child in SelectSubcategoriesFor(top.Name))
                 {
-                    Category item = new Category { Name = name, Parent = top };
-                    categories.Add(item);
-                    top.Children.Add(item);
+                    child.Parent = top;
+                    categories.Add(child);
+                    top.Children.Add(child);
                 }
             }
             // Get empty top category
@@ -42,10 +42,10 @@ namespace Models
             return categories;
         }
 
-        private List<string> SelectSubcategoriesFor(string parent)
+        private List<Category> SelectSubcategoriesFor(string parent)
         {
-            List<string> categories = new List<string>();
-            string sql = "SELECT name FROM Subcategories WHERE parent=@parent";
+            List<Category> categories = new List<Category>();
+            string sql = "SELECT name, rowid FROM Subcategories WHERE parent=@parent";
             using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
             {
                 cmd.Parameters.Add(new SQLiteParameter()
@@ -57,14 +57,14 @@ namespace Models
                 SQLiteDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
-                    categories.Add(dr.GetString(0));
+                    categories.Add(new Category { Name = dr.GetString(0), Id = dr.GetInt32(1) });
                 }
                 dr.Close();
             }
             return categories;
         }
 
-        private bool ManageCategory(string sql, string name)
+        private bool ManageCategory(string sql, string name, out int rowid )
         {
             try
             {
@@ -78,25 +78,48 @@ namespace Models
                     });
                     cmd.ExecuteNonQuery();
                 }
+                rowid = Convert.ToInt32(connection.LastInsertRowId);
                 return true;
             }
             catch (SQLiteException)
             {
+                rowid = 0;
                 return false;
             }
         }
 
-        public override bool AddCategory(string name, string parent)
+        public override bool AddCategory(string name, string parent, out Category cat)
         {
             if (parent == string.Empty)
             {
                 string sql = "INSERT INTO Categories VALUES(@name)";
-                return ManageCategory(sql, name);
+                int rowid;
+                if (ManageCategory(sql, name, out rowid))
+                {
+                    cat = new Category { Id = rowid, Name = name, Parent = null };
+                    return true;
+                }
+                else
+                {
+                    cat = null;
+                    return false;
+                }
             }
             else
             {
                 string sql = "INSERT INTO Subcategories VALUES(@name, @parent)";
-                return ManageSubcategory(sql, name, parent);
+                int rowid;
+                if (ManageSubcategory(sql, name, parent, out rowid))
+                {
+                    // TODO !!! change string parent to object + add to children
+                    cat = new Category { Id = rowid, Name = name, Parent = null };
+                    return true;
+                }
+                else
+                {
+                    cat = null;
+                    return false;
+                }
             }
         }
 
@@ -106,7 +129,8 @@ namespace Models
             if (cat.Parent == null && cat.Children.Count == 0)
             {
                 string sql = "DELETE FROM Categories WHERE name=@name";
-                return ManageCategory(sql, cat.Name);
+                int rowid;
+                return ManageCategory(sql, cat.Name, out rowid);
             }
             else if (cat.Parent != null)
             {
@@ -117,9 +141,25 @@ namespace Models
                 }
                 else
                 {
-                    // TODO
-                    string sql = "";
-                    throw new NotImplementedException();
+                    string sql = " DELETE FROM Subcategories WHERE rowid=@rowid";
+                    try
+                    {
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+                        {
+                            cmd.Parameters.Add(new SQLiteParameter()
+                            {
+                                ParameterName = "@rowid",
+                                DbType = System.Data.DbType.Int32,
+                                Value = cat.Id
+                            });
+                            cmd.ExecuteNonQuery();
+                        }
+                        return true;
+                    }
+                    catch (SQLiteException)
+                    {
+                        return false;
+                    }
                 }
             }
             else
@@ -128,7 +168,7 @@ namespace Models
             }
         }
 
-        private bool ManageSubcategory(string sql, string name, string parent)
+        private bool ManageSubcategory(string sql, string name, string parent, out int rowid)
         {
             try
             {
@@ -148,10 +188,12 @@ namespace Models
                     });
                     cmd.ExecuteNonQuery();
                 }
+                rowid = Convert.ToInt32(connection.LastInsertRowId);
                 return true;
             }
             catch (SQLiteException)
             {
+                rowid = 0;
                 return false;
             }
         }
@@ -181,7 +223,7 @@ namespace Models
             return accounts;
         }
 
-        public override bool AddAccount(string name)
+        public override bool AddAccount(string name, out Account acc)
         {
             string sql = "INSERT INTO Accounts VALUES(@name, @type, 0, 0, 0)";
             try
@@ -202,10 +244,20 @@ namespace Models
                     });
                     cmd.ExecuteNonQuery();
                 }
+                acc = new Account
+                {
+                    Name = name,
+                    Type = AccType.Bank,
+                    Closed = false,
+                    Excluded = false,
+                    Balance = decimal.Zero,
+                    Id = Convert.ToInt32(connection.LastInsertRowId)
+                };
                 return true;
             }
             catch (SQLiteException)
             {
+                acc = null;
                 return false;
             }
         }
@@ -306,16 +358,36 @@ namespace Models
 
         private bool ExistsTransaction(Category cat)
         {
-            // TODO
-            return false;
+            string sql = "SELECT COUNT(*) FROM Transactions WHERE category_id=@catid";
+            using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+            {
+                cmd.Parameters.Add(new SQLiteParameter()
+                {
+                    ParameterName = "@catid",
+                    DbType = System.Data.DbType.Int32,
+                    Value = cat.Id
+                });
+                Int32 count = Convert.ToInt32(cmd.ExecuteScalar());
+                return count > 0;
+            }
         }
 
         /************** Records *****************/
 
         private bool ExistsRecord(Category cat)
         {
-            // TODO
-            return false;
+            string sql = "SELECT COUNT(*) FROM Budget WHERE category_id=@catid";
+            using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+            {
+                cmd.Parameters.Add(new SQLiteParameter()
+                {
+                    ParameterName = "@catid",
+                    DbType = System.Data.DbType.Int32,
+                    Value = cat.Id
+                });
+                Int32 count = Convert.ToInt32(cmd.ExecuteScalar());
+                return count > 0;
+            }
         }
 
         /************** File *****************/
