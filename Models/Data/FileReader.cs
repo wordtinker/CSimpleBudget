@@ -17,5 +17,7 @@ namespace Models
         public abstract List<Category> SelectCategories();
         public abstract bool AddCategory(string name, string parent, out Category cat);
         public abstract bool DeleteCategory(Category cat);
+
+        public abstract List<Transaction> SelectTransactions(Account acc);
     }
 }

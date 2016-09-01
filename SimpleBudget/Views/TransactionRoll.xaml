@@ -6,7 +6,27 @@
         xmlns:local="clr-namespace:SimpleBudget"
         mc:Ignorable="d"
         Title="TransactionRoll" Height="300" Width="300">
-    <Grid>
-        
-    </Grid>
+    <DockPanel>
+        <Button DockPanel.Dock="Bottom" Content="Add" Click="AddButton_Click"/>
+        <ListView DockPanel.Dock="Top" ItemsSource="{Binding Transactions}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}"/>
+                    <GridViewColumn Header="Amount" DisplayMemberBinding="{Binding Value}"/>
+                    <GridViewColumn Header="Info" DisplayMemberBinding="{Binding Info}"/>
+                    <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category}"/>
+                </GridView>
+            </ListView.View>
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Delete" Click="DeleteTransaction_Click"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
+            <ListView.Resources>
+                <Style TargetType="ListViewItem">
+                    <EventSetter Event="MouseDoubleClick" Handler="Transaction_DoubleClick"/>
+                </Style>
+            </ListView.Resources>
+        </ListView>
+    </DockPanel>
 </Window>

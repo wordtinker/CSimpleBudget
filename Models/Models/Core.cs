@@ -113,5 +113,10 @@ namespace Models
                 return false;
             }
         }
+
+        public IEnumerable<Transaction> GetTransactions(Account acc)
+        {
+            return storage.SelectTransactions(acc);
+        }
     }
 }

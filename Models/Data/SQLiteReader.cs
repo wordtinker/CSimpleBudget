@@ -340,6 +340,36 @@ namespace Models
 
         /************** Transactions *****************/
 
+        public override List<Transaction> SelectTransactions(Account acc)
+        {
+            List<Transaction> transactions = new List<Transaction>();
+            string sql = "SELECT date, amount, info, category_id, rowid FROM Transactions " +
+                         "WHERE acc_id=@id ORDER BY date DESC";
+            using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+            {
+                cmd.Parameters.Add(new SQLiteParameter()
+                {
+                    ParameterName = "@id",
+                    DbType = System.Data.DbType.Int32,
+                    Value = acc.Id
+                });
+                SQLiteDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    transactions.Add(new Transaction
+                    {
+                        Date = dr.GetDateTime(0),
+                        Value = dr.GetDecimal(1)/100,
+                        Info = dr.GetString(2),
+                        CategoryId = dr.GetInt32(3),
+                        Id = dr.GetInt32(4)
+                    });
+                }
+                dr.Close();
+            }
+            return transactions;
+        }
+
         private bool ExistsTransaction(Account acc)
         {
             string sql = "SELECT COUNT(*) FROM Transactions WHERE acc_id=@rowid";
