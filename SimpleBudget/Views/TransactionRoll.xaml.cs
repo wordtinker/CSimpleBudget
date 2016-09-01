@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using ViewModels;
 
 namespace SimpleBudget
 {
@@ -10,6 +11,11 @@ namespace SimpleBudget
     {
         public TransactionRoll()
         {
+            Closing += (sender, e) =>
+            {
+                ((TransactionRollViewModel)DataContext).Close();
+            };
+
             InitializeComponent();
         }
 
@@ -28,6 +34,7 @@ namespace SimpleBudget
         private void DeleteTransaction_Click(object sender, RoutedEventArgs e)
         {
             // TODO
+            
             MessageBox.Show("Delete");
         }
     }

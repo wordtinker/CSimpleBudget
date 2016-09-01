@@ -8,6 +8,7 @@ namespace Models
     {
         private static readonly Core instance = new Core();
         private FileReader storage;
+        private Account currentAccount;
 
         public static Core Instance
         {
@@ -114,9 +115,23 @@ namespace Models
             }
         }
 
-        public IEnumerable<Transaction> GetTransactions(Account acc)
+        public BindingList<Transaction> Transactions { get; } = new BindingList<Transaction>();
+        public Account CurrentAccount
         {
-            return storage.SelectTransactions(acc);
+            get
+            {
+                return currentAccount;
+            }
+            set
+            {
+                currentAccount = value;
+                Transactions.Clear();
+                if (currentAccount != null)
+                {
+                    storage.SelectTransactions(currentAccount).ForEach(Transactions.Add);
+                }
+
+            }
         }
     }
 }

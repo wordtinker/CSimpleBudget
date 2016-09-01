@@ -37,6 +37,7 @@ namespace Models
                     top.Children.Add(child);
                 }
             }
+            // TODO redo
             // Get empty top category
             categories.Add(new Category { Name = string.Empty, Parent = null });
             return categories;

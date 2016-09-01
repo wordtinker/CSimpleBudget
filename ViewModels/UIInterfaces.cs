@@ -6,7 +6,7 @@ namespace ViewModels
         void ShowMessage(string message);
         void ShowBudgetReport();
         void ShowBalanceReport();
-        void ShowTransactionRoll(Item item);
+        void ShowTransactionRoll();
 		void ManageAccounts();
 		void ManageCategories();
 		void ManageBudget();

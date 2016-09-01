@@ -203,7 +203,8 @@ namespace ViewModels
 
         public void ShowTransactionRoll(Item item)
         {
-            windowService.ShowTransactionRoll(item);
+            core.CurrentAccount = item.account;
+            windowService.ShowTransactionRoll();
         }
 
         // TODO total line

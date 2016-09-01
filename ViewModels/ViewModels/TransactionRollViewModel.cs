@@ -2,6 +2,7 @@
 using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace ViewModels
 {
@@ -43,7 +44,6 @@ namespace ViewModels
 
     public class TransactionRollViewModel : BindableBase
     {
-        private Account account;
         private IUITransactionRollService service;
         private Dictionary<int, Category> catDictionary;
         
@@ -51,14 +51,13 @@ namespace ViewModels
         {
             get
             {
-                return from tr in Core.Instance.GetTransactions(account)
+                return from tr in Core.Instance.Transactions
                        select new TransactionItem(tr, catDictionary);
             }
         }
 
-        public TransactionRollViewModel(Item item, IUITransactionRollService service)
+        public TransactionRollViewModel(IUITransactionRollService service)
         {
-            this.account = item.account;
             this.service = service;
 
             catDictionary = new Dictionary<int, Category>();
@@ -67,6 +66,12 @@ namespace ViewModels
              select cat).ToList().ForEach(x => catDictionary.Add(x.Id, x));
 
             // TODO empty cat for non budget accs?
+        }
+
+        public void Close()
+        {
+            // Cleanup selected account and transactions
+            Core.Instance.CurrentAccount = null;
         }
     }
 }
