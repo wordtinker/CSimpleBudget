@@ -19,5 +19,6 @@ namespace Models
         public abstract bool DeleteCategory(Category cat);
 
         public abstract List<Transaction> SelectTransactions(Account acc);
+        public abstract bool DeleteTransaction(Transaction transaction);
     }
 }

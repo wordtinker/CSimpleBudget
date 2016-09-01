@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using ViewModels;
 
@@ -33,9 +34,12 @@ namespace SimpleBudget
 
         private void DeleteTransaction_Click(object sender, RoutedEventArgs e)
         {
-            // TODO
-            
-            MessageBox.Show("Delete");
+            MenuItem mi = (MenuItem)sender;
+            TransactionItem item = (TransactionItem)mi.DataContext;
+            if (!((TransactionRollViewModel)this.DataContext).DeleteTransaction(item))
+            {
+                MessageBox.Show("Can't delete transaction.");
+            }
         }
     }
 }

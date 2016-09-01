@@ -130,7 +130,19 @@ namespace Models
                 {
                     storage.SelectTransactions(currentAccount).ForEach(Transactions.Add);
                 }
+            }
+        }
 
+        public bool DeleteTransaction(Transaction transaction)
+        {
+            if (storage.DeleteTransaction(transaction))
+            {
+                Transactions.Remove(transaction);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

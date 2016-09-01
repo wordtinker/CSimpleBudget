@@ -339,6 +339,24 @@ namespace Models
             }
         }
 
+        private void UpdateTotal(Account acc)
+        {
+            Decimal total;
+            string sql = "SELECT SUM(amount) FROM Transactions WHERE acc_id=@id";
+            using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+            {
+                cmd.Parameters.Add(new SQLiteParameter()
+                {
+                    ParameterName = "@id",
+                    DbType = System.Data.DbType.Int32,
+                    Value = acc.Id
+                });
+                // TODO test if total 0
+                total = Convert.ToDecimal(cmd.ExecuteScalar())/100;
+            }
+            acc.Balance = total;
+        }
+
         /************** Transactions *****************/
 
         public override List<Transaction> SelectTransactions(Account acc)
@@ -363,12 +381,37 @@ namespace Models
                         Value = dr.GetDecimal(1)/100,
                         Info = dr.GetString(2),
                         CategoryId = dr.GetInt32(3),
-                        Id = dr.GetInt32(4)
+                        Id = dr.GetInt32(4),
+                        Account = acc
                     });
                 }
                 dr.Close();
             }
             return transactions;
+        }
+
+        public override bool DeleteTransaction(Transaction transaction)
+        {
+            string sql = "DELETE FROM Transactions WHERE rowid=@id";
+            try
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+                {
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@id",
+                        DbType = System.Data.DbType.Int32,
+                        Value = transaction.Id
+                    });
+                    cmd.ExecuteNonQuery();
+                }
+                UpdateTotal(transaction.Account);
+                return true;
+            }
+            catch (SQLiteException)
+            {
+                return false;
+            }
         }
 
         private bool ExistsTransaction(Account acc)

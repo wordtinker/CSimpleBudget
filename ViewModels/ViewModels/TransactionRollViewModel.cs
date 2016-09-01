@@ -8,7 +8,7 @@ namespace ViewModels
 {
     public class TransactionItem
     {
-        private Transaction tr;
+        internal Transaction tr;
         private Dictionary<int, Category> categories;
 
         public string Date
@@ -56,6 +56,11 @@ namespace ViewModels
             }
         }
 
+        public bool DeleteTransaction(TransactionItem item)
+        {
+            return Core.Instance.DeleteTransaction(item.tr);
+        }
+
         public TransactionRollViewModel(IUITransactionRollService service)
         {
             this.service = service;
@@ -64,6 +69,11 @@ namespace ViewModels
             (from cat in Core.Instance.Categories
              where cat.Parent != null
              select cat).ToList().ForEach(x => catDictionary.Add(x.Id, x));
+
+            Core.Instance.Transactions.ListChanged += (sender, e) =>
+            {
+                OnPropertyChanged(() => Transactions);
+            };
 
             // TODO empty cat for non budget accs?
         }
