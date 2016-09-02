@@ -61,6 +61,16 @@ namespace ViewModels
             return Core.Instance.DeleteTransaction(item.tr);
         }
 
+        public void ShowTransactionEditor()
+        {
+            service.ShowTransactionEditor();
+        }
+
+        public void ShowTransactionEditor(TransactionItem item)
+        {
+            service.ShowTransactionEditor(item);
+        }
+
         public TransactionRollViewModel(IUITransactionRollService service)
         {
             this.service = service;

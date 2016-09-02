@@ -18,16 +18,14 @@
                 </GridView>
             </ListView.View>
             <ListView.Resources>
-                <Style TargetType="ListViewItem">
-                    <EventSetter Event="MouseDoubleClick" Handler="Transaction_DoubleClick"/>
-                </Style>
                 <ContextMenu x:Key="ItemContextMenu">
                     <MenuItem Header="Delete" Click="DeleteTransaction_Click"/>
                 </ContextMenu>
             </ListView.Resources>
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
-                    <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />              
+                    <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
+                    <EventSetter Event="MouseDoubleClick" Handler="Transaction_DoubleClick"/>
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>

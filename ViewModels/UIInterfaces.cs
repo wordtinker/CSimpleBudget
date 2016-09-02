@@ -19,7 +19,8 @@ namespace ViewModels
 
     public interface IUITransactionRollService
     {
-        // TODO
+        void ShowTransactionEditor();
+        void ShowTransactionEditor(TransactionItem transactionItem);
     }
 
     public interface IUIBudgetWindowService

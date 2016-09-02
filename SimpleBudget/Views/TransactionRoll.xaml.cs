@@ -22,14 +22,14 @@ namespace SimpleBudget
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            // TODO
-            MessageBox.Show("Add");
+            ((TransactionRollViewModel)DataContext).ShowTransactionEditor();
         }
 
-        private void Transaction_DoubleClick(object Sender, MouseButtonEventArgs e)
+        private void Transaction_DoubleClick(object sender, MouseButtonEventArgs e)
         {
-            // TODO
-            MessageBox.Show("Edit");
+            ListViewItem li = (ListViewItem)sender;
+            TransactionItem item = (TransactionItem)li.DataContext;
+            ((TransactionRollViewModel)DataContext).ShowTransactionEditor(item);
         }
 
         private void DeleteTransaction_Click(object sender, RoutedEventArgs e)
