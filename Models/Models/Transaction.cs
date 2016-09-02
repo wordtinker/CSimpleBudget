@@ -9,7 +9,7 @@ namespace Models
         public DateTime Date { get; set; }
         public decimal Value { get; set; }
         public string Info { get; set; }
-        public int CategoryId { get; set; }
+        public Category Category { get; set; }
         internal int Id { get; set; }
         internal Account Account { get; set; }
     }

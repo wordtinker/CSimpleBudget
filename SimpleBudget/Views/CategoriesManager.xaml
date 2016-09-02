@@ -24,7 +24,7 @@
             <Label Content="Name"/>
             <TextBox x:Name="CategoryName"/>
             <Label Content="Parent"/>
-            <ComboBox x:Name="ParentCategory" ItemsSource="{Binding TopCategories}"/>
+            <ComboBox x:Name="ParentCategory" ItemsSource="{Binding Categories}" DisplayMemberPath="Title"/>
             <Button Content="Add" Click="AddButton_Click"/>
         </StackPanel>
     </DockPanel>

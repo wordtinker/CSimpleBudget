@@ -1,5 +1,6 @@
 ﻿using Prism.Mvvm;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace Models
@@ -18,23 +19,27 @@ namespace Models
             }
         }
 
-        public BindingList<Account> Accounts { get; } = new BindingList<Account>();
-
-        private List<Category> categories = new List<Category>();
-        public List<Category> Categories {
+        public FileReader Storage
+        {
             get
             {
-                categories.Clear();
+                return storage;
+            }
+            set
+            {
+                storage = value;
+
+                Accounts.Clear();
+                Categories.Clear();
                 if (storage != null)
                 {
-                    foreach (Category cat in storage.SelectCategories())
-                    {
-                        categories.Add(cat);
-                    }
+                    storage.SelectAccounts().ForEach(Accounts.Add);
+                    storage.SelectCategories().ForEach(Categories.Add);
                 }
-                return categories;
             }
         }
+
+        public BindingList<Account> Accounts { get; } = new BindingList<Account>();
 
         public void UpdateAccount(Account acc)
         {
@@ -68,32 +73,14 @@ namespace Models
             }
         }
 
-        public FileReader Storage
-        {
-            get
-            {
-                return storage;
-            }
-            set
-            {
-                storage = value;
+        public ObservableCollection<Category> Categories { get; } = new ObservableCollection<Category>();
 
-                Accounts.Clear();
-                if (storage != null)
-                {
-                    storage.SelectAccounts().ForEach(Accounts.Add);
-                }
-
-                OnPropertyChanged(() => Categories);
-            }
-        }
-
-        public bool AddCategory(string name, string parent)
+        public bool AddCategory(string name, Category parent)
         {
             Category newCat;
             if (storage.AddCategory(name, parent, out newCat))
             {
-                OnPropertyChanged(() => Categories);
+                Categories.Add(newCat);
                 return true;
             }
             else
@@ -106,7 +93,8 @@ namespace Models
         {
             if (storage.DeleteCategory(cat))
             {
-                OnPropertyChanged(() => Categories);
+                cat.Parent?.Children.Remove(cat);
+                Categories.Remove(cat);
                 return true;
             }
             else

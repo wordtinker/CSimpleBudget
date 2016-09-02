@@ -9,7 +9,6 @@ namespace ViewModels
     public class TransactionItem
     {
         internal Transaction tr;
-        private Dictionary<int, Category> categories;
 
         public string Date
         {
@@ -30,29 +29,27 @@ namespace ViewModels
         {
             get
             {
-                Category category = categories[tr.CategoryId];
+                Category category = tr.Category;
                 return string.Format("{0}--{1}", category.Parent.Name, category.Name);
             }
         }
 
-        public TransactionItem(Transaction tr, Dictionary<int, Category> categories)
+        public TransactionItem(Transaction tr)
         {
             this.tr = tr;
-            this.categories = categories;
         }
     }
 
     public class TransactionRollViewModel : BindableBase
     {
         private IUITransactionRollService service;
-        private Dictionary<int, Category> catDictionary;
         
         public IEnumerable<TransactionItem> Transactions
         {
             get
             {
                 return from tr in Core.Instance.Transactions
-                       select new TransactionItem(tr, catDictionary);
+                       select new TransactionItem(tr);
             }
         }
 
@@ -75,17 +72,10 @@ namespace ViewModels
         {
             this.service = service;
 
-            catDictionary = new Dictionary<int, Category>();
-            (from cat in Core.Instance.Categories
-             where cat.Parent != null
-             select cat).ToList().ForEach(x => catDictionary.Add(x.Id, x));
-
             Core.Instance.Transactions.ListChanged += (sender, e) =>
             {
                 OnPropertyChanged(() => Transactions);
             };
-
-            // TODO empty cat for non budget accs?
         }
 
         public void Close()

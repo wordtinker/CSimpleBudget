@@ -30,16 +30,8 @@ namespace ViewModels
             get
             {
                 return from c in Core.Instance.Categories
-                       where c.Parent == null && c.Name != string.Empty
-                       select new Node(c);
-            }
-        }
-        public IEnumerable<string> TopCategories{
-            get
-            {
-                return from c in Core.Instance.Categories
                        where c.Parent == null
-                       select c.Name;
+                       select new Node(c);
             }
         }
 
@@ -48,17 +40,16 @@ namespace ViewModels
             return Core.Instance.DeleteCategory(node.category);
         }
 
-        public bool AddCategory(string name, string parent)
+        public bool AddCategory(string name, Node parentNode)
         {
-            return Core.Instance.AddCategory(name, parent);
+            return Core.Instance.AddCategory(name, parentNode?.category);
         }
 
         public CategoriesViewModel()
         {
-            Core.Instance.PropertyChanged += (object sender, System.ComponentModel.PropertyChangedEventArgs e) =>
+            Core.Instance.Categories.CollectionChanged += (sender, e) =>
             {
                 OnPropertyChanged(() => Categories);
-                OnPropertyChanged(() => TopCategories);
             };
         }
     }

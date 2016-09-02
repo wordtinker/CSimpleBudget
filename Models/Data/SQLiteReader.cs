@@ -1,6 +1,7 @@
 ﻿using System.Data.SQLite;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Models
 {
@@ -37,9 +38,6 @@ namespace Models
                     top.Children.Add(child);
                 }
             }
-            // TODO redo
-            // Get empty top category
-            categories.Add(new Category { Name = string.Empty, Parent = null });
             return categories;
         }
 
@@ -89,9 +87,16 @@ namespace Models
             }
         }
 
-        public override bool AddCategory(string name, string parent, out Category cat)
+        public override bool AddCategory(string name, Category parent, out Category cat)
         {
-            if (parent == string.Empty)
+            // Can't add empty name 
+            if (name == string.Empty)
+            {
+                cat = null;
+                return false;
+            }
+
+            if (parent == null)
             {
                 string sql = "INSERT INTO Categories VALUES(@name)";
                 int rowid;
@@ -110,10 +115,10 @@ namespace Models
             {
                 string sql = "INSERT INTO Subcategories VALUES(@name, @parent)";
                 int rowid;
-                if (ManageSubcategory(sql, name, parent, out rowid))
+                if (ManageSubcategory(sql, name, parent.Name, out rowid))
                 {
-                    // TODO !!! change string parent to object + add to children
-                    cat = new Category { Id = rowid, Name = name, Parent = null };
+                    cat = new Category { Id = rowid, Name = name, Parent = parent };
+                    parent.Children.Add(cat);
                     return true;
                 }
                 else
@@ -359,6 +364,13 @@ namespace Models
 
         /************** Transactions *****************/
 
+        private Category GetCategoryForId(int catId)
+        {
+            return (from cat in Core.Instance.Categories
+            where cat.Id == catId && cat.Parent != null
+            select cat).First();
+        }
+
         public override List<Transaction> SelectTransactions(Account acc)
         {
             List<Transaction> transactions = new List<Transaction>();
@@ -380,7 +392,7 @@ namespace Models
                         Date = dr.GetDateTime(0),
                         Value = dr.GetDecimal(1)/100,
                         Info = dr.GetString(2),
-                        CategoryId = dr.GetInt32(3),
+                        Category = GetCategoryForId(dr.GetInt32(3)),
                         Id = dr.GetInt32(4),
                         Account = acc
                     });

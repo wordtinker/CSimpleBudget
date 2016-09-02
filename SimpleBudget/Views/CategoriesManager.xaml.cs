@@ -17,8 +17,8 @@ namespace SimpleBudget
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             string categoryName = CategoryName.Text;
-            string parentName = ParentCategory.Text;
-            if(!((CategoriesViewModel)this.DataContext).AddCategory(categoryName, parentName))
+            Node parent = (Node)ParentCategory.SelectedItem;
+            if(!((CategoriesViewModel)this.DataContext).AddCategory(categoryName, parent))
             {
                 MessageBox.Show("Can't add category.");
             }
