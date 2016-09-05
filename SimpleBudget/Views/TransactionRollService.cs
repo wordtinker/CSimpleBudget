@@ -5,16 +5,19 @@ namespace SimpleBudget
 {
     class TransactionRollService : IUITransactionRollService
     {
-        public void ShowTransactionEditor()
+        private TransactionRoll rollWindow;
+
+        public TransactionRollService(TransactionRoll rollWindow)
         {
-            //TODO
-            throw new NotImplementedException();
+            this.rollWindow = rollWindow;
         }
 
-        public void ShowTransactionEditor(TransactionItem transactionItem)
+        public void ShowTransactionEditor(TransactionEditorViewModel vm)
         {
-            // TODO
-            throw new NotImplementedException();
+            TransactionEditor window = new TransactionEditor();
+            window.DataContext = vm;
+            window.Owner = rollWindow;
+            window.Show();
         }
     }
 }

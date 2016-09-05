@@ -17,7 +17,7 @@ namespace ViewModels
 
         public string Value
         {
-            get { return string.Format("{0:0.00}", tr.Value); }
+            get { return string.Format("{0:0.00}", tr.Amount); }
         }
 
         public string Info
@@ -43,7 +43,6 @@ namespace ViewModels
     public class TransactionRollViewModel : BindableBase
     {
         private IUITransactionRollService service;
-        
         public IEnumerable<TransactionItem> Transactions
         {
             get
@@ -60,12 +59,14 @@ namespace ViewModels
 
         public void ShowTransactionEditor()
         {
-            service.ShowTransactionEditor();
+            TransactionEditorViewModel vm = new TransactionEditorViewModel();
+            service.ShowTransactionEditor(vm);
         }
 
         public void ShowTransactionEditor(TransactionItem item)
         {
-            service.ShowTransactionEditor(item);
+            TransactionEditorViewModel vm = new TransactionEditorViewModel(item.tr);
+            service.ShowTransactionEditor(vm);
         }
 
         public TransactionRollViewModel(IUITransactionRollService service)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System;
 
 namespace Models
 {
@@ -42,6 +43,7 @@ namespace Models
         // TODO Stub
         // ADD GUI for adding, deleting, and retrieving Acc Types
         public List<string> AccountTypes { get; } = new List<string> { "Bank", "Cash", "Credit Card" };
+
         public BindingList<Account> Accounts { get; } = new BindingList<Account>();
 
         public void UpdateAccount(Account acc)
@@ -137,5 +139,31 @@ namespace Models
                 return false;
             }
         }
+
+        public void AddTransaction(DateTime date, decimal amount, string info, Category category)
+        {
+            // TODO !!!
+            //storage.AddTransaction();
+            // TODO stub
+            Transactions.Add(new Transaction(5555, CurrentAccount)
+            {
+                Category = category,
+                Date = date,
+                Info = info,
+                Amount = amount
+            });
+        }
+
+
+        public void UpdateTransaction(Transaction tr, DateTime date, decimal amount, string info, Category category)
+        {
+            // TODO !!!
+            // storage.UpdateTransaction();
+            tr.Category = category;
+            tr.Date = date;
+            tr.Info = info;
+            tr.Amount = amount;
+        }
+
     }
 }

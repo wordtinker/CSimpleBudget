@@ -8,9 +8,17 @@ namespace ViewModels
 {
     public class Node
     {
+        private string separator = "--";
         public Category category;
 
         public string Title { get { return category.Name; } }
+        public string FullName
+        {
+            get
+            {
+                return string.Format("{0}{1}{2}", category.Parent.Name, separator, category.Name);
+            }
+        }
         public ObservableCollection<Node> Items { get; }
 
         public Node(Category cat)
@@ -21,6 +29,18 @@ namespace ViewModels
             {
                 Items.Add(new Node(item));
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            var item = obj as Node;
+
+            if (item == null)
+            {
+                return false;
+            }
+
+            return category.Equals(item.category);
         }
     }
 

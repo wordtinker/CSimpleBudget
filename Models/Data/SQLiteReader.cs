@@ -387,14 +387,12 @@ namespace Models
                 SQLiteDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
-                    transactions.Add(new Transaction
+                    transactions.Add(new Transaction(dr.GetInt32(4), acc)
                     {
                         Date = dr.GetDateTime(0),
-                        Value = dr.GetDecimal(1)/100,
+                        Amount = dr.GetDecimal(1)/100,
                         Info = dr.GetString(2),
-                        Category = GetCategoryForId(dr.GetInt32(3)),
-                        Id = dr.GetInt32(4),
-                        Account = acc
+                        Category = GetCategoryForId(dr.GetInt32(3))
                     });
                 }
                 dr.Close();

@@ -32,9 +32,9 @@ namespace SimpleBudget
 
         public void ShowTransactionRoll()
         {
-            TransactionRollService service = new TransactionRollService();
-            TransactionRollViewModel vm = new TransactionRollViewModel(service);
             TransactionRoll window = new TransactionRoll();
+            TransactionRollService service = new TransactionRollService(window);
+            TransactionRollViewModel vm = new TransactionRollViewModel(service);
             window.DataContext = vm;
             window.Owner = mainWindow;
             window.ShowDialog();
