@@ -39,6 +39,9 @@ namespace Models
             }
         }
 
+        // TODO Stub
+        // ADD GUI for adding, deleting, and retrieving Acc Types
+        public List<string> AccountTypes { get; } = new List<string> { "Bank", "Cash", "Credit Card" };
         public BindingList<Account> Accounts { get; } = new BindingList<Account>();
 
         public void UpdateAccount(Account acc)
@@ -46,10 +49,10 @@ namespace Models
             Storage.UpdateAccount(acc);
         }
 
-        public bool AddAccount(string accName)
+        public bool AddAccount(string accName, string accType)
         {
             Account newAcc;
-            if (storage.AddAccount(accName, out newAcc))
+            if (storage.AddAccount(accName, accType, out newAcc))
             {
                 Accounts.Add(newAcc);
                 return true;
@@ -93,6 +96,7 @@ namespace Models
         {
             if (storage.DeleteCategory(cat))
             {
+                // TODO Fixme. core or DB?
                 cat.Parent?.Children.Remove(cat);
                 Categories.Remove(cat);
                 return true;

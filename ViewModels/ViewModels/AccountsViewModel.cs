@@ -10,19 +10,12 @@ namespace ViewModels
         public Account account;
 
         public string Name { get { return account.Name; }}
-        public int Type
+        public string Type
         {
-            get { return (int)account.Type; }
+            get { return account.Type; }
             set
             {
-                account.Type = (AccType)value;
-            }
-        }
-        public string SType
-        {
-            get
-            {
-                return AccountsViewModel.AccTypes.ElementAt(Type);
+                account.Type = value;
             }
         }
         public bool Closed
@@ -60,9 +53,7 @@ namespace ViewModels
         {
             get
             {
-                // TODO MVVM violation redo with proper enum support
-                return new List<string> { "Bank", "Cash", "Credit card" };
-                //return Enum.GetValues(typeof(AccType)).Cast<AccType>().Select(x => x.ToString()).ToList();
+                return Core.Instance.AccountTypes;
             }
         }
 
@@ -83,9 +74,9 @@ namespace ViewModels
             OnPropertyChanged(() => SelectedAccount);
         }
 
-        public bool AddAccount(string accName)
+        public bool AddAccount(string accName, string accType)
         {
-            return Core.Instance.AddAccount(accName);
+            return Core.Instance.AddAccount(accName, accType);
         }
 
         public bool DeleteAccount(Item item)

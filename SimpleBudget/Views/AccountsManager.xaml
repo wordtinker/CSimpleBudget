@@ -12,8 +12,8 @@
                 <TextBox x:Name="AccName" Width="100"/>
                 <Button Content="New Account" Click="AddButton_Click"/>
             </StackPanel>
-            <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding AccTypes}"
-                      SelectedIndex="{Binding SelectedAccount.Type}"/>
+            <ComboBox x:Name="AccType" DockPanel.Dock="Top" ItemsSource="{Binding AccTypes}"
+                      SelectedValue="{Binding SelectedAccount.Type}"/>
             <CheckBox DataContext="{Binding SelectedAccount}"
                       x:Name="AccClosed" IsChecked="{Binding Closed}"/>
             <Label Content="Closed"/>

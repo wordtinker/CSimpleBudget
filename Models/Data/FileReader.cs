@@ -10,7 +10,7 @@ namespace Models
         public abstract bool LoadFile(string fileName);
 
         public abstract List<Account> SelectAccounts();
-        public abstract bool AddAccount(string name, out Account acc);
+        public abstract bool AddAccount(string name, string accType, out Account acc);
         public abstract void UpdateAccount(Account acc);
         public abstract bool DeleteAccount(Account acc);
 

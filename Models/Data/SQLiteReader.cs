@@ -217,7 +217,7 @@ namespace Models
                 {
                     accounts.Add(new Account {
                         Name = dr.GetString(0),
-                        Type = (AccType)Enum.Parse(typeof(AccType), dr.GetString(1)),
+                        Type = dr.GetString(1),
                         Balance = dr.GetDecimal(2)/100,
                         Closed = Convert.ToBoolean(dr.GetInt32(3)),
                         Excluded = Convert.ToBoolean(dr.GetInt32(4)),
@@ -229,7 +229,7 @@ namespace Models
             return accounts;
         }
 
-        public override bool AddAccount(string name, out Account acc)
+        public override bool AddAccount(string name, string accType, out Account acc)
         {
             string sql = "INSERT INTO Accounts VALUES(@name, @type, 0, 0, 0)";
             try
@@ -246,14 +246,14 @@ namespace Models
                     {
                         ParameterName = "@type",
                         DbType = System.Data.DbType.String,
-                        Value = AccType.Bank.ToString()
+                        Value = accType
                     });
                     cmd.ExecuteNonQuery();
                 }
                 acc = new Account
                 {
                     Name = name,
-                    Type = AccType.Bank,
+                    Type = accType,
                     Closed = false,
                     Excluded = false,
                     Balance = decimal.Zero,
@@ -280,7 +280,7 @@ namespace Models
                     {
                         ParameterName = "@type",
                         DbType = System.Data.DbType.String,
-                        Value = acc.Type.ToString()
+                        Value = acc.Type
                     });
                     cmd.Parameters.Add(new SQLiteParameter()
                     {

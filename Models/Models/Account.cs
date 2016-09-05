@@ -3,17 +3,10 @@ using Prism.Mvvm;
 
 namespace Models
 {
-    public enum AccType
-    {
-        Bank,
-        Cash,
-        CreditCard
-    }
-
     public class Account : BindableBase
     {
         private string name;
-        private AccType accType;
+        private string accType;
         private decimal balance;
         private bool closed;
         private bool excluded;
@@ -29,7 +22,7 @@ namespace Models
                 Core.Instance.UpdateAccount(this);
             }
         }
-        public AccType Type
+        public string Type
         {   
             get { return accType; }
             set

@@ -28,7 +28,8 @@ namespace SimpleBudget
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             string accName = AccName.Text;
-            if (!((AccountsViewModel)this.DataContext).AddAccount(accName))
+            string accType = AccType.Text;
+            if (!((AccountsViewModel)this.DataContext).AddAccount(accName, accType))
             {
                 MessageBox.Show("Can't add account.");
             }
