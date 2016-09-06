@@ -4,18 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimpleBudget"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Transaction" Height="300" Width="300">
     <DockPanel>
         <Label Content="Date" DockPanel.Dock="Top"/>
         <DatePicker SelectedDate="{Binding Date}" DockPanel.Dock="Top"/>
         <Label Content="Amount" DockPanel.Dock="Top"/>
-        <TextBox Text="{Binding Amount}" DockPanel.Dock="Top"/>
+        <xctk:DecimalUpDown Value="{Binding Amount}" DockPanel.Dock="Top" FormatString="F2"/>
         <Label Content="Info" DockPanel.Dock="Top"/>
         <TextBox Text="{Binding Info}" DockPanel.Dock="Top"/>
         <Label Content="Category" DockPanel.Dock="Top"/>
         <ComboBox ItemsSource="{Binding Categories}" DisplayMemberPath="FullName"
                   SelectedItem="{Binding Category}" DockPanel.Dock="Top"/>
-        <Button Content="Update" Command="{Binding UpdateTransaction}"/>
+        <Button Content="Update" Command="{Binding UpdateTransaction}" Click="Button_Click"/>
     </DockPanel>
 </Window>

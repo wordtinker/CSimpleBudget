@@ -22,7 +22,6 @@ namespace ViewModels
             }
         }
         public DateTime Date { get; set; }
-        // TODO only decimal!
         public decimal Amount { get; set; }
         public string Info { get; set; }
         public Node Category { get; set; }
@@ -42,7 +41,6 @@ namespace ViewModels
                     {
                         Core.Instance.UpdateTransaction(tr, Date, Amount, Info, Category.category);
                     }
-                    // TODO close()!
                 }));
             }
         }
