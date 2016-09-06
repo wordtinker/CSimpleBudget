@@ -21,7 +21,6 @@ namespace ViewModels
                        select new Node(c);
             }
         }
-        // TODO set date properly, not updating?
         public DateTime Date { get; set; }
         // TODO only decimal!
         public decimal Amount { get; set; }

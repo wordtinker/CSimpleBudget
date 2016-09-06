@@ -13,7 +13,7 @@ namespace Models
         public override string Extension { get; } = "Budget files (*.sbdb)|*.sbdb";
 
         /************** Categories *****************/
-        public override List<Category> SelectCategories()
+        internal override List<Category> SelectCategories()
         {
             // Get top categories
             List<Category> topCategories = new List<Category>();
@@ -87,7 +87,7 @@ namespace Models
             }
         }
 
-        public override bool AddCategory(string name, Category parent, out Category cat)
+        internal override bool AddCategory(string name, Category parent, out Category cat)
         {
             // Can't add empty name 
             if (name == string.Empty)
@@ -129,7 +129,7 @@ namespace Models
             }
         }
 
-        public override bool DeleteCategory(Category cat)
+        internal override bool DeleteCategory(Category cat)
         {
             // Top category with no children
             if (cat.Parent == null && cat.Children.Count == 0)
@@ -206,7 +206,7 @@ namespace Models
 
         /************** Accounts *****************/
 
-        public override List<Account> SelectAccounts()
+        internal override List<Account> SelectAccounts()
         {
             List<Account> accounts = new List<Account>();
             string sql = "SELECT *, rowid FROM Accounts";
@@ -229,7 +229,7 @@ namespace Models
             return accounts;
         }
 
-        public override bool AddAccount(string name, string accType, out Account acc)
+        internal override bool AddAccount(string name, string accType, out Account acc)
         {
             string sql = "INSERT INTO Accounts VALUES(@name, @type, 0, 0, 0)";
             try
@@ -268,7 +268,7 @@ namespace Models
             }
         }
 
-        public override void UpdateAccount(Account acc)
+        internal override bool UpdateAccount(Account acc)
         {
             string sql = "UPDATE Accounts SET type=@type, balance=@balance, closed=@closed, " +
                 "exbudget=@excluded WHERE rowid=@rowid";
@@ -308,14 +308,15 @@ namespace Models
                     });
                     cmd.ExecuteNonQuery();
                 }
+                return true;
             }
             catch (SQLiteException)
             {
-                //
+                return false;
             }
         }
 
-        public override bool DeleteAccount(Account acc)
+        internal override bool DeleteAccount(Account acc)
         {
             // Cant delete if there is a transaction on account
             if (ExistsTransaction(acc))
@@ -371,7 +372,7 @@ namespace Models
             select cat).First();
         }
 
-        public override List<Transaction> SelectTransactions(Account acc)
+        internal override List<Transaction> SelectTransactions(Account acc)
         {
             List<Transaction> transactions = new List<Transaction>();
             string sql = "SELECT date, amount, info, category_id, rowid FROM Transactions " +
@@ -390,7 +391,7 @@ namespace Models
                     transactions.Add(new Transaction(dr.GetInt32(4), acc)
                     {
                         Date = dr.GetDateTime(0),
-                        Amount = dr.GetDecimal(1)/100,
+                        Amount = dr.GetDecimal(1) / 100,
                         Info = dr.GetString(2),
                         Category = GetCategoryForId(dr.GetInt32(3))
                     });
@@ -400,7 +401,7 @@ namespace Models
             return transactions;
         }
 
-        public override bool DeleteTransaction(Transaction transaction)
+        internal override bool DeleteTransaction(Transaction transaction)
         {
             string sql = "DELETE FROM Transactions WHERE rowid=@id";
             try
@@ -416,6 +417,115 @@ namespace Models
                     cmd.ExecuteNonQuery();
                 }
                 UpdateTotal(transaction.Account);
+                return true;
+            }
+            catch (SQLiteException)
+            {
+                return false;
+            }
+        }
+
+        internal override bool AddTransaction(
+            Account currentAccount, DateTime date, decimal amount, string info, Category category, out Transaction newTr)
+        {
+            string sql = "INSERT INTO Transactions VALUES(@date, @amount, @info, @accId, @catId)";
+            try
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+                {
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@date",
+                        DbType = System.Data.DbType.Date,
+                        Value = date.Date
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@amount",
+                        DbType = System.Data.DbType.Int32,
+                        Value = decimal.ToInt32(amount * 100)
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@info",
+                        DbType = System.Data.DbType.String,
+                        Value = info ?? string.Empty
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@accId",
+                        DbType = System.Data.DbType.Int32,
+                        Value = currentAccount.Id
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@catId",
+                        DbType = System.Data.DbType.Int32,
+                        Value = category.Id
+                    });
+                    cmd.ExecuteNonQuery();
+                }
+                newTr = new Transaction(Convert.ToInt32(connection.LastInsertRowId), currentAccount)
+                {
+                    Amount = amount,
+                    Date = date,
+                    Info = info,
+                    Category = category
+                };
+                UpdateTotal(currentAccount);
+                return true;
+            }
+            catch (SQLiteException)
+            {
+                newTr = null;
+                return false;
+            }
+        }
+
+        internal override bool UpdateTransaction(Transaction tr, DateTime date, decimal amount, string info, Category category)
+        {
+            string sql = "UPDATE Transactions SET date=@date, amount=@amount, info=@info, category_id=@catId WHERE rowid=@rowId";
+            try
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+                {
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@date",
+                        DbType = System.Data.DbType.Date,
+                        Value = date.Date
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@amount",
+                        DbType = System.Data.DbType.Int32,
+                        Value = decimal.ToInt32(amount * 100)
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@info",
+                        DbType = System.Data.DbType.String,
+                        Value = info ?? string.Empty
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@catId",
+                        DbType = System.Data.DbType.Int32,
+                        Value = category.Id
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@rowId",
+                        DbType = System.Data.DbType.Int32,
+                        Value = tr.Id
+                    });
+                    cmd.ExecuteNonQuery();
+                }
+                tr.Category = category;
+                tr.Date = date;
+                tr.Info = info;
+                tr.Amount = amount;
+                UpdateTotal(tr.Account);
                 return true;
             }
             catch (SQLiteException)

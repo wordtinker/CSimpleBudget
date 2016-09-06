@@ -8,7 +8,7 @@
         Title="Transaction" Height="300" Width="300">
     <DockPanel>
         <Label Content="Date" DockPanel.Dock="Top"/>
-        <DatePicker Text="{Binding Date}" DockPanel.Dock="Top"/>
+        <DatePicker SelectedDate="{Binding Date}" DockPanel.Dock="Top"/>
         <Label Content="Amount" DockPanel.Dock="Top"/>
         <TextBox Text="{Binding Amount}" DockPanel.Dock="Top"/>
         <Label Content="Info" DockPanel.Dock="Top"/>

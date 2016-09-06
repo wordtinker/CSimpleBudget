@@ -1,24 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Models
 {
     public abstract class FileReader
     {
+
         public abstract string Extension { get; }
 
         public abstract bool InitializeFile(string fileName);
         public abstract bool LoadFile(string fileName);
 
-        public abstract List<Account> SelectAccounts();
-        public abstract bool AddAccount(string name, string accType, out Account acc);
-        public abstract void UpdateAccount(Account acc);
-        public abstract bool DeleteAccount(Account acc);
+        internal abstract List<Account> SelectAccounts();
+        internal abstract bool AddAccount(string name, string accType, out Account acc);
+        internal abstract bool UpdateAccount(Account acc);
+        internal abstract bool DeleteAccount(Account acc);
 
-        public abstract List<Category> SelectCategories();
-        public abstract bool AddCategory(string name, Category parent, out Category cat);
-        public abstract bool DeleteCategory(Category cat);
+        internal abstract List<Category> SelectCategories();
+        internal abstract bool AddCategory(string name, Category parent, out Category cat);
+        internal abstract bool DeleteCategory(Category cat);
 
-        public abstract List<Transaction> SelectTransactions(Account acc);
-        public abstract bool DeleteTransaction(Transaction transaction);
+        internal abstract List<Transaction> SelectTransactions(Account acc);
+        internal abstract bool DeleteTransaction(Transaction transaction);
+        internal abstract bool UpdateTransaction(Transaction tr, DateTime date, decimal amount, string info, Category category);
+        internal abstract bool AddTransaction(
+            Account currentAccount, DateTime date, decimal amount, string info, Category category, out Transaction newTr);
+        
     }
 }

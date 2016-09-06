@@ -98,7 +98,6 @@ namespace Models
         {
             if (storage.DeleteCategory(cat))
             {
-                // TODO Fixme. core or DB?
                 cat.Parent?.Children.Remove(cat);
                 Categories.Remove(cat);
                 return true;
@@ -142,27 +141,17 @@ namespace Models
 
         public void AddTransaction(DateTime date, decimal amount, string info, Category category)
         {
-            // TODO !!!
-            //storage.AddTransaction();
-            // TODO stub
-            Transactions.Add(new Transaction(5555, CurrentAccount)
+            Transaction newTr;
+            if (storage.AddTransaction(CurrentAccount, date, amount, info, category, out newTr))
             {
-                Category = category,
-                Date = date,
-                Info = info,
-                Amount = amount
-            });
+                Transactions.Add(newTr);
+            }
         }
 
 
         public void UpdateTransaction(Transaction tr, DateTime date, decimal amount, string info, Category category)
         {
-            // TODO !!!
-            // storage.UpdateTransaction();
-            tr.Category = category;
-            tr.Date = date;
-            tr.Info = info;
-            tr.Amount = amount;
+            storage.UpdateTransaction(tr, date, amount, info, category);
         }
 
     }
