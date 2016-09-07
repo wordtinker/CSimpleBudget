@@ -49,10 +49,25 @@ namespace ViewModels
             }
         }
 
+        public void CurrenMonthChanged(int index)
+        {
+            Core.Instance.CurrentMonth = index + 1;
+        }
+
+        public void CurrentYearChanged(int year)
+        {
+            Core.Instance.CurrentYear = year;
+        }
+
         //ctor
         public BudgetManagerViewModel(IUIBudgetWindowService windowService)
         {
             this.windowService = windowService;
+            Core.Instance.Records.ListChanged += (sender, e) =>
+            {
+                OnPropertyChanged(() => Records);
+            };
+
             Core.Instance.CurrentYear = SelectedYear;
             Core.Instance.CurrentMonth = SelectedMonth + 1;
         }
