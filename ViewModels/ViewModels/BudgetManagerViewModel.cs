@@ -1,26 +1,26 @@
-﻿using Prism.Mvvm;
+﻿using Models;
+using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 
 namespace ViewModels
 {
-    public enum BudgetType
+    public class RecordItem
     {
         // TODO
-        Monthly,
-        Weekly
-    }
+        private BudgetRecord record;
 
-    public class BudgetRecord
-    {
-        public Decimal Amount { get; set; }
-        public string Category { get; set; }
-        public BudgetType Type { get; set; }
-        public int OnDay { get; set; }
-        // TODO
+        public decimal Amount { get { return record.Amount; } }
+        public string Category { get { return string.Format("{0}--{1}", record.Category.Parent?.Name, record.Category.Name); } }
+        public string Type { get { return record.Type.ToString(); } }
+        public int OnDay { get { return record.OnDay; } }
+
+        public RecordItem(BudgetRecord rec)
+        {
+            this.record = rec;
+        }
     }
 
     public class BudgetManagerViewModel : BindableBase
@@ -33,24 +33,28 @@ namespace ViewModels
         {
             get
             {
-                // TODO min, current-5 max,curr+5 stub from DB
-                return new List<int> { 2014, 2015, 2016 };
+                // TODO min-3 from DB
+                int minYear = 2014;
+                int maxYear = DateTime.Now.AddYears(3).Year;
+                return Enumerable.Range(minYear, maxYear - minYear).ToList();
             }
         }
         public int SelectedYear { get; set; } = DateTime.Now.Year;
-        public ObservableCollection<BudgetRecord> Records { get; }
-
-
+        public IEnumerable<RecordItem> Records
+        {
+            get
+            {
+                return from rec in Core.Instance.Records
+                       select new RecordItem(rec);
+            }
+        }
 
         //ctor
         public BudgetManagerViewModel(IUIBudgetWindowService windowService)
         {
             this.windowService = windowService;
-            // TODO Stub
-            Records = new ObservableCollection<BudgetRecord> {
-                new BudgetRecord{ Amount=-500, Category = "Test", OnDay=1, Type=BudgetType.Monthly},
-                new BudgetRecord{ Amount=-1000, Category = "Test2", OnDay=2, Type=BudgetType.Monthly}
-            };
+            Core.Instance.CurrentYear = SelectedYear;
+            Core.Instance.CurrentMonth = SelectedMonth + 1;
         }
     }
 }

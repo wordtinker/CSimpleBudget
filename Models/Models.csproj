@@ -71,6 +71,7 @@
     <Compile Include="Data\FileReader.cs" />
     <Compile Include="Data\SQLiteReader.cs" />
     <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\BudgetRecord.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Core.cs" />
     <Compile Include="Models\Transaction.cs" />

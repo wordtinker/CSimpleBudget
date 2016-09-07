@@ -25,6 +25,7 @@ namespace Models
         internal abstract bool UpdateTransaction(Transaction tr, DateTime date, decimal amount, string info, Category category);
         internal abstract bool AddTransaction(
             Account currentAccount, DateTime date, decimal amount, string info, Category category, out Transaction newTr);
-        
+
+        internal abstract List<BudgetRecord> SelectRecords(int currentYear, int currentMonth);
     }
 }

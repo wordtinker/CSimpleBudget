@@ -584,6 +584,45 @@ namespace Models
             }
         }
 
+        internal override List<BudgetRecord> SelectRecords(int currentYear, int currentMonth)
+        {
+            string sql = "SELECT *, rowid FROM Budget WHERE month=@month AND year=@year";
+            List<BudgetRecord> records = new List<BudgetRecord>();
+            using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+            {
+                cmd.Parameters.Add(new SQLiteParameter()
+                {
+                    ParameterName = "@month",
+                    DbType = System.Data.DbType.Int32,
+                    Value = currentMonth
+                });
+                cmd.Parameters.Add(new SQLiteParameter()
+                {
+                    ParameterName = "@year",
+                    DbType = System.Data.DbType.Int32,
+                    Value = currentYear
+                });
+                SQLiteDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    BudgetType type;
+                    Enum.TryParse<BudgetType>(dr.GetString(2), out type);
+                    records.Add(new BudgetRecord
+                    {
+                        Amount = dr.GetDecimal(0) / 100,
+                        Category = GetCategoryForId(dr.GetInt32(1)),
+                        Type = type,
+                        OnDay = dr.GetInt32(3),
+                        Month = currentMonth,
+                        Year = currentYear,
+                        Id = dr.GetInt32(6)
+                    });
+                }
+                dr.Close();
+            }
+            return records;
+        }
+
         /************** File *****************/
 
         public override bool InitializeFile(string fileName)

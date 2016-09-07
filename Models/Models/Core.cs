@@ -11,6 +11,8 @@ namespace Models
         private static readonly Core instance = new Core();
         private FileReader storage;
         private Account currentAccount;
+        private int currentYear;
+        private int currentMonth; // 1-based
 
         public static Core Instance
         {
@@ -154,5 +156,36 @@ namespace Models
             storage.UpdateTransaction(tr, date, amount, info, category);
         }
 
+        public int CurrentYear
+        {
+            get
+            {
+                return currentYear;
+            }
+            set
+            {
+                if (SetProperty(ref currentYear, value))
+                {
+                    Records.Clear();
+                    storage.SelectRecords(CurrentYear, CurrentMonth).ForEach(Records.Add);
+                }
+            }
+        }
+        public int CurrentMonth
+        {
+            get
+            {
+                return currentMonth;
+            }
+            set
+            {
+                if (SetProperty(ref currentMonth, value))
+                {
+                    Records.Clear();
+                    storage.SelectRecords(CurrentYear, CurrentMonth).ForEach(Records.Add);
+                }
+            }
+        }
+        public BindingList<BudgetRecord> Records { get; } = new BindingList<BudgetRecord>();
     }
 }
