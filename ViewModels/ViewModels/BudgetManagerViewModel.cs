@@ -10,7 +10,7 @@ namespace ViewModels
     public class RecordItem
     {
         // TODO
-        private BudgetRecord record;
+        internal BudgetRecord record;
 
         public decimal Amount { get { return record.Amount; } }
         public string Category { get { return string.Format("{0}--{1}", record.Category.Parent?.Name, record.Category.Name); } }
@@ -59,6 +59,11 @@ namespace ViewModels
             Core.Instance.CurrentYear = year;
         }
 
+        public bool DeleteRecord(RecordItem item)
+        {
+            return Core.Instance.DeleteRecord(item.record);
+        }
+
         //ctor
         public BudgetManagerViewModel(IUIBudgetWindowService windowService)
         {
@@ -71,5 +76,7 @@ namespace ViewModels
             Core.Instance.CurrentYear = SelectedYear;
             Core.Instance.CurrentMonth = SelectedMonth + 1;
         }
+
+        // TODO close handler to Core.Instance
     }
 }

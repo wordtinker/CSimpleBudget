@@ -27,5 +27,6 @@ namespace Models
             Account currentAccount, DateTime date, decimal amount, string info, Category category, out Transaction newTr);
 
         internal abstract List<BudgetRecord> SelectRecords(int currentYear, int currentMonth);
+        internal abstract bool DeleteRecord(BudgetRecord record);
     }
 }

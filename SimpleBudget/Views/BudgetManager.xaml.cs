@@ -19,11 +19,6 @@ namespace SimpleBudget
             // TODO
         }
 
-        private void Delete_Click(object sender, RoutedEventArgs e)
-        {
-            // TODO
-        }
-
         private void Month_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int index = (sender as ComboBox).SelectedIndex;
@@ -37,6 +32,16 @@ namespace SimpleBudget
             {
                 int year = int.Parse(sYear);
                 ((BudgetManagerViewModel)this.DataContext).CurrentYearChanged(year);
+            }
+        }
+
+        private void DeleteRecord_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem mi = (MenuItem)sender;
+            RecordItem item = (RecordItem)mi.DataContext;
+            if (!((BudgetManagerViewModel)this.DataContext).DeleteRecord(item))
+            {
+                MessageBox.Show("Can't delete budget record.");
             }
         }
     }

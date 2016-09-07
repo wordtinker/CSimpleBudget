@@ -623,6 +623,29 @@ namespace Models
             return records;
         }
 
+        internal override bool DeleteRecord(BudgetRecord record)
+        {
+            string sql = "DELETE FROM Budget WHERE rowid=@rowid";
+            try
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+                {
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@rowid",
+                        DbType = System.Data.DbType.Int32,
+                        Value = record.Id
+                    });
+                    cmd.ExecuteNonQuery();
+                }
+                return true;
+            }
+            catch (SQLiteException)
+            {
+                return false;
+            }
+        }
+
         /************** File *****************/
 
         public override bool InitializeFile(string fileName)

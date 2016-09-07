@@ -17,26 +17,25 @@
             <Button Content="Add"/>
             <Button Content="Copy from"/>
         </StackPanel>
-        <DataGrid DockPanel.Dock="Top"
-                  ItemsSource="{Binding Records}"
-                  AutoGenerateColumns="False"
-                  SelectionMode="Single"
-                  HeadersVisibility="Column"
-                  GridLinesVisibility="Horizontal"
-                  IsReadOnly="True"
-                  BorderThickness="0">
-            <DataGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Edit" Click="Edit_Click"/>
-                    <MenuItem Header="Delete" Click="Delete_Click"/>
+        <ListView DockPanel.Dock="Top" ItemsSource="{Binding Records}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Amount" DisplayMemberBinding="{Binding Amount}"/>
+                    <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category}"/>
+                    <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Type}"/>
+                    <GridViewColumn Header="On day" DisplayMemberBinding="{Binding OnDay}"/>
+                </GridView>
+            </ListView.View>
+            <ListView.Resources>
+                <ContextMenu x:Key="RecordsContextMenu">
+                    <MenuItem Header="Delete" Click="DeleteRecord_Click"/>
                 </ContextMenu>
-            </DataGrid.ContextMenu>
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Amount" Width="Auto" Binding="{Binding Amount}"/>
-                <DataGridTextColumn Header="Category" Width="*" Binding="{Binding Category}"/>
-                <DataGridTextColumn Header="Type" Width="*" Binding="{Binding Type}"/>
-                <DataGridTextColumn Header="On day" Width="*" Binding="{Binding OnDay}"/>
-            </DataGrid.Columns>
-        </DataGrid>
+            </ListView.Resources>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="ContextMenu" Value="{StaticResource RecordsContextMenu}" />
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
     </DockPanel>
 </Window>

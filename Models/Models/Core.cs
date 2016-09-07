@@ -187,5 +187,18 @@ namespace Models
             }
         }
         public BindingList<BudgetRecord> Records { get; } = new BindingList<BudgetRecord>();
+
+        public bool DeleteRecord(BudgetRecord record)
+        {
+            if (storage.DeleteRecord(record))
+            {
+                Records.Remove(record);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
