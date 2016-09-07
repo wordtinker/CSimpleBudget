@@ -77,6 +77,11 @@ namespace ViewModels
             Core.Instance.CurrentMonth = SelectedMonth + 1;
         }
 
-        // TODO close handler to Core.Instance
+        public void Close()
+        {
+            // Cleanup
+            Core.Instance.CurrentYear = null;
+            Core.Instance.CurrentMonth = null;
+        }
     }
 }
