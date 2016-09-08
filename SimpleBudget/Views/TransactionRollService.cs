@@ -16,7 +16,7 @@ namespace SimpleBudget
             TransactionEditor window = new TransactionEditor();
             window.DataContext = vm;
             window.Owner = rollWindow;
-            window.Show();
+            window.ShowDialog();
         }
     }
 }

@@ -16,7 +16,7 @@ namespace SimpleBudget
             BudgetRecordEditor editor = new BudgetRecordEditor();
             editor.DataContext = vm;
             editor.Owner = parentWindow;
-            editor.Show();
+            editor.ShowDialog();
         }
     }
 }
