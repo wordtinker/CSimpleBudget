@@ -112,6 +112,9 @@
       <DependentUpon>BudgetManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\BudgetManagerService.cs" />
+    <Compile Include="Views\BudgetRecordEditor.xaml.cs">
+      <DependentUpon>BudgetRecordEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CategoriesManager.xaml.cs">
       <DependentUpon>CategoriesManager.xaml</DependentUpon>
     </Compile>
@@ -128,6 +131,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\BudgetManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BudgetRecordEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

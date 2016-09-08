@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using ViewModels;
 
 namespace SimpleBudget
@@ -19,9 +20,11 @@ namespace SimpleBudget
             InitializeComponent();
         }
 
-        private void Edit_Click(object sender, RoutedEventArgs e)
+        private void Record_DoubleClick(object sender, MouseButtonEventArgs e)
         {
-            // TODO
+            ListViewItem li = (ListViewItem)sender;
+            RecordItem item = (RecordItem)li.DataContext;
+            ((BudgetManagerViewModel)DataContext).ShowTransactionEditor(item);
         }
 
         private void Month_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -48,6 +51,11 @@ namespace SimpleBudget
             {
                 MessageBox.Show("Can't delete budget record.");
             }
+        }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            ((BudgetManagerViewModel)DataContext).ShowTransactionEditor();
         }
     }
 }

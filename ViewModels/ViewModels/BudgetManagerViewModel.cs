@@ -64,6 +64,18 @@ namespace ViewModels
             return Core.Instance.DeleteRecord(item.record);
         }
 
+        public void ShowTransactionEditor()
+        {
+            BudgetRecordEditorViewModel vm = new BudgetRecordEditorViewModel();
+            windowService.ShowBudgetRecordEditor(vm);
+        }
+
+        public void ShowTransactionEditor(RecordItem item)
+        {
+            BudgetRecordEditorViewModel vm = new BudgetRecordEditorViewModel(item.record);
+            windowService.ShowBudgetRecordEditor(vm);
+        }
+
         //ctor
         public BudgetManagerViewModel(IUIBudgetWindowService windowService)
         {

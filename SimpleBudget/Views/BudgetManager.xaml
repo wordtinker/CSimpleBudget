@@ -14,7 +14,7 @@
             <ComboBox ItemsSource="{Binding Years}" SelectedValue="{Binding SelectedYear}" SelectionChanged="Year_SelectionChanged"/>
         </StackPanel>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
-            <Button Content="Add"/>
+            <Button Content="Add" Click="AddButton_Click"/>
             <Button Content="Copy from"/>
         </StackPanel>
         <ListView DockPanel.Dock="Top" ItemsSource="{Binding Records}">
@@ -33,7 +33,8 @@
             </ListView.Resources>
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
-                    <Setter Property="ContextMenu" Value="{StaticResource RecordsContextMenu}" />
+                    <Setter Property="ContextMenu" Value="{StaticResource RecordsContextMenu}"/>
+                    <EventSetter Event="MouseDoubleClick" Handler="Record_DoubleClick"/>
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>

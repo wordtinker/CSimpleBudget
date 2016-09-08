@@ -24,6 +24,6 @@ namespace ViewModels
 
     public interface IUIBudgetWindowService
     {
-        // TODO
+        void ShowBudgetRecordEditor(BudgetRecordEditorViewModel vm);
     }
 }

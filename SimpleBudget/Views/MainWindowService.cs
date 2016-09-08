@@ -60,9 +60,9 @@ namespace SimpleBudget
 
 		public void ManageBudget()
 		{
-            BudgetManagerService service = new BudgetManagerService();
-            BudgetManagerViewModel vm = new BudgetManagerViewModel(service);
             BudgetManager window = new BudgetManager();
+            BudgetManagerService service = new BudgetManagerService(window);
+            BudgetManagerViewModel vm = new BudgetManagerViewModel(service);
             window.DataContext = vm;
             window.Owner = mainWindow;
             window.ShowDialog();
