@@ -29,16 +29,7 @@ namespace ViewModels
 
         public List<string> Months { get; } = DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12).ToList();
         public int SelectedMonth { get; set; } = DateTime.Now.Month - 1;
-        public List<int> Years
-        {
-            get
-            {
-                // TODO min-3 from DB
-                int minYear = 2014;
-                int maxYear = DateTime.Now.AddYears(3).Year;
-                return Enumerable.Range(minYear, maxYear - minYear).ToList();
-            }
-        }
+        public IEnumerable<int> Years { get; } = Core.Instance.GetActiveYears();
         public int SelectedYear { get; set; } = DateTime.Now.Year;
         public IEnumerable<RecordItem> Records
         {

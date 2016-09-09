@@ -2,6 +2,7 @@
 
 namespace Models
 {
+    // TODO description
     public enum BudgetType
     {
         Monthly,

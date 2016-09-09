@@ -4,9 +4,48 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimpleBudget"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Budget Record" Height="300" Width="300">
-    <Grid>
-        
-    </Grid>
+    <DockPanel>
+        <Label Content="Year" DockPanel.Dock="Top"/>
+        <ComboBox ItemsSource="{Binding Years}" SelectedItem="{Binding SelectedYear}" DockPanel.Dock="Top"/>
+        <Label Content="Month" DockPanel.Dock="Top"/>
+        <ComboBox ItemsSource="{Binding Months}" SelectedIndex="{Binding SelectedMonth}" DockPanel.Dock="Top"/>
+        <Label Content="Budget" DockPanel.Dock="Top"/>
+        <xctk:DecimalUpDown Value="{Binding Amount}" DockPanel.Dock="Top" FormatString="F2"/>
+        <ComboBox ItemsSource="{Binding Categories}" DisplayMemberPath="FullName"
+                  SelectedItem="{Binding Category}" DockPanel.Dock="Top"/>
+        <Grid DockPanel.Dock="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <RadioButton GroupName="BType" Content="Monthly"
+                         IsChecked="{Binding Monthly}"
+                         Grid.Column="0" Grid.Row="0"/>
+            <RadioButton x:Name="point" GroupName="BType" Content="Point on"
+                         IsChecked="{Binding Point}"
+                         Grid.Column="0" Grid.Row="1"/>
+            <ComboBox ItemsSource="{Binding Days}"
+                      Grid.Column="1" Grid.Row="1" IsEnabled="{Binding ElementName=point, Path=IsChecked}"
+                      SelectedItem="{Binding Day}"/>
+            <RadioButton GroupName="BType" Content="Daily"
+                         IsChecked="{Binding Daily}"
+                         Grid.Column="0" Grid.Row="2"/>
+            <RadioButton x:Name="weekly" GroupName="BType" Content="Weekly on"
+                         IsChecked="{Binding Weekly}"
+                         Grid.Column="0" Grid.Row="3"/>
+            <ComboBox ItemsSource="{Binding DaysOfWeek}"
+                      Grid.Column="1" Grid.Row="3" IsEnabled="{Binding ElementName=weekly, Path=IsChecked}"
+                      SelectedIndex="{Binding DayOfWeek}"/>
+        </Grid>
+        <Button DockPanel.Dock="Bottom" Content="Update" Command="{Binding UpdateRecord}" Click="Button_Click"/>
+    </DockPanel>
 </Window>

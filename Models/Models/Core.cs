@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System;
+using System.Linq;
 
 namespace Models
 {
@@ -40,6 +41,15 @@ namespace Models
                     storage.SelectCategories().ForEach(Categories.Add);
                 }
             }
+        }
+
+        public IEnumerable<int> GetActiveYears()
+        {
+            // TODO min-3 from DB
+            int minYear = 2014;
+            // TODO max+3 from DB
+            int maxYear = DateTime.Now.AddYears(3).Year;
+            return Enumerable.Range(minYear, maxYear - minYear);
         }
 
         // TODO Stub
