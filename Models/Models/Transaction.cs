@@ -38,7 +38,6 @@ namespace Models
         {
             this.Id = id;
             this.Account = acc;
-
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Models;
+using Prism.Commands;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,6 +11,7 @@ namespace ViewModels
     public class BudgetRecordEditorViewModel
     {
         private BudgetRecord record;
+        private ICommand updateRecord;
 
         public List<string> Months { get; } = DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12).ToList();
         public int SelectedMonth { get; set; } = DateTime.Now.Month - 1;
@@ -35,12 +37,49 @@ namespace ViewModels
         public IEnumerable<string> DaysOfWeek { get; } = Enum.GetNames(typeof(DayOfWeek));
         public int DayOfWeek { get; set; } = 0;
 
+        private BudgetType GetSelectedType(out int onDay)
+        {
+            onDay = 0;
+            if (Monthly)
+            {
+                return BudgetType.Monthly;
+            }
+            else if (Point)
+            {
+                onDay = Day;
+                return BudgetType.Point;
+            }
+            else if (Daily)
+            {
+                return BudgetType.Daily;
+            }
+            else
+            {
+                onDay = DayOfWeek;
+                return BudgetType.Weekly;
+            }
+        }
+
         public ICommand UpdateRecord
         {
-            get
+                get
             {
-                throw new NotImplementedException();
-                // TODO
+                return updateRecord ??
+                (updateRecord = new DelegateCommand(() =>
+                {
+                    int onDay;
+                    BudgetType budgetType = GetSelectedType(out onDay);
+                    if (record == null)
+                    {
+                        Core.Instance.AddRecord(
+                            Amount, Category.category, budgetType, onDay, SelectedMonth + 1, SelectedYear);
+                    }
+                    else
+                    {
+                        Core.Instance.UpdateRecord(
+                            record, Amount, Category.category, budgetType, onDay, SelectedMonth + 1, SelectedYear);
+                    }
+                }));
             }
         }
 

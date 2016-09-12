@@ -9,7 +9,7 @@ namespace ViewModels
 {
     public class RecordItem
     {
-        // TODO
+        // TODO copy from Btn
         internal BudgetRecord record;
 
         public decimal Amount { get { return record.Amount; } }

@@ -607,15 +607,14 @@ namespace Models
                 {
                     BudgetType type;
                     Enum.TryParse<BudgetType>(dr.GetString(2), out type);
-                    records.Add(new BudgetRecord
+                    records.Add(new BudgetRecord(dr.GetInt32(6))
                     {
                         Amount = dr.GetDecimal(0) / 100,
                         Category = GetCategoryForId(dr.GetInt32(1)),
                         Type = type,
                         OnDay = dr.GetInt32(3),
                         Month = currentMonth,
-                        Year = currentYear,
-                        Id = dr.GetInt32(6)
+                        Year = currentYear
                     });
                 }
                 dr.Close();
@@ -638,6 +637,138 @@ namespace Models
                     });
                     cmd.ExecuteNonQuery();
                 }
+                return true;
+            }
+            catch (SQLiteException)
+            {
+                return false;
+            }
+        }
+
+        internal override bool AddRecord(
+            decimal amount, Category category, BudgetType budgetType, int onDay,
+            int selectedMonth, int selectedYear, out BudgetRecord newRecord)
+        {
+            string sql = "INSERT INTO Budget VALUES(@amount, @catId, @btype, @onDay, @year, @month)";
+            try
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+                {
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@amount",
+                        DbType = System.Data.DbType.Int32,
+                        Value = decimal.ToInt32(amount * 100)
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@catId",
+                        DbType = System.Data.DbType.Int32,
+                        Value = category.Id
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@btype",
+                        DbType = System.Data.DbType.String,
+                        Value = budgetType.ToString()
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@onDay",
+                        DbType = System.Data.DbType.Int32,
+                        Value = onDay
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@month",
+                        DbType = System.Data.DbType.Int32,
+                        Value = selectedMonth
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@year",
+                        DbType = System.Data.DbType.Int32,
+                        Value = selectedYear
+                    });
+                    cmd.ExecuteNonQuery();
+                }
+                newRecord = new BudgetRecord(Convert.ToInt32(connection.LastInsertRowId))
+                {
+                    Amount = amount,
+                    Category = category,
+                    Month = selectedMonth,
+                    Year = selectedYear,
+                    OnDay = onDay,
+                    Type = budgetType
+                };
+                return true;
+            }
+            catch (SQLiteException)
+            {
+                newRecord = null;
+                return false;
+            }
+        }
+
+        internal override bool UpdateRecord(
+            BudgetRecord record, decimal amount, Category category, BudgetType budgetType,
+            int onDay, int selectedMonth, int selectedYear)
+        {
+            string sql = "UPDATE Budget SET amount=@amount, category_id=@catId, type=@btype, day=@onDay, year=@year, month=@month WHERE rowid=@rowid";
+            try
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+                {
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@amount",
+                        DbType = System.Data.DbType.Int32,
+                        Value = decimal.ToInt32(amount * 100)
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@catId",
+                        DbType = System.Data.DbType.Int32,
+                        Value = category.Id
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@btype",
+                        DbType = System.Data.DbType.String,
+                        Value = budgetType.ToString()
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@onDay",
+                        DbType = System.Data.DbType.Int32,
+                        Value = onDay
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@month",
+                        DbType = System.Data.DbType.Int32,
+                        Value = selectedMonth
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@year",
+                        DbType = System.Data.DbType.Int32,
+                        Value = selectedYear
+                    });
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@rowid",
+                        DbType = System.Data.DbType.Int32,
+                        Value = record.Id
+                    });
+                    cmd.ExecuteNonQuery();
+                }
+                record.Amount = amount;
+                record.Category = category;
+                record.Type = budgetType;
+                record.OnDay = onDay;
+                record.Month = selectedMonth;
+                record.Year = selectedYear;
                 return true;
             }
             catch (SQLiteException)

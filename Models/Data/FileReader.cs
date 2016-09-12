@@ -28,5 +28,7 @@ namespace Models
 
         internal abstract List<BudgetRecord> SelectRecords(int currentYear, int currentMonth);
         internal abstract bool DeleteRecord(BudgetRecord record);
+        internal abstract bool AddRecord(decimal amount, Category category, BudgetType budgetType, int onDay, int selectedMonth, int selectedYear, out BudgetRecord newRecord);
+        internal abstract bool UpdateRecord(BudgetRecord record, decimal amount, Category category, BudgetType budgetType, int onDay, int selectedMonth, int selectedYear);
     }
 }

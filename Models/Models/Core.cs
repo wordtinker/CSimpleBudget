@@ -216,5 +216,30 @@ namespace Models
                 return false;
             }
         }
+
+        public void AddRecord(decimal amount, Category category, BudgetType budgetType, int onDay, int selectedMonth, int selectedYear)
+        {
+            BudgetRecord newRecord;
+            if (storage.AddRecord(
+                amount, category, budgetType, onDay, selectedMonth, selectedYear, out newRecord))
+            {
+                if (CurrentYear == newRecord.Year && CurrentMonth == newRecord.Month)
+                {
+                    Records.Add(newRecord);
+                }
+            }
+        }
+
+        public void UpdateRecord(BudgetRecord record, decimal amount, Category category, BudgetType budgetType, int onDay, int selectedMonth, int selectedYear)
+        {
+            storage.UpdateRecord(record, amount, category, budgetType, onDay, selectedMonth, selectedYear);
+            if (CurrentYear != record.Year || CurrentMonth != record.Month)
+            {
+                Records.Remove(record);
+            }
+        }
+
+        private Core() { /* Empty */ }
+
     }
 }
