@@ -7,6 +7,15 @@ using System.Linq;
 
 namespace ViewModels
 {
+    public class BudgetBar
+    {
+        public string Name { get; set; }
+        public decimal Spent { get; set; }
+        public decimal ToSpend { get; set; }
+        public decimal Overspent { get; set; }
+        // TODO
+    }
+
     public class MainWindowViewModel : BindableBase
     {
         private IUIMainWindowService windowService;
@@ -215,6 +224,22 @@ namespace ViewModels
                 return from acc in core.Accounts
                        where acc.Closed == false
                        select new Item(acc);
+            }
+        }
+
+        // TODO
+        public IEnumerable<BudgetBar> Bars
+        {
+            get
+            {
+              var bars = new List<BudgetBar>
+                {
+                    new BudgetBar { Name="B0/S120", Spent=0, ToSpend=0, Overspent=120},
+                    new BudgetBar { Name="B100/S50", Spent=50, ToSpend=50, Overspent=0},
+                    new BudgetBar { Name="B100/S0", Spent=0, ToSpend=100, Overspent=0},
+                    new BudgetBar { Name="B100/120", Spent=100, ToSpend=0, Overspent=20}
+                };
+                return bars;
             }
         }
 

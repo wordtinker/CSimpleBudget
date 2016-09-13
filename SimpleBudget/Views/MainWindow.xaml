@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimpleBudget"
+        xmlns:datavis="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+        xmlns:chart="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
         mc:Ignorable="d"
         Title="Simple Budget" Height="350" Width="525">
     <DockPanel>
@@ -45,5 +47,25 @@
                 </Style>
             </ListView.Resources>
         </ListView>
+        <chart:Chart>
+            <chart:Chart.LegendStyle>
+                <Style TargetType="datavis:Legend">
+                    <Setter Property="Width" Value="0" />
+                </Style>
+            </chart:Chart.LegendStyle>
+            <chart:Chart.Series>
+                <chart:Stacked100BarSeries>
+                    <chart:SeriesDefinition ItemsSource="{Binding Bars}"
+                                            IndependentValuePath="Name"
+                                            DependentValuePath="Spent"/>
+                    <chart:SeriesDefinition ItemsSource="{Binding Bars}"
+                                            IndependentValuePath="Name"
+                                            DependentValuePath="ToSpend"/>
+                    <chart:SeriesDefinition ItemsSource="{Binding Bars}"
+                                            IndependentValuePath="Name"
+                                            DependentValuePath="Overspent"/>
+                </chart:Stacked100BarSeries>
+            </chart:Chart.Series>
+        </chart:Chart>
     </DockPanel>
 </Window>
