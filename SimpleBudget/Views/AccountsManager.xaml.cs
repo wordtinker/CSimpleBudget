@@ -18,7 +18,7 @@ namespace SimpleBudget
         private void DeleteAccount_Click(object sender, RoutedEventArgs e)
         {
             MenuItem mi = (MenuItem)sender;
-            Item item = (Item)mi.DataContext;
+            AccountItem item = (AccountItem)mi.DataContext;
             if (!((AccountsViewModel)this.DataContext).DeleteAccount(item))
             {
                 MessageBox.Show("Can't delete account.");
@@ -38,7 +38,7 @@ namespace SimpleBudget
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ListBox box = (ListBox)sender;
-            Item si = (Item)box.SelectedItem;
+            AccountItem si = (AccountItem)box.SelectedItem;
             ((AccountsViewModel)this.DataContext).UpdateSelection(si);
         }
     }

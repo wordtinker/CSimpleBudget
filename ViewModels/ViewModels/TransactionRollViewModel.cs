@@ -81,7 +81,7 @@ namespace ViewModels
         public void Close()
         {
             // Cleanup selected account and transactions
-            Core.Instance.CurrentAccount = null;
+            Core.Instance.SelectedAccount = null;
         }
     }
 }

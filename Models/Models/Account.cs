@@ -11,7 +11,7 @@ namespace Models
         private bool closed;
         private bool excluded;
 
-        public int Id { get; set; }
+        internal int Id { get; set; }
 
         public string Name
         {

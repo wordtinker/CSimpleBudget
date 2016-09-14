@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ViewModels
 {
-    public class Item : BindableBase
+    public class AccountItem : BindableBase
     {
         public Account account;
 
@@ -40,7 +40,7 @@ namespace ViewModels
             get { return account.Balance; }
         }
 
-        public Item(Account acc)
+        public AccountItem(Account acc)
         {
             this.account = acc;
         }
@@ -57,18 +57,18 @@ namespace ViewModels
             }
         }
 
-        public Item SelectedAccount { get; set; }
+        public AccountItem SelectedAccount { get; set; }
 
-        public IEnumerable<Item> Accounts
+        public IEnumerable<AccountItem> Accounts
         {
             get
             {
                 return from acc in Core.Instance.Accounts
-                       select new Item(acc);
+                       select new AccountItem(acc);
             }
         }
 
-        public void UpdateSelection(Item selectedItem)
+        public void UpdateSelection(AccountItem selectedItem)
         {
             SelectedAccount = selectedItem;
             OnPropertyChanged(() => SelectedAccount);
@@ -79,7 +79,7 @@ namespace ViewModels
             return Core.Instance.AddAccount(accName, accType);
         }
 
-        public bool DeleteAccount(Item item)
+        public bool DeleteAccount(AccountItem item)
         {
             return Core.Instance.DeleteAccount(item.account);
         }

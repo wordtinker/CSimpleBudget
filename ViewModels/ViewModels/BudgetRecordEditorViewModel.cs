@@ -18,16 +18,16 @@ namespace ViewModels
         public IEnumerable<int> Years { get; } = Core.Instance.GetActiveYears();
         public int SelectedYear { get; set; } = DateTime.Now.Year;
         public decimal Amount { get; set; }
-        public IEnumerable<Node> Categories
+        public IEnumerable<CategoryNode> Categories
         {
             get
             {
                 return from c in Core.Instance.Categories
                        where c.Parent != null
-                       select new Node(c);
+                       select new CategoryNode(c);
             }
         }
-        public Node Category { get; set; }
+        public CategoryNode Category { get; set; }
         public bool Monthly { get; set; }
         public bool Point { get; set; }
         public IEnumerable<int> Days { get; } = Enumerable.Range(1, 30);
@@ -85,7 +85,7 @@ namespace ViewModels
 
         public BudgetRecordEditorViewModel()
         {
-            Category = new Node((from c in Core.Instance.Categories where c.Parent != null select c).First());
+            Category = new CategoryNode((from c in Core.Instance.Categories where c.Parent != null select c).First());
             Monthly = true;
         }
 
@@ -95,7 +95,7 @@ namespace ViewModels
             SelectedMonth = record.Month - 1;
             SelectedYear = record.Year;
             Amount = record.Amount;
-            Category = new Node(record.Category);
+            Category = new CategoryNode(record.Category);
             switch (record.Type)
             {
                 case BudgetType.Monthly:

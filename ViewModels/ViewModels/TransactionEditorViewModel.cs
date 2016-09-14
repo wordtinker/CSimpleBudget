@@ -12,19 +12,19 @@ namespace ViewModels
         private Transaction tr;
         private ICommand updateTransaction;
 
-        public IEnumerable<Node> Categories
+        public IEnumerable<CategoryNode> Categories
         {
             get
             {
                 return from c in Core.Instance.Categories
                        where c.Parent != null
-                       select new Node(c);
+                       select new CategoryNode(c);
             }
         }
         public DateTime Date { get; set; }
         public decimal Amount { get; set; }
         public string Info { get; set; }
-        public Node Category { get; set; }
+        public CategoryNode Category { get; set; }
 
         public ICommand UpdateTransaction
         {
@@ -48,7 +48,7 @@ namespace ViewModels
         public TransactionEditorViewModel()
         {
             Date = DateTime.Now;
-            Category = new Node((from c in Core.Instance.Categories where c.Parent != null select c).First());
+            Category = new CategoryNode((from c in Core.Instance.Categories where c.Parent != null select c).First());
         }
 
         public TransactionEditorViewModel(Transaction tr)
@@ -57,7 +57,7 @@ namespace ViewModels
             Date = tr.Date;
             Amount = tr.Amount;
             Info = tr.Info;
-            Category = new Node(tr.Category);
+            Category = new CategoryNode(tr.Category);
         }
     }
 }

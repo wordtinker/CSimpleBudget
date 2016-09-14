@@ -42,12 +42,12 @@ namespace ViewModels
 
         public void CurrenMonthChanged(int index)
         {
-            Core.Instance.CurrentMonth = index + 1;
+            Core.Instance.SelectedMonth = index + 1;
         }
 
         public void CurrentYearChanged(int year)
         {
-            Core.Instance.CurrentYear = year;
+            Core.Instance.SelectedYear = year;
         }
 
         public bool DeleteRecord(RecordItem item)
@@ -76,15 +76,15 @@ namespace ViewModels
                 OnPropertyChanged(() => Records);
             };
 
-            Core.Instance.CurrentYear = SelectedYear;
-            Core.Instance.CurrentMonth = SelectedMonth + 1;
+            Core.Instance.SelectedYear = SelectedYear;
+            Core.Instance.SelectedMonth = SelectedMonth + 1;
         }
 
         public void Close()
         {
             // Cleanup
-            Core.Instance.CurrentYear = null;
-            Core.Instance.CurrentMonth = null;
+            Core.Instance.SelectedYear = null;
+            Core.Instance.SelectedMonth = null;
         }
     }
 }

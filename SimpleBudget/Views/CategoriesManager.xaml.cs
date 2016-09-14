@@ -17,7 +17,7 @@ namespace SimpleBudget
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             string categoryName = CategoryName.Text;
-            Node parent = (Node)ParentCategory.SelectedItem;
+            CategoryNode parent = (CategoryNode)ParentCategory.SelectedItem;
             if(!((CategoriesViewModel)this.DataContext).AddCategory(categoryName, parent))
             {
                 MessageBox.Show("Can't add category.");
@@ -27,7 +27,7 @@ namespace SimpleBudget
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             MenuItem mi = (MenuItem)sender;
-            Node node = (Node)mi.DataContext;
+            CategoryNode node = (CategoryNode)mi.DataContext;
 
             if (!((CategoriesViewModel)this.DataContext).DeleteCategory(node))
             {

@@ -210,20 +210,20 @@ namespace ViewModels
             }
         }
 
-        public void ShowTransactionRoll(Item item)
+        public void ShowTransactionRoll(AccountItem item)
         {
-            core.CurrentAccount = item.account;
+            core.SelectedAccount = item.account;
             windowService.ShowTransactionRoll();
         }
 
         // TODO total line
-        public IEnumerable<Item> Accounts
+        public IEnumerable<AccountItem> Accounts
         {
             get
             {
                 return from acc in core.Accounts
                        where acc.Closed == false
-                       select new Item(acc);
+                       select new AccountItem(acc);
             }
         }
 

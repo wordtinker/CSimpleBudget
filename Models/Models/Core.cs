@@ -11,9 +11,9 @@ namespace Models
     {
         private static readonly Core instance = new Core();
         private FileReader storage;
-        private Account currentAccount;
-        private int? currentYear;
-        private int? currentMonth; // 1-based
+        private Account selectedAccount;
+        private int? selectedYear;
+        private int? selectedMonth; // 1-based
 
         public static Core Instance
         {
@@ -121,19 +121,19 @@ namespace Models
         }
 
         public BindingList<Transaction> Transactions { get; } = new BindingList<Transaction>();
-        public Account CurrentAccount
+        public Account SelectedAccount
         {
             get
             {
-                return currentAccount;
+                return selectedAccount;
             }
             set
             {
-                currentAccount = value;
+                selectedAccount = value;
                 Transactions.Clear();
-                if (currentAccount != null)
+                if (selectedAccount != null)
                 {
-                    storage.SelectTransactions(currentAccount).ForEach(Transactions.Add);
+                    storage.SelectTransactions(selectedAccount).ForEach(Transactions.Add);
                 }
             }
         }
@@ -154,7 +154,7 @@ namespace Models
         public void AddTransaction(DateTime date, decimal amount, string info, Category category)
         {
             Transaction newTr;
-            if (storage.AddTransaction(CurrentAccount, date, amount, info, category, out newTr))
+            if (storage.AddTransaction(SelectedAccount, date, amount, info, category, out newTr))
             {
                 Transactions.Add(newTr);
             }
@@ -166,38 +166,38 @@ namespace Models
             storage.UpdateTransaction(tr, date, amount, info, category);
         }
 
-        public int? CurrentYear
+        public int? SelectedYear
         {
             get
             {
-                return currentYear;
+                return selectedYear;
             }
             set
             {
-                if (SetProperty(ref currentYear, value))
+                if (SetProperty(ref selectedYear, value))
                 {
                     Records.Clear();
-                    if (CurrentYear != null && CurrentMonth != null)
+                    if (SelectedYear != null && SelectedMonth != null)
                     {
-                        storage.SelectRecords(CurrentYear.Value, CurrentMonth.Value).ForEach(Records.Add);
+                        storage.SelectRecords(SelectedYear.Value, SelectedMonth.Value).ForEach(Records.Add);
                     }
                 }
             }
         }
-        public int? CurrentMonth
+        public int? SelectedMonth
         {
             get
             {
-                return currentMonth;
+                return selectedMonth;
             }
             set
             {
-                if (SetProperty(ref currentMonth, value))
+                if (SetProperty(ref selectedMonth, value))
                 {
                     Records.Clear();
-                    if (CurrentYear != null && CurrentMonth != null)
+                    if (SelectedYear != null && SelectedMonth != null)
                     {
-                        storage.SelectRecords(CurrentYear.Value, CurrentMonth.Value).ForEach(Records.Add);
+                        storage.SelectRecords(SelectedYear.Value, SelectedMonth.Value).ForEach(Records.Add);
                     }
                 }
             }
@@ -223,7 +223,7 @@ namespace Models
             if (storage.AddRecord(
                 amount, category, budgetType, onDay, selectedMonth, selectedYear, out newRecord))
             {
-                if (CurrentYear == newRecord.Year && CurrentMonth == newRecord.Month)
+                if (SelectedYear == newRecord.Year && SelectedMonth == newRecord.Month)
                 {
                     Records.Add(newRecord);
                 }
@@ -233,7 +233,7 @@ namespace Models
         public void UpdateRecord(BudgetRecord record, decimal amount, Category category, BudgetType budgetType, int onDay, int selectedMonth, int selectedYear)
         {
             storage.UpdateRecord(record, amount, category, budgetType, onDay, selectedMonth, selectedYear);
-            if (CurrentYear != record.Year || CurrentMonth != record.Month)
+            if (SelectedYear != record.Year || SelectedMonth != record.Month)
             {
                 Records.Remove(record);
             }

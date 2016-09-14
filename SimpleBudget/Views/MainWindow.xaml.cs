@@ -21,7 +21,7 @@ namespace SimpleBudget
         public void Account_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             ListViewItem lvi = (ListViewItem)sender;
-            Item item = (Item)lvi.Content;
+            AccountItem item = (AccountItem)lvi.Content;
             MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
             vm.ShowTransactionRoll(item);
         }
