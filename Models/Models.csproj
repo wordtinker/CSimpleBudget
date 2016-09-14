@@ -74,6 +74,7 @@
     <Compile Include="Models\BudgetRecord.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Core.cs" />
+    <Compile Include="Models\Spending.cs" />
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

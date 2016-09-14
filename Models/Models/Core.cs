@@ -239,6 +239,44 @@ namespace Models
             }
         }
 
+        public List<Spending> CurrentMonthSpendings
+        {
+            get
+            {
+                // TODO stub
+                int currentYear = DateTime.Today.Year;
+                int currentMonth = DateTime.Today.Month;
+
+                List<Spending> spendings = new List<Spending>();
+
+                spendings.Add(new Spending
+                {
+                    Category = new Category { Name="B0", Parent= new Category { Name="S120"} },
+                    Budget = 0m,
+                    Value = 120m });
+                spendings.Add(new Spending
+                {
+                    Category = new Category { Name = "B100", Parent = new Category { Name = "S50" } },
+                    Budget = 100m,
+                    Value = 50m
+                });
+                spendings.Add(new Spending
+                {
+                    Category = new Category { Name = "B100", Parent = new Category { Name = "S0" } },
+                    Budget = 100m,
+                    Value = 0m
+                });
+                spendings.Add(new Spending
+                {
+                    Category = new Category { Name = "B100", Parent = new Category { Name = "S120" } },
+                    Budget = 100m,
+                    Value = 120m
+                });
+
+                return spendings;
+            }
+        }
+
         private Core() { /* Empty */ }
 
     }

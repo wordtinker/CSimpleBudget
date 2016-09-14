@@ -4,16 +4,43 @@ using System.Windows.Input;
 using Models;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace ViewModels
 {
     public class BudgetBar
     {
-        public string Name { get; set; }
-        public decimal Spent { get; set; }
-        public decimal ToSpend { get; set; }
-        public decimal Overspent { get; set; }
-        // TODO
+        private Spending spending;
+        private CategoryNode category;
+
+        public BudgetBar(Spending spending)
+        {
+            this.spending = spending;
+            this.category = new CategoryNode(spending.Category);
+        }
+
+        public string Name { get { return category.FullName; } }
+        public decimal Spent
+        {
+            get
+            {
+                return spending.Value - Overspent;
+            }
+        }
+        public decimal ToSpend
+        {
+            get
+            {
+                return spending.Budget - Spent;
+            }
+        }
+        public decimal Overspent
+        {
+            get
+            {
+                return Math.Max(0m, spending.Value - spending.Budget);
+            }
+        }
     }
 
     public class MainWindowViewModel : BindableBase
@@ -227,19 +254,12 @@ namespace ViewModels
             }
         }
 
-        // TODO
         public IEnumerable<BudgetBar> Bars
         {
             get
             {
-              var bars = new List<BudgetBar>
-                {
-                    new BudgetBar { Name="B0/S120", Spent=0, ToSpend=0, Overspent=120},
-                    new BudgetBar { Name="B100/S50", Spent=50, ToSpend=50, Overspent=0},
-                    new BudgetBar { Name="B100/S0", Spent=0, ToSpend=100, Overspent=0},
-                    new BudgetBar { Name="B100/120", Spent=100, ToSpend=0, Overspent=20}
-                };
-                return bars;
+                return from spending in core.CurrentMonthSpendings
+                       select new BudgetBar(spending);
             }
         }
 

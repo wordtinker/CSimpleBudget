@@ -57,13 +57,31 @@
                 <chart:Stacked100BarSeries>
                     <chart:SeriesDefinition ItemsSource="{Binding Bars}"
                                             IndependentValuePath="Name"
-                                            DependentValuePath="Spent"/>
+                                            DependentValuePath="Spent">
+                        <chart:SeriesDefinition.DataPointStyle>
+                            <Style TargetType="chart:BarDataPoint">
+                                <Setter Property="Background" Value="Blue"/>
+                            </Style>
+                        </chart:SeriesDefinition.DataPointStyle>
+                    </chart:SeriesDefinition>
                     <chart:SeriesDefinition ItemsSource="{Binding Bars}"
                                             IndependentValuePath="Name"
-                                            DependentValuePath="ToSpend"/>
+                                            DependentValuePath="ToSpend">
+                        <chart:SeriesDefinition.DataPointStyle>
+                            <Style TargetType="chart:BarDataPoint">
+                                <Setter Property="Background" Value="Green"/>
+                            </Style>
+                        </chart:SeriesDefinition.DataPointStyle>
+                    </chart:SeriesDefinition>
                     <chart:SeriesDefinition ItemsSource="{Binding Bars}"
                                             IndependentValuePath="Name"
-                                            DependentValuePath="Overspent"/>
+                                            DependentValuePath="Overspent">
+                        <chart:SeriesDefinition.DataPointStyle>
+                            <Style TargetType="chart:BarDataPoint">
+                                <Setter Property="Background" Value="Red"/>
+                            </Style>
+                        </chart:SeriesDefinition.DataPointStyle>
+                    </chart:SeriesDefinition>
                 </chart:Stacked100BarSeries>
             </chart:Chart.Series>
         </chart:Chart>
