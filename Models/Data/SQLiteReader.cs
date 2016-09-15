@@ -20,11 +20,14 @@ namespace Models
             }
             else
             {
-                // TODO check the rest of the code
                 return Convert.ToDecimal(obj) / 100;
             }
         }
 
+        private static int FromDecimaltoDBInt(decimal value)
+        {
+            return decimal.ToInt32(value * 100);
+        }
 
         /************** Categories *****************/
         internal override List<Category> SelectCategories()
@@ -300,8 +303,7 @@ namespace Models
                     {
                         ParameterName = "@balance",
                         DbType = System.Data.DbType.Int32,
-                        // TODO
-                        Value = decimal.ToInt32(acc.Balance * 100)
+                        Value = FromDecimaltoDBInt(acc.Balance)
                     });
                     cmd.Parameters.Add(new SQLiteParameter()
                     {
@@ -495,8 +497,7 @@ namespace Models
                     {
                         ParameterName = "@amount",
                         DbType = System.Data.DbType.Int32,
-                        // TODO
-                        Value = decimal.ToInt32(amount * 100)
+                        Value = FromDecimaltoDBInt(amount)
                     });
                     cmd.Parameters.Add(new SQLiteParameter()
                     {
@@ -552,8 +553,7 @@ namespace Models
                     {
                         ParameterName = "@amount",
                         DbType = System.Data.DbType.Int32,
-                        // TODO
-                        Value = decimal.ToInt32(amount * 100)
+                        Value = FromDecimaltoDBInt(amount)
                     });
                     cmd.Parameters.Add(new SQLiteParameter()
                     {
@@ -739,8 +739,7 @@ namespace Models
                     {
                         ParameterName = "@amount",
                         DbType = System.Data.DbType.Int32,
-                        // TODO
-                        Value = decimal.ToInt32(amount * 100)
+                        Value = FromDecimaltoDBInt(amount)
                     });
                     cmd.Parameters.Add(new SQLiteParameter()
                     {
@@ -805,8 +804,7 @@ namespace Models
                     {
                         ParameterName = "@amount",
                         DbType = System.Data.DbType.Int32,
-                        // TODO
-                        Value = decimal.ToInt32(amount * 100)
+                        Value = FromDecimaltoDBInt(amount)
                     });
                     cmd.Parameters.Add(new SQLiteParameter()
                     {
