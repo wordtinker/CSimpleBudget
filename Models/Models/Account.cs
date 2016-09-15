@@ -16,7 +16,7 @@ namespace Models
         public string Name
         {
             get { return name; }
-            internal set
+            set
             {
                 SetProperty(ref name, value);
             }
@@ -32,7 +32,7 @@ namespace Models
         public decimal Balance
         {
             get { return balance; }
-            internal set
+            set
             {
                 SetProperty(ref balance, value);
             }

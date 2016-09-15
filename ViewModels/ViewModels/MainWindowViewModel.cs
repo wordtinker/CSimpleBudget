@@ -243,14 +243,23 @@ namespace ViewModels
             windowService.ShowTransactionRoll();
         }
 
-        // TODO total line
         public IEnumerable<AccountItem> Accounts
         {
             get
             {
-                return from acc in core.Accounts
-                       where acc.Closed == false
-                       select new AccountItem(acc);
+                List<AccountItem> accs = 
+                    (from acc in core.Accounts
+                     where acc.Closed == false
+                     select new AccountItem(acc)).ToList();
+                AccountItem totalAccItem = new AccountItem(
+                    new Account
+                    {
+                        Name = "Total",
+                        Balance = accs.Sum(acc => acc.Balance)
+
+                    });
+                accs.Add(totalAccItem);
+                return accs;
             }
         }
 
