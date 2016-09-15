@@ -12,6 +12,20 @@ namespace Models
 
         public override string Extension { get; } = "Budget files (*.sbdb)|*.sbdb";
 
+        private static decimal ConvertFromDBVal(object obj)
+        {
+            if (obj == null || obj == DBNull.Value)
+            {
+                return default(decimal);
+            }
+            else
+            {
+                // TODO check the rest of the code
+                return Convert.ToDecimal(obj) / 100;
+            }
+        }
+
+
         /************** Categories *****************/
         internal override List<Category> SelectCategories()
         {
@@ -27,7 +41,7 @@ namespace Models
                 }
                 dr.Close();
             }
-            // Get sucategories
+            // Get subcategories
             List<Category> categories = new List<Category>(topCategories);
             foreach (Category top in topCategories)
             {
@@ -401,6 +415,44 @@ namespace Models
             return transactions;
         }
 
+        internal override decimal SelectTransactionsCombined(int currentYear, int currentMonth, Category cat)
+        {
+            DateTime firstDayOfMonth = new DateTime(currentYear, currentMonth, 1);
+            DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddSeconds(-1);
+            DateTime lastDayofPrevMonth = firstDayOfMonth.AddSeconds(-1);
+
+            // BETWEEN firstDay and lastDay is glitchy
+            // have to use > and <=
+            string sql = @"SELECT sum(t.amount) FROM Transactions as t
+                           INNER JOIN Accounts as a
+                           on t.acc_id = a.rowid
+                           WHERE date>@startDate and date<=@endDate
+                           AND category_id=@catId
+                           AND exbudget = 0";
+            using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+            {
+                cmd.Parameters.Add(new SQLiteParameter()
+                {
+                    ParameterName = "@catId",
+                    DbType = System.Data.DbType.Int32,
+                    Value = cat.Id
+                });
+                cmd.Parameters.Add(new SQLiteParameter()
+                {
+                    ParameterName = "@startDate",
+                    DbType = System.Data.DbType.Date,
+                    Value = lastDayofPrevMonth
+            });
+                cmd.Parameters.Add(new SQLiteParameter()
+                {
+                    ParameterName = "@endDate",
+                    DbType = System.Data.DbType.Date,
+                    Value = lastDayOfMonth
+                });
+                return ConvertFromDBVal(cmd.ExecuteScalar());
+            }
+        }
+
         internal override bool DeleteTransaction(Transaction transaction)
         {
             string sql = "DELETE FROM Transactions WHERE rowid=@id";
@@ -620,6 +672,33 @@ namespace Models
                 dr.Close();
             }
             return records;
+        }
+
+        internal override decimal SelectRecordsCombined(int currentYear, int currentMonth, Category cat)
+        {
+            string sql = "SELECT sum(amount) FROM Budget WHERE month=@month AND year=@year AND category_id=@catId";
+            using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+            {
+                cmd.Parameters.Add(new SQLiteParameter()
+                {
+                    ParameterName = "@catId",
+                    DbType = System.Data.DbType.Int32,
+                    Value = cat.Id
+                });
+                cmd.Parameters.Add(new SQLiteParameter()
+                {
+                    ParameterName = "@month",
+                    DbType = System.Data.DbType.Int32,
+                    Value = currentMonth
+                });
+                cmd.Parameters.Add(new SQLiteParameter()
+                {
+                    ParameterName = "@year",
+                    DbType = System.Data.DbType.Int32,
+                    Value = currentYear
+                });
+                return ConvertFromDBVal(cmd.ExecuteScalar());
+            }
         }
 
         internal override bool DeleteRecord(BudgetRecord record)

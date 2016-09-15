@@ -292,6 +292,13 @@ namespace ViewModels
             {
                 OnPropertyChanged(() => Accounts);
             };
+            core.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == "CurrentMonthSpendings")
+                {
+                    OnPropertyChanged(() => Bars);
+                }
+            };
             LoadLastOpenedFile();
         }
     }

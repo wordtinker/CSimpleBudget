@@ -21,12 +21,14 @@ namespace Models
         internal abstract bool DeleteCategory(Category cat);
 
         internal abstract List<Transaction> SelectTransactions(Account acc);
+        internal abstract decimal SelectTransactionsCombined(int currentYear, int currentMonth, Category cat);
         internal abstract bool DeleteTransaction(Transaction transaction);
         internal abstract bool UpdateTransaction(Transaction tr, DateTime date, decimal amount, string info, Category category);
         internal abstract bool AddTransaction(
             Account currentAccount, DateTime date, decimal amount, string info, Category category, out Transaction newTr);
 
         internal abstract List<BudgetRecord> SelectRecords(int currentYear, int currentMonth);
+        internal abstract decimal SelectRecordsCombined(int currentYear, int currentMonth, Category cat);
         internal abstract bool DeleteRecord(BudgetRecord record);
         internal abstract bool AddRecord(decimal amount, Category category, BudgetType budgetType, int onDay, int selectedMonth, int selectedYear, out BudgetRecord newRecord);
         internal abstract bool UpdateRecord(BudgetRecord record, decimal amount, Category category, BudgetType budgetType, int onDay, int selectedMonth, int selectedYear);

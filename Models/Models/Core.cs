@@ -61,6 +61,9 @@ namespace Models
         public void UpdateAccount(Account acc)
         {
             Storage.UpdateAccount(acc);
+
+            // exbudget on/off could change spending view 
+            OnPropertyChanged(() => CurrentMonthSpendings);
         }
 
         public bool AddAccount(string accName, string accType)
@@ -143,6 +146,8 @@ namespace Models
             if (storage.DeleteTransaction(transaction))
             {
                 Transactions.Remove(transaction);
+                // Changes the spending view
+                OnPropertyChanged(() => CurrentMonthSpendings);
                 return true;
             }
             else
@@ -157,6 +162,8 @@ namespace Models
             if (storage.AddTransaction(SelectedAccount, date, amount, info, category, out newTr))
             {
                 Transactions.Add(newTr);
+                // Changes the spending view
+                OnPropertyChanged(() => CurrentMonthSpendings);
             }
         }
 
@@ -164,6 +171,8 @@ namespace Models
         public void UpdateTransaction(Transaction tr, DateTime date, decimal amount, string info, Category category)
         {
             storage.UpdateTransaction(tr, date, amount, info, category);
+            // Might change the spending view
+            OnPropertyChanged(() => CurrentMonthSpendings);
         }
 
         public int? SelectedYear
@@ -184,6 +193,7 @@ namespace Models
                 }
             }
         }
+
         public int? SelectedMonth
         {
             get
@@ -202,6 +212,7 @@ namespace Models
                 }
             }
         }
+
         public BindingList<BudgetRecord> Records { get; } = new BindingList<BudgetRecord>();
 
         public bool DeleteRecord(BudgetRecord record)
@@ -209,6 +220,7 @@ namespace Models
             if (storage.DeleteRecord(record))
             {
                 Records.Remove(record);
+                OnPropertyChanged(() => CurrentMonthSpendings);
                 return true;
             }
             else
@@ -227,6 +239,7 @@ namespace Models
                 {
                     Records.Add(newRecord);
                 }
+                OnPropertyChanged(() => CurrentMonthSpendings);
             }
         }
 
@@ -237,42 +250,37 @@ namespace Models
             {
                 Records.Remove(record);
             }
+            OnPropertyChanged(() => CurrentMonthSpendings);
         }
 
         public List<Spending> CurrentMonthSpendings
         {
             get
             {
-                // TODO stub
                 int currentYear = DateTime.Today.Year;
                 int currentMonth = DateTime.Today.Month;
 
                 List<Spending> spendings = new List<Spending>();
 
-                spendings.Add(new Spending
-                {
-                    Category = new Category { Name="B0", Parent= new Category { Name="S120"} },
-                    Budget = 0m,
-                    Value = 120m });
-                spendings.Add(new Spending
-                {
-                    Category = new Category { Name = "B100", Parent = new Category { Name = "S50" } },
-                    Budget = 100m,
-                    Value = 50m
-                });
-                spendings.Add(new Spending
-                {
-                    Category = new Category { Name = "B100", Parent = new Category { Name = "S0" } },
-                    Budget = 100m,
-                    Value = 0m
-                });
-                spendings.Add(new Spending
-                {
-                    Category = new Category { Name = "B100", Parent = new Category { Name = "S120" } },
-                    Budget = 100m,
-                    Value = 120m
-                });
+                var subcats = from c in Categories
+                              where c.Parent != null
+                              select c;
 
+                foreach (Category cat in subcats)
+                {
+                    decimal budget = Math.Abs(storage.SelectRecordsCombined(currentYear, currentMonth, cat));
+                    decimal spent = Math.Abs(storage.SelectTransactionsCombined(currentYear, currentMonth, cat));
+                    if (budget == 0m && spent == 0m)
+                    {
+                        continue;
+                    }
+                    spendings.Add(new Spending
+                    {
+                        Category = cat,
+                        Budget = budget,
+                        Value = spent
+                    });
+                }
                 return spendings;
             }
         }
