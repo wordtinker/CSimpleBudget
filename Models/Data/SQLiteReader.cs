@@ -377,6 +377,8 @@ namespace Models
                 total = FromDBValToDecimal(cmd.ExecuteScalar());
             }
             acc.Balance = total;
+            // save new total to DB
+            UpdateAccount(acc);
         }
 
         /************** Transactions *****************/

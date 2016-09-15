@@ -16,6 +16,7 @@ namespace ViewModels
             set
             {
                 account.Type = value;
+                Core.Instance.UpdateAccount(account);
             }
         }
         public bool Closed
@@ -24,6 +25,7 @@ namespace ViewModels
             set
             {
                 account.Closed = value;
+                Core.Instance.UpdateAccount(account);
             }
         }
         public bool Excluded
@@ -32,6 +34,7 @@ namespace ViewModels
             set
             {
                 account.Excluded = value;
+                Core.Instance.UpdateAccount(account);
             }
         }
 

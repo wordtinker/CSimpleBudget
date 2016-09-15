@@ -16,10 +16,9 @@ namespace Models
         public string Name
         {
             get { return name; }
-            set
+            internal set
             {
                 SetProperty(ref name, value);
-                Core.Instance.UpdateAccount(this);
             }
         }
         public string Type
@@ -28,16 +27,14 @@ namespace Models
             set
             {
                 SetProperty(ref accType, value);
-                Core.Instance.UpdateAccount(this);
             }
         }
         public decimal Balance
         {
             get { return balance; }
-            set
+            internal set
             {
                 SetProperty(ref balance, value);
-                Core.Instance.UpdateAccount(this);
             }
         }
         public bool Closed
@@ -46,7 +43,6 @@ namespace Models
             set
             {
                 SetProperty(ref closed, value);
-                Core.Instance.UpdateAccount(this);
             }
         }
         public bool Excluded
@@ -55,7 +51,6 @@ namespace Models
             set
             {
                 SetProperty(ref excluded, value);
-                Core.Instance.UpdateAccount(this);
             }
         }
     }
