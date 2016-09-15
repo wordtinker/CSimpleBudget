@@ -220,6 +220,7 @@ namespace Models
             if (storage.DeleteRecord(record))
             {
                 Records.Remove(record);
+                // Changes the spending view
                 OnPropertyChanged(() => CurrentMonthSpendings);
                 return true;
             }
@@ -239,6 +240,7 @@ namespace Models
                 {
                     Records.Add(newRecord);
                 }
+                // Changes the spending view
                 OnPropertyChanged(() => CurrentMonthSpendings);
             }
         }
@@ -250,6 +252,7 @@ namespace Models
             {
                 Records.Remove(record);
             }
+            // Might change the spending view
             OnPropertyChanged(() => CurrentMonthSpendings);
         }
 
