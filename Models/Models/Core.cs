@@ -45,8 +45,8 @@ namespace Models
 
         public void GetActiveBudgetYears(out int minYear, out int maxYear)
         {
-            minYear = storage.GetMinimumYear();
-            maxYear = storage.GetMaximumYear();
+            minYear = storage.GetMinimumYear() ?? DateTime.Today.Year;
+            maxYear = storage.GetMaximumYear() ?? DateTime.Today.Year;
         }
 
         // TODO Stub

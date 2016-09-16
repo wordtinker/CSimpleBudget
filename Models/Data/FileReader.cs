@@ -33,7 +33,7 @@ namespace Models
         internal abstract bool AddRecord(decimal amount, Category category, BudgetType budgetType, int onDay, int selectedMonth, int selectedYear, out BudgetRecord newRecord);
         internal abstract bool UpdateRecord(BudgetRecord record, decimal amount, Category category, BudgetType budgetType, int onDay, int selectedMonth, int selectedYear);
 
-        internal abstract int GetMaximumYear();
-        internal abstract int GetMinimumYear();
+        internal abstract int? GetMaximumYear();
+        internal abstract int? GetMinimumYear();
     }
 }

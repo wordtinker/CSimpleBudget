@@ -862,30 +862,44 @@ namespace Models
 
         /************** Misc *****************/
 
-        internal override int GetMaximumYear()
+        internal override int? GetMaximumYear()
         {
             string sql = "SELECT MAX(year) FROM Budget";
             using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
             {
-                return Convert.ToInt32(cmd.ExecuteScalar());
+                object toConvert = cmd.ExecuteScalar();
+                if (Convert.IsDBNull(toConvert))
+                {
+                    return null;
+                }
+                else
+                {
+                    return Convert.ToInt32(toConvert);
+                }
             }
         }
 
-        internal override int GetMinimumYear()
+        internal override int? GetMinimumYear()
         {
             string sql = "SELECT MIN(year) FROM Budget";
             using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
             {
-                return Convert.ToInt32(cmd.ExecuteScalar());
+                object toConvert = cmd.ExecuteScalar();
+                if (Convert.IsDBNull(toConvert))
+                {
+                    return null;
+                }
+                else
+                {
+                    return Convert.ToInt32(toConvert);
+                }
             }
-            // TODO test every DB yield that could be empty, null, DBnull
         }
 
         /************** File *****************/
 
         public override bool InitializeFile(string fileName)
         {
-            // TOTO Later : move to foreign key support and cascade delete;
             try
             {
                 string cString = string.Format(connString, fileName);
@@ -919,7 +933,7 @@ namespace Models
                 }
 
                 sql = "CREATE TABLE IF NOT EXISTS Budget(amount INTEGER, " +
-                    "category_id INTEGER, type TEXT, day INTEGER, year INTEGER, month INTEGER";
+                    "category_id INTEGER, type TEXT, day INTEGER, year INTEGER, month INTEGER)";
                 using (SQLiteCommand cmd = new SQLiteCommand(sql, dbConn))
                 {
                     cmd.ExecuteNonQuery();

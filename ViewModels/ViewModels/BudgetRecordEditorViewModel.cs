@@ -21,7 +21,6 @@ namespace ViewModels
             {
                 int minYear, maxYear;
                 Core.Instance.GetActiveBudgetYears(out minYear, out maxYear);
-                // TODO what if minYear, maxYear is empty?
                 return Enumerable.Range(minYear - 1, 5 + maxYear - minYear);
             }
         }
