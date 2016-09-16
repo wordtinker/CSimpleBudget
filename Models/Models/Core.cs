@@ -43,13 +43,10 @@ namespace Models
             }
         }
 
-        public IEnumerable<int> GetActiveYears()
+        public void GetActiveBudgetYears(out int minYear, out int maxYear)
         {
-            // TODO min-3 from DB
-            int minYear = 2014;
-            // TODO max+3 from DB
-            int maxYear = DateTime.Now.AddYears(3).Year;
-            return Enumerable.Range(minYear, maxYear - minYear);
+            minYear = storage.GetMinimumYear();
+            maxYear = storage.GetMaximumYear();
         }
 
         // TODO Stub

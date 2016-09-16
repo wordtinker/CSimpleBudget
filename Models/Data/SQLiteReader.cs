@@ -860,6 +860,27 @@ namespace Models
             }
         }
 
+        /************** Misc *****************/
+
+        internal override int GetMaximumYear()
+        {
+            string sql = "SELECT MAX(year) FROM Budget";
+            using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+            {
+                return Convert.ToInt32(cmd.ExecuteScalar());
+            }
+        }
+
+        internal override int GetMinimumYear()
+        {
+            string sql = "SELECT MIN(year) FROM Budget";
+            using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+            {
+                return Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            // TODO test every DB yield that could be empty, null, DBnull
+        }
+
         /************** File *****************/
 
         public override bool InitializeFile(string fileName)
