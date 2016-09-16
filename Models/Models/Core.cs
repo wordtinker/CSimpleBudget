@@ -25,7 +25,7 @@ namespace Models
 
         public FileReader Storage
         {
-            get
+            internal get
             {
                 return storage;
             }
@@ -40,6 +40,7 @@ namespace Models
                     storage.SelectAccounts().ForEach(Accounts.Add);
                     storage.SelectCategories().ForEach(Categories.Add);
                 }
+                OnPropertyChanged(() => CurrentMonthSpendings);
             }
         }
 

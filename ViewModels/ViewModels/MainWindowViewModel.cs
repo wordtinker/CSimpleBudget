@@ -251,14 +251,17 @@ namespace ViewModels
                     (from acc in core.Accounts
                      where acc.Closed == false
                      select new AccountItem(acc)).ToList();
-                AccountItem totalAccItem = new AccountItem(
-                    new Account
-                    {
-                        Name = "Total",
-                        Balance = accs.Sum(acc => acc.Balance)
+                if (accs.Count > 0)
+                {
+                    AccountItem totalAccItem = new AccountItem(
+                        new Account
+                        {
+                            Name = "Total",
+                            Balance = accs.Sum(acc => acc.Balance)
 
-                    });
-                accs.Add(totalAccItem);
+                        });
+                    accs.Add(totalAccItem);
+                }
                 return accs;
             }
         }
