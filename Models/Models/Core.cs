@@ -64,10 +64,12 @@ namespace Models
             OnPropertyChanged(() => CurrentMonthSpendings);
         }
 
-        public bool AddAccount(string accName, string accType)
+        public bool AddAccount(string accName)
         {
+            // TODO Block before we have accTypes
+            string newAccDefaultType = AccountTypes[0];
             Account newAcc;
-            if (storage.AddAccount(accName, accType, out newAcc))
+            if (storage.AddAccount(accName, newAccDefaultType, out newAcc))
             {
                 Accounts.Add(newAcc);
                 return true;

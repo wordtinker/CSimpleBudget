@@ -5,38 +5,47 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimpleBudget"
         mc:Ignorable="d"
-        Title="Accounts" Height="300" Width="300">
+        Title="Accounts" Height="300" Width="400" MinHeight="300" MinWidth="400">
+    <Window.Resources>
+        <ContextMenu x:Key="RowMenu">
+            <MenuItem Header="Delete Account" Click="DeleteAccount_Click"/>
+        </ContextMenu>
+        <Style x:Key="DefaultRowStyle" TargetType="{x:Type DataGridRow}">
+            <Setter Property="ContextMenu" Value="{StaticResource RowMenu}" />
+        </Style>
+    </Window.Resources>
     <DockPanel>
-        <DockPanel DockPanel.Dock="Right">
-            <StackPanel Orientation="Vertical" DockPanel.Dock="Bottom">
-                <TextBox x:Name="AccName" Width="100"/>
-                <Button Content="New Account" Click="AddButton_Click"/>
-            </StackPanel>
-            <ComboBox x:Name="AccType" DockPanel.Dock="Top" ItemsSource="{Binding AccTypes}"
-                      SelectedValue="{Binding SelectedAccount.Type}"/>
-            <CheckBox DataContext="{Binding SelectedAccount}"
-                      x:Name="AccClosed" IsChecked="{Binding Closed}"/>
-            <Label Content="Closed"/>
-            <CheckBox DataContext="{Binding SelectedAccount}"
-                      x:Name="AccOut" IsChecked="{Binding Excluded}"/>
-            <Label Content="Excluded from budget"/>
-        </DockPanel>
-        <ListBox DockPanel.Dock="Left"
-                 ItemsSource="{Binding Accounts}"
-                 SelectionMode="Single"
-                 SelectionChanged="ListBox_SelectionChanged"
-                 SelectedIndex="0">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}">
-                        <TextBlock.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="Delete Account" Click="DeleteAccount_Click"/>
-                            </ContextMenu>
-                        </TextBlock.ContextMenu>
-                    </TextBlock>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+            <TextBox x:Name="AccName" Width="100" Margin="0,10,10,0"/>
+            <Button Content="New Account" Margin="0,10,0,0" Click="AddButton_Click"/>
+        </StackPanel>
+        <DataGrid DockPanel.Dock="Top"
+                  ItemsSource="{Binding Accounts}"
+                  AutoGenerateColumns="False"
+                  SelectionMode="Single"
+                  HeadersVisibility="Column"
+                  GridLinesVisibility="None"
+                  IsReadOnly="False"
+                  BorderThickness="0"
+                  CanUserResizeColumns="False"
+                  CanUserSortColumns="False"
+                  CanUserReorderColumns="False"
+                  RowStyle="{StaticResource DefaultRowStyle}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}" IsReadOnly="True"/>
+                <DataGridTemplateColumn Header="Type" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding AccTypes}"
+                                      SelectedItem="{Binding Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridCheckBoxColumn Header="Closed" Width="Auto"
+                                        Binding="{Binding Closed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridCheckBoxColumn Header="Ex Budget" Width="Auto"
+                                        Binding="{Binding Excluded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </DockPanel>
 </Window>

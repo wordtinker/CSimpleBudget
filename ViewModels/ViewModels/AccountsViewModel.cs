@@ -10,6 +10,15 @@ namespace ViewModels
         public Account account;
 
         public string Name { get { return account.Name; }}
+
+        public List<string> AccTypes
+        {
+            get
+            {
+                return Core.Instance.AccountTypes;
+            }
+        }
+
         public string Type
         {
             get { return account.Type; }
@@ -54,34 +63,18 @@ namespace ViewModels
 
     public class AccountsViewModel : BindableBase
     {
-        public static IEnumerable<string> AccTypes
+        public List<AccountItem> Accounts
         {
             get
             {
-                return Core.Instance.AccountTypes;
+                return (from acc in Core.Instance.Accounts
+                       select new AccountItem(acc)).ToList();
             }
         }
 
-        public AccountItem SelectedAccount { get; set; }
-
-        public IEnumerable<AccountItem> Accounts
+        public bool AddAccount(string accName)
         {
-            get
-            {
-                return from acc in Core.Instance.Accounts
-                       select new AccountItem(acc);
-            }
-        }
-
-        public void UpdateSelection(AccountItem selectedItem)
-        {
-            SelectedAccount = selectedItem;
-            OnPropertyChanged(() => SelectedAccount);
-        }
-
-        public bool AddAccount(string accName, string accType)
-        {
-            return Core.Instance.AddAccount(accName, accType);
+            return Core.Instance.AddAccount(accName);
         }
 
         public bool DeleteAccount(AccountItem item)
