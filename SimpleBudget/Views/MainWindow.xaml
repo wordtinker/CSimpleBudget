@@ -7,7 +7,7 @@
         xmlns:datavis="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
         xmlns:chart="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
         mc:Ignorable="d"
-        Title="Simple Budget" Height="350" Width="525">
+        Title="Simple Budget" Height="600" Width="800" MinWidth="800" MinHeight="600">
     <DockPanel>
         <StatusBar DockPanel.Dock="Bottom" Background="White">
             <TextBlock Text="{Binding OpenedFile}"/>
@@ -33,57 +33,81 @@
                 <MenuItem Header="_About" Command="{Binding ShowHelp}"/>
             </MenuItem>
         </Menu>
-        <ListView DockPanel.Dock="Left" ItemsSource="{Binding Accounts}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
-                    <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Type}"/>
-                    <GridViewColumn Header="Balance" DisplayMemberBinding="{Binding Balance}"/>
-                </GridView>
-            </ListView.View>
-            <ListView.Resources>
-                <Style TargetType="ListViewItem">
-                    <EventSetter Event="MouseDoubleClick" Handler="Account_DoubleClick"/>
-                </Style>
-            </ListView.Resources>
-        </ListView>
-        <chart:Chart>
-            <chart:Chart.LegendStyle>
-                <Style TargetType="datavis:Legend">
-                    <Setter Property="Width" Value="0" />
-                </Style>
-            </chart:Chart.LegendStyle>
-            <chart:Chart.Series>
-                <chart:Stacked100BarSeries>
-                    <chart:SeriesDefinition ItemsSource="{Binding Bars}"
+        <Border DockPanel.Dock="Left" BorderBrush="Black" BorderThickness="1">
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <DataGrid Grid.Column="0"
+                          ItemsSource="{Binding Accounts}"
+                          AutoGenerateColumns="False"
+                          SelectionMode="Single"
+                          HeadersVisibility="Column"
+                          GridLinesVisibility="None"
+                          IsReadOnly="True"
+                          BorderThickness="0"
+                          CanUserResizeColumns="False"
+                          CanUserSortColumns="False"
+                          CanUserReorderColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Width="Auto" Binding="{Binding Name}"/>
+                        <DataGridTextColumn Header="Type" Width="*" Binding="{Binding Type}"/>
+                        <DataGridTextColumn Header="Balance" Width="*" Binding="{Binding Balance}"/>
+                    </DataGrid.Columns>
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridRow">
+                            <EventSetter Event="MouseDoubleClick" Handler="Account_DoubleClick"/>
+                        </Style>
+                    </DataGrid.Resources>
+                </DataGrid>
+                <chart:Chart Grid.Column="1">
+                    <chart:Chart.LegendStyle>
+                        <Style TargetType="datavis:Legend">
+                            <Setter Property="Width" Value="0" />
+                        </Style>
+                    </chart:Chart.LegendStyle>
+                    <chart:Chart.Axes>
+                        <chart:LinearAxis Orientation="X" Opacity="0"/>
+                    </chart:Chart.Axes>
+                    <chart:Chart.PlotAreaStyle>
+                        <Style TargetType="Grid">
+                            <Setter Property="Background" Value="Transparent"/>
+                        </Style>
+                    </chart:Chart.PlotAreaStyle>
+                    <chart:Chart.Series>
+                        <chart:Stacked100BarSeries>
+                            <chart:SeriesDefinition ItemsSource="{Binding Bars}"
                                             IndependentValuePath="Name"
                                             DependentValuePath="Spent">
-                        <chart:SeriesDefinition.DataPointStyle>
-                            <Style TargetType="chart:BarDataPoint">
-                                <Setter Property="Background" Value="Blue"/>
-                            </Style>
-                        </chart:SeriesDefinition.DataPointStyle>
-                    </chart:SeriesDefinition>
-                    <chart:SeriesDefinition ItemsSource="{Binding Bars}"
+                                <chart:SeriesDefinition.DataPointStyle>
+                                    <Style TargetType="chart:BarDataPoint">
+                                        <Setter Property="Background" Value="Blue"/>
+                                    </Style>
+                                </chart:SeriesDefinition.DataPointStyle>
+                            </chart:SeriesDefinition>
+                            <chart:SeriesDefinition ItemsSource="{Binding Bars}"
                                             IndependentValuePath="Name"
                                             DependentValuePath="ToSpend">
-                        <chart:SeriesDefinition.DataPointStyle>
-                            <Style TargetType="chart:BarDataPoint">
-                                <Setter Property="Background" Value="Green"/>
-                            </Style>
-                        </chart:SeriesDefinition.DataPointStyle>
-                    </chart:SeriesDefinition>
-                    <chart:SeriesDefinition ItemsSource="{Binding Bars}"
+                                <chart:SeriesDefinition.DataPointStyle>
+                                    <Style TargetType="chart:BarDataPoint">
+                                        <Setter Property="Background" Value="Green"/>
+                                    </Style>
+                                </chart:SeriesDefinition.DataPointStyle>
+                            </chart:SeriesDefinition>
+                            <chart:SeriesDefinition ItemsSource="{Binding Bars}"
                                             IndependentValuePath="Name"
                                             DependentValuePath="Overspent">
-                        <chart:SeriesDefinition.DataPointStyle>
-                            <Style TargetType="chart:BarDataPoint">
-                                <Setter Property="Background" Value="Red"/>
-                            </Style>
-                        </chart:SeriesDefinition.DataPointStyle>
-                    </chart:SeriesDefinition>
-                </chart:Stacked100BarSeries>
-            </chart:Chart.Series>
-        </chart:Chart>
+                                <chart:SeriesDefinition.DataPointStyle>
+                                    <Style TargetType="chart:BarDataPoint">
+                                        <Setter Property="Background" Value="Red"/>
+                                    </Style>
+                                </chart:SeriesDefinition.DataPointStyle>
+                            </chart:SeriesDefinition>
+                        </chart:Stacked100BarSeries>
+                    </chart:Chart.Series>
+                </chart:Chart>
+            </Grid>
+        </Border>
     </DockPanel>
 </Window>

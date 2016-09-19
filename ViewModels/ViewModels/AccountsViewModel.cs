@@ -43,6 +43,8 @@ namespace ViewModels
             get { return account.Balance; }
         }
 
+        public bool Aggregated { get; internal set; }
+
         public AccountItem(Account acc)
         {
             this.account = acc;

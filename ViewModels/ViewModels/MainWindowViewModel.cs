@@ -239,8 +239,11 @@ namespace ViewModels
 
         public void ShowTransactionRoll(AccountItem item)
         {
-            core.SelectedAccount = item.account;
-            windowService.ShowTransactionRoll();
+            if (item.Aggregated == false)
+            {
+                core.SelectedAccount = item.account;
+                windowService.ShowTransactionRoll();
+            }
         }
 
         public IEnumerable<AccountItem> Accounts
@@ -258,8 +261,8 @@ namespace ViewModels
                         {
                             Name = "Total",
                             Balance = accs.Sum(acc => acc.Balance)
-
                         });
+                    totalAccItem.Aggregated = true;
                     accs.Add(totalAccItem);
                 }
                 return accs;

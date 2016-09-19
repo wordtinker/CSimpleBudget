@@ -20,8 +20,8 @@ namespace SimpleBudget
 
         public void Account_DoubleClick(object sender, MouseButtonEventArgs e)
         {
-            ListViewItem lvi = (ListViewItem)sender;
-            AccountItem item = (AccountItem)lvi.Content;
+            DataGridRow dgr = (DataGridRow)sender;
+            AccountItem item = (AccountItem)dgr.DataContext;
             MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
             vm.ShowTransactionRoll(item);
         }
