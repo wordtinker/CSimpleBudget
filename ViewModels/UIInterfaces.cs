@@ -25,5 +25,6 @@ namespace ViewModels
     public interface IUIBudgetWindowService
     {
         void ShowBudgetRecordEditor(BudgetRecordEditorViewModel vm);
+        void ShowMessage(string message);
     }
 }

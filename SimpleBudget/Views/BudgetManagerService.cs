@@ -1,4 +1,5 @@
-﻿using ViewModels;
+﻿using System.Windows;
+using ViewModels;
 
 namespace SimpleBudget
 {
@@ -17,6 +18,11 @@ namespace SimpleBudget
             editor.DataContext = vm;
             editor.Owner = parentWindow;
             editor.ShowDialog();
+        }
+
+        public void ShowMessage(string message)
+        {
+            MessageBox.Show(message);
         }
     }
 }

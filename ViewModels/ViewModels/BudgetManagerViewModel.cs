@@ -65,8 +65,15 @@ namespace ViewModels
 
         public void ShowTransactionEditor()
         {
-            BudgetRecordEditorViewModel vm = new BudgetRecordEditorViewModel();
-            windowService.ShowBudgetRecordEditor(vm);
+            if (Core.Instance.Categories.Count == 0)
+            {
+                windowService.ShowMessage("Set categories first!");
+            }
+            else
+            {
+                BudgetRecordEditorViewModel vm = new BudgetRecordEditorViewModel();
+                windowService.ShowBudgetRecordEditor(vm);
+            }
         }
 
         public void ShowTransactionEditor(RecordItem item)

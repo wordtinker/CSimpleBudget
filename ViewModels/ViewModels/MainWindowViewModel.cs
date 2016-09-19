@@ -241,8 +241,15 @@ namespace ViewModels
         {
             if (item.Aggregated == false)
             {
-                core.SelectedAccount = item.account;
-                windowService.ShowTransactionRoll();
+                if (core.Categories.Count == 0)
+                {
+                    windowService.ShowMessage("Set categories first!");
+                }
+                else
+                {
+                    core.SelectedAccount = item.account;
+                    windowService.ShowTransactionRoll();
+                }
             }
         }
 
