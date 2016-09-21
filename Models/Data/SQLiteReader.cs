@@ -248,6 +248,13 @@ namespace Models
 
         internal override bool AddAccount(string name, string accType, out Account acc)
         {
+            // Can't add empty account name
+            if (name == string.Empty)
+            {
+                acc = null;
+                return false;
+            }
+
             string sql = "INSERT INTO Accounts VALUES(@name, @type, 0, 0, 0)";
             try
             {

@@ -15,9 +15,9 @@
         </Style>
     </Window.Resources>
     <DockPanel>
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
-            <TextBox x:Name="AccName" Width="100" Margin="0,10,10,0"/>
-            <Button Content="New Account" Margin="0,10,0,0" Click="AddButton_Click"/>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center" Margin="10,10,10,10">
+            <TextBox x:Name="AccName" Width="100"/>
+            <Button Content="New Account" Click="AddButton_Click"/>
         </StackPanel>
         <DataGrid DockPanel.Dock="Top"
                   ItemsSource="{Binding Accounts}"
