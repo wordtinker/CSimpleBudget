@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimpleBudget"
         mc:Ignorable="d"
-        Title="Categories" Height="300" Width="300">
+        Title="Categories" Height="300" Width="400" ResizeMode="NoResize">
     <DockPanel>
-        <TreeView DockPanel.Dock="Left" ItemsSource="{Binding Categories}">
+        <TreeView DockPanel.Dock="Left" ItemsSource="{Binding Categories}" MinWidth="200" MaxWidth="200">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type MenuItem}" ItemsSource="{Binding Items}">
                     <TextBlock Text="{Binding Title}">
@@ -20,12 +20,12 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-        <StackPanel Orientation="Vertical" DockPanel.Dock="Right">
+        <StackPanel Orientation="Vertical" DockPanel.Dock="Right" Margin="10,10,10,10">
             <Label Content="Name"/>
             <TextBox x:Name="CategoryName"/>
             <Label Content="Parent"/>
             <ComboBox x:Name="ParentCategory" ItemsSource="{Binding Categories}" DisplayMemberPath="Title"/>
-            <Button Content="Add" Click="AddButton_Click"/>
+            <Button Content="Add" Click="AddButton_Click" Margin="0,10,0,0"/>
         </StackPanel>
     </DockPanel>
 </Window>
