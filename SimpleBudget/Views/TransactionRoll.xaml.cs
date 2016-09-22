@@ -27,8 +27,8 @@ namespace SimpleBudget
 
         private void Transaction_DoubleClick(object sender, MouseButtonEventArgs e)
         {
-            ListViewItem li = (ListViewItem)sender;
-            TransactionItem item = (TransactionItem)li.DataContext;
+            DataGridRow dgr = (DataGridRow)sender;
+            TransactionItem item = (TransactionItem)dgr.DataContext;
             ((TransactionRollViewModel)DataContext).ShowTransactionEditor(item);
         }
 

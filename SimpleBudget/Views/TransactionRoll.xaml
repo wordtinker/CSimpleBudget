@@ -5,29 +5,37 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimpleBudget"
         mc:Ignorable="d"
-        Title="TransactionRoll" Height="300" Width="300">
+        Title="Transactions" Height="300" Width="300">
+    <Window.Resources>
+        <ContextMenu x:Key="RowMenu">
+            <MenuItem Header="Delete Transaction" Click="DeleteTransaction_Click"/>
+        </ContextMenu>
+        <Style x:Key="DefaultRowStyle" TargetType="{x:Type DataGridRow}">
+            <Setter Property="ContextMenu" Value="{StaticResource RowMenu}" />
+            <EventSetter Event="MouseDoubleClick" Handler="Transaction_DoubleClick"/>
+        </Style>
+    </Window.Resources>
     <DockPanel>
-        <Button DockPanel.Dock="Bottom" Content="Add" Click="AddButton_Click"/>
-        <ListView DockPanel.Dock="Top" ItemsSource="{Binding Transactions}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}"/>
-                    <GridViewColumn Header="Amount" DisplayMemberBinding="{Binding Value}"/>
-                    <GridViewColumn Header="Info" DisplayMemberBinding="{Binding Info}"/>
-                    <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category}"/>
-                </GridView>
-            </ListView.View>
-            <ListView.Resources>
-                <ContextMenu x:Key="ItemContextMenu">
-                    <MenuItem Header="Delete" Click="DeleteTransaction_Click"/>
-                </ContextMenu>
-            </ListView.Resources>
-            <ListView.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}">
-                    <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
-                    <EventSetter Event="MouseDoubleClick" Handler="Transaction_DoubleClick"/>
-                </Style>
-            </ListView.ItemContainerStyle>
-        </ListView>
+        <Button DockPanel.Dock="Bottom" Content="Add" Click="AddButton_Click"
+                Margin="0,10" Width="100" HorizontalAlignment="Center"/>
+        <DataGrid DockPanel.Dock="Top"
+                  ItemsSource="{Binding Transactions}"
+                  AutoGenerateColumns="False"
+                  SelectionMode="Single"
+                  HeadersVisibility="Column"
+                  GridLinesVisibility="None"
+                  IsReadOnly="True"
+                  BorderThickness="0"
+                  CanUserResizeColumns="False"
+                  CanUserSortColumns="False"
+                  CanUserReorderColumns="False"
+                  RowStyle="{StaticResource DefaultRowStyle}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Date" Width="Auto" Binding="{Binding Date}"/>
+                <DataGridTextColumn Header="Amount" Width="Auto" Binding="{Binding Value}"/>
+                <DataGridTextColumn Header="Info" Width="*" Binding="{Binding Info}"/>
+                <DataGridTextColumn Header="Category" Width="Auto" Binding="{Binding Category}"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </DockPanel>
 </Window>
