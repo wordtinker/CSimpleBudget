@@ -5,38 +5,44 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimpleBudget"
         mc:Ignorable="d"
-        Title="BudgetManager" Height="300" Width="300">
+        Title="Budget Manager" Height="400" Width="600" ResizeMode="NoResize">
+    <Window.Resources>
+        <ContextMenu x:Key="RowMenu">
+            <MenuItem Header="Delete Record" Click="DeleteRecord_Click"/>
+        </ContextMenu>
+        <Style x:Key="DefaultRowStyle" TargetType="{x:Type DataGridRow}">
+            <Setter Property="ContextMenu" Value="{StaticResource RowMenu}" />
+            <EventSetter Event="MouseDoubleClick" Handler="Record_DoubleClick"/>
+        </Style>
+    </Window.Resources>
     <DockPanel>
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-            <Label Content="Month"/>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+            <Label Content="Month" Margin="0,0,10,0"/>
             <ComboBox ItemsSource="{Binding Months}" SelectedIndex="{Binding SelectedMonth}" SelectionChanged="Month_SelectionChanged"/>
-            <Label Content="Year"/>
+            <Label Content="Year" Margin="10,0,10,0"/>
             <ComboBox ItemsSource="{Binding Years}" SelectedValue="{Binding SelectedYear}" SelectionChanged="Year_SelectionChanged"/>
         </StackPanel>
-        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
-            <Button Content="Add" Click="AddButton_Click"/>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,10">
+            <Button Content="Add" Click="AddButton_Click" Margin="0,0,10,0"/>
             <Button Content="Copy from"/>
         </StackPanel>
-        <ListView DockPanel.Dock="Top" ItemsSource="{Binding Records}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Amount" DisplayMemberBinding="{Binding Amount}"/>
-                    <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category}"/>
-                    <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Type}"/>
-                    <GridViewColumn Header="On day" DisplayMemberBinding="{Binding OnDay}"/>
-                </GridView>
-            </ListView.View>
-            <ListView.Resources>
-                <ContextMenu x:Key="RecordsContextMenu">
-                    <MenuItem Header="Delete" Click="DeleteRecord_Click"/>
-                </ContextMenu>
-            </ListView.Resources>
-            <ListView.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}">
-                    <Setter Property="ContextMenu" Value="{StaticResource RecordsContextMenu}"/>
-                    <EventSetter Event="MouseDoubleClick" Handler="Record_DoubleClick"/>
-                </Style>
-            </ListView.ItemContainerStyle>
-        </ListView>
+        <DataGrid DockPanel.Dock="Top" ItemsSource="{Binding Records}"
+                  AutoGenerateColumns="False"
+                  SelectionMode="Single"
+                  HeadersVisibility="Column"
+                  GridLinesVisibility="None"
+                  IsReadOnly="True"
+                  BorderThickness="0"
+                  CanUserResizeColumns="False"
+                  CanUserSortColumns="False"
+                  CanUserReorderColumns="False"
+                  RowStyle="{StaticResource DefaultRowStyle}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Amount" Width="*" Binding="{Binding Amount}"/>
+                <DataGridTextColumn Header="Category" Width="*" Binding="{Binding Category}"/>
+                <DataGridTextColumn Header="Type" Width="*" Binding="{Binding Type}"/>
+                <DataGridTextColumn Header="On day" Width="*" Binding="{Binding OnDay}"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </DockPanel>
 </Window>

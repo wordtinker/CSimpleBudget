@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimpleBudget"
         mc:Ignorable="d"
-        Title="Accounts" Height="300" Width="400" MinHeight="300" MinWidth="400">
+        Title="Accounts" Height="300" Width="400" MinHeight="300" MinWidth="400" ResizeMode="NoResize">
     <Window.Resources>
         <ContextMenu x:Key="RowMenu">
             <MenuItem Header="Delete Account" Click="DeleteAccount_Click"/>

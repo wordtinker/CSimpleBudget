@@ -22,9 +22,9 @@ namespace SimpleBudget
 
         private void Record_DoubleClick(object sender, MouseButtonEventArgs e)
         {
-            ListViewItem li = (ListViewItem)sender;
-            RecordItem item = (RecordItem)li.DataContext;
-            ((BudgetManagerViewModel)DataContext).ShowTransactionEditor(item);
+            DataGridRow dgr = (DataGridRow)sender;
+            RecordItem item = (RecordItem)dgr.DataContext;
+            ((BudgetManagerViewModel)DataContext).ShowRecordEditor(item);
         }
 
         private void Month_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -55,7 +55,7 @@ namespace SimpleBudget
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            ((BudgetManagerViewModel)DataContext).ShowTransactionEditor();
+            ((BudgetManagerViewModel)DataContext).ShowRecordEditor();
         }
     }
 }

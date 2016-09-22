@@ -63,7 +63,7 @@ namespace ViewModels
             return Core.Instance.DeleteRecord(item.record);
         }
 
-        public void ShowTransactionEditor()
+        public void ShowRecordEditor()
         {
             if (Core.Instance.Categories.Count == 0)
             {
@@ -76,7 +76,7 @@ namespace ViewModels
             }
         }
 
-        public void ShowTransactionEditor(RecordItem item)
+        public void ShowRecordEditor(RecordItem item)
         {
             BudgetRecordEditorViewModel vm = new BudgetRecordEditorViewModel(item.record);
             windowService.ShowBudgetRecordEditor(vm);
