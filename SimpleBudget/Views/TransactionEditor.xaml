@@ -6,17 +6,46 @@
         xmlns:local="clr-namespace:SimpleBudget"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="Transaction" Height="300" Width="300">
-    <DockPanel>
-        <Label Content="Date" DockPanel.Dock="Top"/>
-        <DatePicker SelectedDate="{Binding Date}" DockPanel.Dock="Top"/>
-        <Label Content="Amount" DockPanel.Dock="Top"/>
-        <xctk:DecimalUpDown Value="{Binding Amount}" DockPanel.Dock="Top" FormatString="F2"/>
-        <Label Content="Info" DockPanel.Dock="Top"/>
-        <TextBox Text="{Binding Info}" DockPanel.Dock="Top"/>
-        <Label Content="Category" DockPanel.Dock="Top"/>
-        <ComboBox ItemsSource="{Binding Categories}" DisplayMemberPath="FullName"
-                  SelectedItem="{Binding Category}" DockPanel.Dock="Top"/>
-        <Button Content="Update" Command="{Binding UpdateTransaction}" Click="Button_Click"/>
+        Title="Transaction" Height="220" Width="220" ResizeMode="NoResize">
+    <DockPanel Margin="10,0,10,10">
+        <Grid DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Content="Date"
+                   Grid.Column="0" Grid.Row="0"
+                   Margin="0,0,0,5"/>
+            <DatePicker SelectedDate="{Binding Date}"
+                        Grid.Column="1" Grid.Row="0"
+                        Width="100" Margin="0,0,0,5"/>
+            <Label Content="Amount"
+                   Grid.Column="0" Grid.Row="1"
+                   Margin="0,5,0,5"/>
+            <xctk:DecimalUpDown Value="{Binding Amount}" FormatString="F2"
+                                Grid.Column="1" Grid.Row="1"
+                                Width="100" Margin="0,5,0,5"/>
+            <Label Content="Info"
+                   Grid.Column="0" Grid.Row="2"
+                   Margin="0,5,0,5"/>
+            <TextBox Text="{Binding Info}"
+                     Grid.Column="1" Grid.Row="2"
+                     Width="100" Margin="0,5,0,5"/>
+            <Label Content="Category"
+                   Grid.Column="0" Grid.Row="3"
+                   Margin="0,5,0,0"/>
+            <ComboBox ItemsSource="{Binding Categories}" DisplayMemberPath="FullName" SelectedItem="{Binding Category}"
+                      Grid.Column="1" Grid.Row="3"
+                      Width="100" Margin="0,5,0,0"/>
+        </Grid>
+        <Button Content="Update" Command="{Binding UpdateTransaction}" Click="Button_Click"
+                HorizontalAlignment="Center"
+                Width="100" Height="25"/>
     </DockPanel>
 </Window>
