@@ -6,17 +6,45 @@
         xmlns:local="clr-namespace:SimpleBudget"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="Budget Record" Height="300" Width="300">
-    <DockPanel>
-        <Label Content="Year" DockPanel.Dock="Top"/>
-        <ComboBox ItemsSource="{Binding Years}" SelectedItem="{Binding SelectedYear}" DockPanel.Dock="Top"/>
-        <Label Content="Month" DockPanel.Dock="Top"/>
-        <ComboBox ItemsSource="{Binding Months}" SelectedIndex="{Binding SelectedMonth}" DockPanel.Dock="Top"/>
-        <Label Content="Budget" DockPanel.Dock="Top"/>
-        <xctk:DecimalUpDown Value="{Binding Amount}" DockPanel.Dock="Top" FormatString="F2"/>
-        <ComboBox ItemsSource="{Binding Categories}" DisplayMemberPath="FullName"
-                  SelectedItem="{Binding Category}" DockPanel.Dock="Top"/>
+        Title="Budget Record" Height="300" Width="240" ResizeMode="NoResize">
+    <DockPanel Margin="10,0,10,10">
         <Grid DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="130"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Content="Year"
+                   Grid.Column="0" Grid.Row="0"
+                   Margin="0,0,0,5"/>
+            <ComboBox ItemsSource="{Binding Years}" SelectedItem="{Binding SelectedYear}"
+                      Grid.Column="1" Grid.Row="0"
+                      Margin="0,0,0,5"/>
+            <Label Content="Month" 
+                   Grid.Column="0" Grid.Row="1"
+                   Margin="0,5,0,5"/>
+            <ComboBox ItemsSource="{Binding Months}" SelectedIndex="{Binding SelectedMonth}"
+                      Grid.Column="1" Grid.Row="1"
+                      Margin="0,5,0,5"/>
+            <Label Content="Budget"
+                   Grid.Column="0" Grid.Row="2"
+                   Margin="0,5,0,5"/>
+            <xctk:DecimalUpDown Value="{Binding Amount}" FormatString="F2"
+                                Grid.Column="1" Grid.Row="2"
+                                Margin="0,5,0,5"/>
+            <Label Content="Category"
+                   Grid.Column="0" Grid.Row="3"
+                   Margin="0,5,0,0"/>
+            <ComboBox ItemsSource="{Binding Categories}" DisplayMemberPath="FullName" SelectedItem="{Binding Category}"
+                      Grid.Column="1" Grid.Row="3"
+                      Margin="0,5,0,0"/>
+        </Grid>
+        <Grid DockPanel.Dock="Top" HorizontalAlignment="Center">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -29,23 +57,31 @@
             </Grid.ColumnDefinitions>
             <RadioButton GroupName="BType" Content="Monthly"
                          IsChecked="{Binding Monthly}"
-                         Grid.Column="0" Grid.Row="0"/>
+                         Grid.Column="0" Grid.Row="0"
+                         Margin="0,2,0,2"/>
             <RadioButton x:Name="point" GroupName="BType" Content="Point on"
                          IsChecked="{Binding Point}"
-                         Grid.Column="0" Grid.Row="1"/>
+                         Grid.Column="0" Grid.Row="1"
+                         Margin="0,2,0,2"/>
             <ComboBox ItemsSource="{Binding Days}"
                       Grid.Column="1" Grid.Row="1" IsEnabled="{Binding ElementName=point, Path=IsChecked}"
-                      SelectedItem="{Binding Day}"/>
+                      SelectedItem="{Binding Day}"
+                      Margin="0,2,0,2"/>
             <RadioButton GroupName="BType" Content="Daily"
                          IsChecked="{Binding Daily}"
-                         Grid.Column="0" Grid.Row="2"/>
+                         Grid.Column="0" Grid.Row="2"
+                         Margin="0,2,0,2"/>
             <RadioButton x:Name="weekly" GroupName="BType" Content="Weekly on"
                          IsChecked="{Binding Weekly}"
-                         Grid.Column="0" Grid.Row="3"/>
+                         Grid.Column="0" Grid.Row="3"
+                         Margin="0,2,0,0"/>
             <ComboBox ItemsSource="{Binding DaysOfWeek}"
                       Grid.Column="1" Grid.Row="3" IsEnabled="{Binding ElementName=weekly, Path=IsChecked}"
-                      SelectedIndex="{Binding DayOfWeek}"/>
+                      SelectedIndex="{Binding DayOfWeek}"
+                      Margin="0,2,0,0"/>
         </Grid>
-        <Button DockPanel.Dock="Bottom" Content="Update" Command="{Binding UpdateRecord}" Click="Button_Click"/>
+        <Button DockPanel.Dock="Bottom"
+                Content="Update" Command="{Binding UpdateRecord}" Click="Button_Click"
+                Height="20" Margin="6,0"/>
     </DockPanel>
 </Window>
