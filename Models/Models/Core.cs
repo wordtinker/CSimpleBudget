@@ -215,6 +215,16 @@ namespace Models
 
         public BindingList<BudgetRecord> Records { get; } = new BindingList<BudgetRecord>();
 
+        public void CopyRecords(int fromMonth, int fromYear)
+        {
+            storage.SelectRecords(fromYear, fromMonth).ForEach((r) =>
+            {
+                AddRecord(r.Amount, r.Category, r.Type, r.OnDay,
+                    SelectedMonth.GetValueOrDefault(),
+                    SelectedYear.GetValueOrDefault());
+            });
+        }
+
         public bool DeleteRecord(BudgetRecord record)
         {
             if (storage.DeleteRecord(record))

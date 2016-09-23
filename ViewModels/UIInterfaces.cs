@@ -26,5 +26,6 @@ namespace ViewModels
     {
         void ShowBudgetRecordEditor(BudgetRecordEditorViewModel vm);
         void ShowMessage(string message);
+        bool RequestMonthAndYear(out int monthToCopyFrom, out int yearToCopyFrom);
     }
 }

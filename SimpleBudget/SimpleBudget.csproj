@@ -115,6 +115,9 @@
     <Compile Include="Views\BudgetManager.xaml.cs">
       <DependentUpon>BudgetManager.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\BudgetManagerCopyRequest.xaml.cs">
+      <DependentUpon>BudgetManagerCopyRequest.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\BudgetManagerService.cs" />
     <Compile Include="Views\BudgetRecordEditor.xaml.cs">
       <DependentUpon>BudgetRecordEditor.xaml</DependentUpon>
@@ -135,6 +138,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\BudgetManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BudgetManagerCopyRequest.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

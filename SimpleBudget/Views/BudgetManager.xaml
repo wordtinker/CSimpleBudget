@@ -24,7 +24,7 @@
         </StackPanel>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,10">
             <Button Content="Add" Click="AddButton_Click" Margin="0,0,10,0"/>
-            <Button Content="Copy from"/>
+            <Button Content="Copy from" Command="{Binding RequestCopyFrom}"/>
         </StackPanel>
         <DataGrid DockPanel.Dock="Top" ItemsSource="{Binding Records}"
                   AutoGenerateColumns="False"

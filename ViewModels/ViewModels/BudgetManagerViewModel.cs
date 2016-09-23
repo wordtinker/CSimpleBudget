@@ -1,15 +1,16 @@
 ﻿using Models;
+using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Windows.Input;
 
 namespace ViewModels
 {
     public class RecordItem
     {
-        // TODO copy from Btn
         internal BudgetRecord record;
 
         public decimal Amount { get { return record.Amount; } }
@@ -26,6 +27,7 @@ namespace ViewModels
     public class BudgetManagerViewModel : BindableBase
     {
         private IUIBudgetWindowService windowService;
+        private ICommand requestCopyFrom;
 
         public List<string> Months { get; } = DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12).ToList();
         public int SelectedMonth { get; set; } = DateTime.Now.Month - 1;
@@ -80,6 +82,23 @@ namespace ViewModels
         {
             BudgetRecordEditorViewModel vm = new BudgetRecordEditorViewModel(item.record);
             windowService.ShowBudgetRecordEditor(vm);
+        }
+
+        public ICommand RequestCopyFrom
+        {
+            get
+            {
+                return requestCopyFrom ??
+                    (requestCopyFrom = new DelegateCommand(() =>
+                    {
+                        int monthToCopyFrom, yearToCopyFrom;
+                        if (windowService.RequestMonthAndYear(out monthToCopyFrom, out yearToCopyFrom))
+                        {
+                            // monthToCopyFrom is zero based
+                            Core.Instance.CopyRecords(monthToCopyFrom + 1, yearToCopyFrom);
+                        }
+                    }));
+            }
         }
 
         //ctor

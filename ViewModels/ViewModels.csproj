@@ -67,6 +67,7 @@
     <Compile Include="UIInterfaces.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ViewModels\AccountsViewModel.cs" />
+    <Compile Include="ViewModels\BudgetManagerCopyRequestViewModel.cs" />
     <Compile Include="ViewModels\BudgetManagerViewModel.cs" />
     <Compile Include="ViewModels\BudgetRecordEditorViewModel.cs" />
     <Compile Include="ViewModels\CategoriesViewModel.cs" />

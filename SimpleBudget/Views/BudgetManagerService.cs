@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using ViewModels;
 
 namespace SimpleBudget
@@ -23,6 +24,26 @@ namespace SimpleBudget
         public void ShowMessage(string message)
         {
             MessageBox.Show(message);
+        }
+
+        public bool RequestMonthAndYear(out int month, out int year)
+        {
+            BudgetManagerCopyRequest requestWindow = new BudgetManagerCopyRequest();
+            BudgetManagerCopyRequestViewModel context = new BudgetManagerCopyRequestViewModel();
+            requestWindow.DataContext = context;
+            requestWindow.Owner = parentWindow;
+            if (requestWindow.ShowDialog() == true)
+            {
+                month = context.SelectedMonth;
+                year = context.SelectedYear;
+                return true;
+            }
+            else
+            {
+                month = 0;
+                year = 0;
+                return false;
+            }
         }
     }
 }
