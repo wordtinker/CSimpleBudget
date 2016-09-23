@@ -44,7 +44,7 @@
                       Grid.Column="1" Grid.Row="3"
                       Width="100" Margin="0,5,0,0"/>
         </Grid>
-        <Button Content="Update" Command="{Binding UpdateTransaction}" Click="Button_Click"
+        <Button Content="Update" Click="Button_Click"
                 HorizontalAlignment="Center"
                 Width="100" Height="25"/>
     </DockPanel>

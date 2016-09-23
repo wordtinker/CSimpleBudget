@@ -1,11 +1,11 @@
 ﻿using Models;
 using Prism.Mvvm;
-using System.Collections.Generic;
-using System.Linq;
+using System;
+using System.ComponentModel;
 
 namespace ViewModels
 {
-    public class TransactionItem
+    public class TransactionItem : BindableBase
     {
         internal Transaction tr;
 
@@ -36,52 +36,73 @@ namespace ViewModels
         public TransactionItem(Transaction tr)
         {
             this.tr = tr;
+            tr.PropertyChanged += (sender, e) => {
+                // Raise all properties changed.
+                OnPropertyChanged(string.Empty);
+            };
         }
     }
 
     public class TransactionRollViewModel : BindableBase
     {
         private IUITransactionRollService service;
-        public IEnumerable<TransactionItem> Transactions
-        {
-            get
-            {
-                return from tr in Core.Instance.Transactions
-                       select new TransactionItem(tr);
-            }
-        }
+        private Account account;
+
+        public BindingList<TransactionItem> Transactions { get; } = new BindingList<TransactionItem>();
 
         public bool DeleteTransaction(TransactionItem item)
         {
-            return Core.Instance.DeleteTransaction(item.tr);
+            if (Core.Instance.DeleteTransaction(item.tr))
+            {
+                Transactions.Remove(item);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public void ShowTransactionEditor()
         {
+            DateTime date;
+            decimal amount;
+            string info;
+            CategoryNode catNode;
+
             TransactionEditorViewModel vm = new TransactionEditorViewModel();
-            service.ShowTransactionEditor(vm);
+            if (service.ShowTransactionEditor(vm, out date, out amount, out info, out catNode))
+            {
+                Transaction newTr;
+                if (Core.Instance.AddTransaction(account, date, amount, info, catNode.category, out newTr))
+                {
+                    Transactions.Add(new TransactionItem(newTr));
+                }
+            }
         }
 
         public void ShowTransactionEditor(TransactionItem item)
         {
+            DateTime date;
+            decimal amount;
+            string info;
+            CategoryNode catNode;
+
             TransactionEditorViewModel vm = new TransactionEditorViewModel(item.tr);
-            service.ShowTransactionEditor(vm);
+            if (service.ShowTransactionEditor(vm, out date, out amount, out info, out catNode))
+            {
+                Core.Instance.UpdateTransaction(item.tr, date, amount, info, catNode.category);
+            }
         }
 
-        public TransactionRollViewModel(IUITransactionRollService service)
+        public TransactionRollViewModel(AccountItem accItem, IUITransactionRollService service)
         {
             this.service = service;
-
-            Core.Instance.Transactions.ListChanged += (sender, e) =>
+            this.account = accItem.account;
+            Core.Instance.GetTransactions(account).ForEach((tr) =>
             {
-                OnPropertyChanged(() => Transactions);
-            };
-        }
-
-        public void Close()
-        {
-            // Cleanup selected account and transactions
-            Core.Instance.SelectedAccount = null;
+                Transactions.Add(new TransactionItem(tr));
+            });
         }
     }
 }

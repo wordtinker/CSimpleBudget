@@ -12,11 +12,6 @@ namespace SimpleBudget
     {
         public TransactionRoll()
         {
-            Closing += (sender, e) =>
-            {
-                ((TransactionRollViewModel)DataContext).Close();
-            };
-
             InitializeComponent();
         }
 

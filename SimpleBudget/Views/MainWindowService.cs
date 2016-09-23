@@ -30,11 +30,11 @@ namespace SimpleBudget
             MessageBox.Show(message);
         }
 
-        public void ShowTransactionRoll()
+        public void ShowTransactionRoll(AccountItem accItem)
         {
             TransactionRoll window = new TransactionRoll();
             TransactionRollService service = new TransactionRollService(window);
-            TransactionRollViewModel vm = new TransactionRollViewModel(service);
+            TransactionRollViewModel vm = new TransactionRollViewModel(accItem, service);
             window.DataContext = vm;
             window.Owner = mainWindow;
             window.ShowDialog();

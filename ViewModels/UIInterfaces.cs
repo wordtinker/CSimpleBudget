@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace ViewModels
 {
     public interface IUIMainWindowService
@@ -6,7 +8,7 @@ namespace ViewModels
         void ShowMessage(string message);
         void ShowBudgetReport();
         void ShowBalanceReport();
-        void ShowTransactionRoll();
+        void ShowTransactionRoll(AccountItem accItem);
 		void ManageAccounts();
 		void ManageCategories();
 		void ManageBudget();
@@ -19,7 +21,8 @@ namespace ViewModels
 
     public interface IUITransactionRollService
     {
-        void ShowTransactionEditor(TransactionEditorViewModel vm);
+        bool ShowTransactionEditor(
+            TransactionEditorViewModel vm, out DateTime date, out decimal amount, out string info, out CategoryNode catNode);
     }
 
     public interface IUIBudgetWindowService

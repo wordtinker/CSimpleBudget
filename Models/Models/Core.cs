@@ -11,7 +11,6 @@ namespace Models
     {
         private static readonly Core instance = new Core();
         private FileReader storage;
-        private Account selectedAccount;
         private int? selectedYear;
         private int? selectedMonth; // 1-based
 
@@ -123,29 +122,15 @@ namespace Models
             }
         }
 
-        public BindingList<Transaction> Transactions { get; } = new BindingList<Transaction>();
-        public Account SelectedAccount
+        public List<Transaction> GetTransactions(Account selectedAccount)
         {
-            get
-            {
-                return selectedAccount;
-            }
-            set
-            {
-                selectedAccount = value;
-                Transactions.Clear();
-                if (selectedAccount != null)
-                {
-                    storage.SelectTransactions(selectedAccount).ForEach(Transactions.Add);
-                }
-            }
+            return storage.SelectTransactions(selectedAccount);
         }
 
         public bool DeleteTransaction(Transaction transaction)
         {
             if (storage.DeleteTransaction(transaction))
             {
-                Transactions.Remove(transaction);
                 // Changes the spending view
                 OnPropertyChanged(() => CurrentMonthSpendings);
                 return true;
@@ -156,14 +141,21 @@ namespace Models
             }
         }
 
-        public void AddTransaction(DateTime date, decimal amount, string info, Category category)
+        public bool AddTransaction(
+            Account acc, DateTime date, decimal amount, string info, Category category, out Transaction newTransaction)
         {
             Transaction newTr;
-            if (storage.AddTransaction(SelectedAccount, date, amount, info, category, out newTr))
+            if (storage.AddTransaction(acc, date, amount, info, category, out newTr))
             {
-                Transactions.Add(newTr);
                 // Changes the spending view
                 OnPropertyChanged(() => CurrentMonthSpendings);
+                newTransaction = newTr;
+                return true;
+            }
+            else
+            {
+                newTransaction = null;
+                return false;
             }
         }
 

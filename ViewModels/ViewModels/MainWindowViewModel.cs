@@ -247,8 +247,7 @@ namespace ViewModels
                 }
                 else
                 {
-                    core.SelectedAccount = item.account;
-                    windowService.ShowTransactionRoll();
+                    windowService.ShowTransactionRoll(item);
                 }
             }
         }

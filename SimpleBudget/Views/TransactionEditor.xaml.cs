@@ -14,6 +14,7 @@ namespace SimpleBudget
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            DialogResult = true;
             this.Close();
         }
     }

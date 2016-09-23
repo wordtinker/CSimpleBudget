@@ -1,4 +1,5 @@
-﻿using ViewModels;
+﻿using System;
+using ViewModels;
 
 namespace SimpleBudget
 {
@@ -11,12 +12,28 @@ namespace SimpleBudget
             this.rollWindow = rollWindow;
         }
 
-        public void ShowTransactionEditor(TransactionEditorViewModel vm)
+        public bool ShowTransactionEditor(
+            TransactionEditorViewModel vm, out DateTime date, out decimal amount, out string info, out CategoryNode catNode)
         {
             TransactionEditor window = new TransactionEditor();
             window.DataContext = vm;
             window.Owner = rollWindow;
-            window.ShowDialog();
+            if (window.ShowDialog() == true)
+            {
+                date = vm.Date;
+                amount = vm.Amount;
+                info = vm.Info;
+                catNode = vm.Category;
+                return true;
+            }
+            else
+            {
+                date = DateTime.Now;
+                amount = 0m;
+                info = null;
+                catNode = null;
+                return false;
+            }
         }
     }
 }

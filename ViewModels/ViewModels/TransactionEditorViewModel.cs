@@ -1,16 +1,13 @@
 ﻿using Models;
-using Prism.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 
 namespace ViewModels
 {
     public class TransactionEditorViewModel
     {
         private Transaction tr;
-        private ICommand updateTransaction;
 
         public IEnumerable<CategoryNode> Categories
         {
@@ -25,25 +22,6 @@ namespace ViewModels
         public decimal Amount { get; set; }
         public string Info { get; set; }
         public CategoryNode Category { get; set; }
-
-        public ICommand UpdateTransaction
-        {
-            get
-            {
-                return updateTransaction ??
-                (updateTransaction = new DelegateCommand(() =>
-                {
-                    if (tr == null)
-                    {
-                        Core.Instance.AddTransaction(Date, Amount, Info, Category.category);
-                    }
-                    else
-                    {
-                        Core.Instance.UpdateTransaction(tr, Date, Amount, Info, Category.category);
-                    }
-                }));
-            }
-        }
 
         public TransactionEditorViewModel()
         {
