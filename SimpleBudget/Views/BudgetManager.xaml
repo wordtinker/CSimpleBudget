@@ -18,9 +18,9 @@
     <DockPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
             <Label Content="Month" Margin="0,0,10,0"/>
-            <ComboBox ItemsSource="{Binding Months}" SelectedIndex="{Binding SelectedMonth}" SelectionChanged="Month_SelectionChanged"/>
+            <ComboBox ItemsSource="{Binding Months}" SelectedIndex="{Binding SelectedMonth}"/>
             <Label Content="Year" Margin="10,0,10,0"/>
-            <ComboBox ItemsSource="{Binding Years}" SelectedValue="{Binding SelectedYear}" SelectionChanged="Year_SelectionChanged"/>
+            <ComboBox ItemsSource="{Binding Years}" SelectedValue="{Binding SelectedYear}"/>
         </StackPanel>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,10">
             <Button Content="Add" Click="AddButton_Click" Margin="0,0,10,0"/>

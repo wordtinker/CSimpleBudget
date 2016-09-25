@@ -28,9 +28,22 @@ namespace ViewModels
     {
         private IUIBudgetWindowService windowService;
         private ICommand requestCopyFrom;
+        private int selectedMonth = DateTime.Now.Month - 1;
+        private int selectedYear = DateTime.Now.Year;
 
         public List<string> Months { get; } = DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12).ToList();
-        public int SelectedMonth { get; set; } = DateTime.Now.Month - 1;
+        public int SelectedMonth
+        {
+            get
+            {
+                return selectedMonth;
+            }
+            set
+            {
+                selectedMonth = value;
+                Core.Instance.SelectedMonth = value + 1;
+            }
+        }
         public IEnumerable<int> Years
         {
             get
@@ -40,7 +53,17 @@ namespace ViewModels
                 return Enumerable.Range(minYear - 1, 5 + maxYear - minYear);
             }
         }
-        public int SelectedYear { get; set; } = DateTime.Now.Year;
+        public int SelectedYear {
+            get
+            {
+                return selectedYear;
+            }
+            set
+            {
+                selectedYear = value;
+                Core.Instance.SelectedYear = value;
+            }
+        }
         public IEnumerable<RecordItem> Records
         {
             get
@@ -48,16 +71,6 @@ namespace ViewModels
                 return from rec in Core.Instance.Records
                        select new RecordItem(rec);
             }
-        }
-
-        public void CurrenMonthChanged(int index)
-        {
-            Core.Instance.SelectedMonth = index + 1;
-        }
-
-        public void CurrentYearChanged(int year)
-        {
-            Core.Instance.SelectedYear = year;
         }
 
         public bool DeleteRecord(RecordItem item)
