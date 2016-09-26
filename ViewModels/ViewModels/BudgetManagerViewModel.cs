@@ -9,18 +9,137 @@ using System.Windows.Input;
 
 namespace ViewModels
 {
-    public class RecordItem
+    public class RecordItem : BindableBase
     {
         internal BudgetRecord record;
+        internal BudgetType Type;
 
-        public decimal Amount { get { return record.Amount; } }
-        public string Category { get { return string.Format("{0}--{1}", record.Category.Parent?.Name, record.Category.Name); } }
-        public string Type { get { return record.Type.ToString(); } }
-        public int OnDay { get { return record.OnDay; } }
+        private int month;
+        private string monthName;
+        private bool monthly;
+        private bool point;
+        private bool daily;
+        private bool weekly;
+
+        public string TypeName { get { return Type.ToString(); } }
+        public int OnDay { get; set; }
+        public decimal Amount { get; set; }
+        public int Year { get; set; }
+        public int Month
+        {
+            get { return month; }
+            set
+            {
+                if (SetProperty(ref month, value))
+                {
+                    MonthName = DateTimeFormatInfo.CurrentInfo.MonthNames[value - 1];
+                }
+            }
+        }
+        public string MonthName
+        {
+            get { return monthName; }
+            set
+            {
+                if (SetProperty(ref monthName, value))
+                {
+                    Month = DateTime.ParseExact(value, "MMMM", CultureInfo.CurrentCulture).Month;
+                }
+            }
+        }
+        public CategoryNode Category { get; set; }
+        public bool Monthly
+        {
+            get { return monthly; }
+            set
+            {
+                monthly = value;
+                if (monthly)
+                {
+                    Type = BudgetType.Monthly;
+                    OnDay = 0;
+                }
+            }
+        }
+        public bool Point
+        {
+            get { return point; }
+            set
+            {
+                point = value;
+                if (point)
+                {
+                    Type = BudgetType.Point;
+                    OnDay = 1;
+                }
+            }
+        }
+        public bool Daily
+        {
+            get { return daily; }
+            set
+            {
+                daily = value;
+                if (daily)
+                {
+                    Type = BudgetType.Daily;
+                    OnDay = 0;
+                }
+            }
+        }
+        public bool Weekly
+        {
+            get { return weekly; }
+            set
+            {
+                weekly = value;
+                if (weekly)
+                {
+                    Type = BudgetType.Weekly;
+                    OnDay = 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates fake RecordItem with no real record behind
+        /// </summary>
+        public RecordItem()
+        {
+            this.record = null;
+            Year = DateTime.Now.Year;
+            Month = DateTime.Now.Month;
+            Category = new CategoryNode((from c in Core.Instance.Categories where c.Parent != null select c).First());
+            Monthly = true;
+        }
 
         public RecordItem(BudgetRecord rec)
         {
             this.record = rec;
+            Year = rec.Year;
+            Month = rec.Month;
+            Amount = rec.Amount;
+            Category = new CategoryNode(rec.Category);
+
+            switch (rec.Type)
+            {
+                case BudgetType.Monthly:
+                    Monthly = true;
+                    break;
+                case BudgetType.Point:
+                    Point = true;
+                    OnDay = record.OnDay;
+                    break;
+                case BudgetType.Daily:
+                    Daily = true;
+                    break;
+                case BudgetType.Weekly:
+                    Weekly = true;
+                    OnDay = record.OnDay;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -28,20 +147,20 @@ namespace ViewModels
     {
         private IUIBudgetWindowService windowService;
         private ICommand requestCopyFrom;
-        private int selectedMonth = DateTime.Now.Month - 1;
+        private string selectedMonthName = DateTime.Now.ToString("MMMM");
         private int selectedYear = DateTime.Now.Year;
 
         public List<string> Months { get; } = DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12).ToList();
-        public int SelectedMonth
+        public string SelectedMonthName
         {
             get
             {
-                return selectedMonth;
+                return selectedMonthName;
             }
             set
             {
-                selectedMonth = value;
-                Core.Instance.SelectedMonth = value + 1;
+                selectedMonthName = value;
+                Core.Instance.SelectedMonth = DateTime.ParseExact(value, "MMMM", CultureInfo.CurrentCulture).Month;
             }
         }
         public IEnumerable<int> Years
@@ -124,7 +243,8 @@ namespace ViewModels
             };
 
             Core.Instance.SelectedYear = SelectedYear;
-            Core.Instance.SelectedMonth = SelectedMonth + 1;
+            Core.Instance.SelectedMonth =
+                DateTime.ParseExact(SelectedMonthName, "MMMM", CultureInfo.CurrentCulture).Month;
         }
 
         public void Close()

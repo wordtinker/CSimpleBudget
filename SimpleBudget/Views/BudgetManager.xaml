@@ -18,7 +18,7 @@
     <DockPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
             <Label Content="Month" Margin="0,0,10,0"/>
-            <ComboBox ItemsSource="{Binding Months}" SelectedIndex="{Binding SelectedMonth}"/>
+            <ComboBox ItemsSource="{Binding Months}" SelectedItem="{Binding SelectedMonthName}"/>
             <Label Content="Year" Margin="10,0,10,0"/>
             <ComboBox ItemsSource="{Binding Years}" SelectedValue="{Binding SelectedYear}"/>
         </StackPanel>
@@ -39,8 +39,8 @@
                   RowStyle="{StaticResource DefaultRowStyle}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Amount" Width="*" Binding="{Binding Amount}"/>
-                <DataGridTextColumn Header="Category" Width="*" Binding="{Binding Category}"/>
-                <DataGridTextColumn Header="Type" Width="*" Binding="{Binding Type}"/>
+                <DataGridTextColumn Header="Category" Width="Auto" Binding="{Binding Category.FullName}"/>
+                <DataGridTextColumn Header="Type" Width="*" Binding="{Binding TypeName}"/>
                 <DataGridTextColumn Header="On day" Width="*" Binding="{Binding OnDay}"/>
             </DataGrid.Columns>
         </DataGrid>

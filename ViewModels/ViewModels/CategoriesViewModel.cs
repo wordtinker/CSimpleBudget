@@ -16,7 +16,7 @@ namespace ViewModels
         {
             get
             {
-                return string.Format("{0}{1}{2}", category.Parent.Name, separator, category.Name);
+                return string.Format("{0}{1}{2}", category.Parent?.Name, separator, category.Name);
             }
         }
         public ObservableCollection<CategoryNode> Items { get; }
