@@ -3,6 +3,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
@@ -101,27 +102,14 @@ namespace ViewModels
             }
         }
 
-        /// <summary>
-        /// Creates fake RecordItem with no real record behind
-        /// </summary>
-        public RecordItem()
+        private void Update()
         {
-            this.record = null;
-            Year = DateTime.Now.Year;
-            Month = DateTime.Now.Month;
-            Category = new CategoryNode((from c in Core.Instance.Categories where c.Parent != null select c).First());
-            Monthly = true;
-        }
+            Year = record.Year;
+            Month = record.Month;
+            Amount = record.Amount;
+            Category = new CategoryNode(record.Category);
 
-        public RecordItem(BudgetRecord rec)
-        {
-            this.record = rec;
-            Year = rec.Year;
-            Month = rec.Month;
-            Amount = rec.Amount;
-            Category = new CategoryNode(rec.Category);
-
-            switch (rec.Type)
+            switch (record.Type)
             {
                 case BudgetType.Monthly:
                     Monthly = true;
@@ -141,6 +129,30 @@ namespace ViewModels
                     break;
             }
         }
+
+        /// <summary>
+        /// Creates fake RecordItem with no real record behind
+        /// </summary>
+        public RecordItem()
+        {
+            this.record = null;
+            Year = DateTime.Now.Year;
+            Month = DateTime.Now.Month;
+            Category = new CategoryNode((from c in Core.Instance.Categories where c.Parent != null select c).First());
+            Monthly = true;
+        }
+
+        public RecordItem(BudgetRecord rec)
+        {
+            this.record = rec;
+            Update();
+            rec.PropertyChanged += (sender, e) =>
+            {
+                // Raise all properties changed.
+                Update();
+                OnPropertyChanged(string.Empty);
+            };
+        }
     }
 
     public class BudgetManagerViewModel : BindableBase
@@ -150,7 +162,14 @@ namespace ViewModels
         private string selectedMonthName = DateTime.Now.ToString("MMMM");
         private int selectedYear = DateTime.Now.Year;
 
+        public BindingList<RecordItem> Records { get; } = new BindingList<RecordItem>();
         public List<string> Months { get; } = DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12).ToList();
+        private int SelectedMonth {
+            get
+            {
+                return DateTime.ParseExact(SelectedMonthName, "MMMM", CultureInfo.CurrentCulture).Month;
+            }
+        }
         public string SelectedMonthName
         {
             get
@@ -159,8 +178,10 @@ namespace ViewModels
             }
             set
             {
-                selectedMonthName = value;
-                Core.Instance.SelectedMonth = DateTime.ParseExact(value, "MMMM", CultureInfo.CurrentCulture).Month;
+                if (SetProperty(ref selectedMonthName, value))
+                {
+                    UpdateRecords();
+                }
             }
         }
         public IEnumerable<int> Years
@@ -179,22 +200,33 @@ namespace ViewModels
             }
             set
             {
-                selectedYear = value;
-                Core.Instance.SelectedYear = value;
+                if (SetProperty(ref selectedYear, value))
+                {
+                    UpdateRecords();
+                }
             }
         }
-        public IEnumerable<RecordItem> Records
+
+        private void UpdateRecords()
         {
-            get
+            Records.Clear();
+            Core.Instance.GetRecords(SelectedYear, SelectedMonth).ForEach((rec) =>
             {
-                return from rec in Core.Instance.Records
-                       select new RecordItem(rec);
-            }
+                Records.Add(new RecordItem(rec));
+            });
         }
 
         public bool DeleteRecord(RecordItem item)
         {
-            return Core.Instance.DeleteRecord(item.record);
+            if (Core.Instance.DeleteRecord(item.record))
+            {
+                Records.Remove(item);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public void ShowRecordEditor()
@@ -205,15 +237,42 @@ namespace ViewModels
             }
             else
             {
+                RecordItem newRecordItem;
                 BudgetRecordEditorViewModel vm = new BudgetRecordEditorViewModel();
-                windowService.ShowBudgetRecordEditor(vm);
+                if (windowService.ShowBudgetRecordEditor(vm, out newRecordItem))
+                {
+                    BudgetRecord newRecord;
+                    if (Core.Instance.AddRecord(
+                        newRecordItem.Amount, newRecordItem.Category.category,
+                        newRecordItem.Type, newRecordItem.OnDay,
+                        newRecordItem.Month, newRecordItem.Year, out newRecord))
+                    {
+                        if (newRecord.Month == SelectedMonth && newRecord.Year == SelectedYear)
+                        {
+                            Records.Add(new RecordItem(newRecord));
+                        }
+                    }
+                }
             }
         }
 
         public void ShowRecordEditor(RecordItem item)
         {
+            RecordItem editedRecordItem;
             BudgetRecordEditorViewModel vm = new BudgetRecordEditorViewModel(item.record);
-            windowService.ShowBudgetRecordEditor(vm);
+            if (windowService.ShowBudgetRecordEditor(vm, out editedRecordItem))
+            {
+                if (Core.Instance.UpdateRecord(
+                    item.record, editedRecordItem.Amount, editedRecordItem.Category.category,
+                    editedRecordItem.Type, editedRecordItem.OnDay,
+                    editedRecordItem.Month, editedRecordItem.Year))
+                {
+                    if (editedRecordItem.Month != SelectedMonth || editedRecordItem.Year != selectedYear)
+                    {
+                        Records.Remove(item);
+                    }
+                }
+            }
         }
 
         public ICommand RequestCopyFrom
@@ -226,8 +285,10 @@ namespace ViewModels
                         int monthToCopyFrom, yearToCopyFrom;
                         if (windowService.RequestMonthAndYear(out monthToCopyFrom, out yearToCopyFrom))
                         {
+                            // TODO
                             // monthToCopyFrom is zero based
-                            Core.Instance.CopyRecords(monthToCopyFrom + 1, yearToCopyFrom);
+                            Core.Instance.CopyRecords(monthToCopyFrom + 1, yearToCopyFrom, SelectedMonth, SelectedYear);
+                            UpdateRecords();
                         }
                     }));
             }
@@ -237,21 +298,7 @@ namespace ViewModels
         public BudgetManagerViewModel(IUIBudgetWindowService windowService)
         {
             this.windowService = windowService;
-            Core.Instance.Records.ListChanged += (sender, e) =>
-            {
-                OnPropertyChanged(() => Records);
-            };
-
-            Core.Instance.SelectedYear = SelectedYear;
-            Core.Instance.SelectedMonth =
-                DateTime.ParseExact(SelectedMonthName, "MMMM", CultureInfo.CurrentCulture).Month;
-        }
-
-        public void Close()
-        {
-            // Cleanup
-            Core.Instance.SelectedYear = null;
-            Core.Instance.SelectedMonth = null;
+            UpdateRecords();
         }
     }
 }

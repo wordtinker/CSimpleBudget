@@ -81,7 +81,7 @@
                       Margin="0,2,0,0"/>
         </Grid>
         <Button DockPanel.Dock="Bottom"
-                Content="Update" Command="{Binding UpdateRecord}" Click="Button_Click"
+                Content="Update" Click="Button_Click"
                 Height="20" Margin="6,0"/>
     </DockPanel>
 </Window>

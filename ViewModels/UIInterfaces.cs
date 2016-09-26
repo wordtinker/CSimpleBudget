@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 
 namespace ViewModels
 {
@@ -27,7 +26,7 @@ namespace ViewModels
 
     public interface IUIBudgetWindowService
     {
-        void ShowBudgetRecordEditor(BudgetRecordEditorViewModel vm);
+        bool ShowBudgetRecordEditor(BudgetRecordEditorViewModel vm, out RecordItem newRecordItem);
         void ShowMessage(string message);
         bool RequestMonthAndYear(out int monthToCopyFrom, out int yearToCopyFrom);
     }

@@ -12,11 +12,6 @@ namespace SimpleBudget
     {
         public BudgetManager()
         {
-            Closing += (sender, e) =>
-            {
-                ((BudgetManagerViewModel)DataContext).Close();
-            };
-
             InitializeComponent();
         }
 

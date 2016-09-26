@@ -13,12 +13,21 @@ namespace SimpleBudget
             this.parentWindow = managerWindow;
         }
 
-        public void ShowBudgetRecordEditor(BudgetRecordEditorViewModel vm)
+        public bool ShowBudgetRecordEditor(BudgetRecordEditorViewModel vm, out RecordItem newItem)
         {
             BudgetRecordEditor editor = new BudgetRecordEditor();
             editor.DataContext = vm;
             editor.Owner = parentWindow;
-            editor.ShowDialog();
+            if (editor.ShowDialog() == true)
+            {
+                newItem = vm.BudgetRecord;
+                return true;
+            }
+            else
+            {
+                newItem = null;
+                return false;
+            }
         }
 
         public void ShowMessage(string message)

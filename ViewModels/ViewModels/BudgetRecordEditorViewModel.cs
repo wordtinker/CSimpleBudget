@@ -1,17 +1,13 @@
 ﻿using Models;
-using Prism.Commands;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Windows.Input;
 
 namespace ViewModels
 {
     public class BudgetRecordEditorViewModel
     {
-        private ICommand updateRecord;
-
         public RecordItem BudgetRecord { get; }
 
         public List<string> Months { get; } = DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12).ToList();
@@ -35,38 +31,6 @@ namespace ViewModels
         }
         public IEnumerable<int> Days { get; } = Enumerable.Range(1, 30);
         public IEnumerable<string> DaysOfWeek { get; } = Enum.GetNames(typeof(DayOfWeek));
-
-        public ICommand UpdateRecord
-        {
-                get
-            {
-                return updateRecord ??
-                (updateRecord = new DelegateCommand(() =>
-                {
-                    if (BudgetRecord.record == null)
-                    {
-                        Core.Instance.AddRecord(
-                            BudgetRecord.Amount,
-                            BudgetRecord.Category.category,
-                            BudgetRecord.Type,
-                            BudgetRecord.OnDay,
-                            BudgetRecord.Month,
-                            BudgetRecord.Year);
-                    }
-                    else
-                    {
-                        Core.Instance.UpdateRecord(
-                            BudgetRecord.record,
-                            BudgetRecord.Amount,
-                            BudgetRecord.Category.category,
-                            BudgetRecord.Type,
-                            BudgetRecord.OnDay,
-                            BudgetRecord.Month,
-                            BudgetRecord.Year);
-                    }
-                }));
-            }
-        }
 
         public BudgetRecordEditorViewModel()
         {
