@@ -66,7 +66,7 @@
             <ComboBox ItemsSource="{Binding Days}"
                       Grid.Column="1" Grid.Row="1" IsEnabled="{Binding ElementName=point, Path=IsChecked}"
                       SelectedItem="{Binding BudgetRecord.OnDay}"
-                      Margin="0,2,0,2"/>
+                      Margin="0,2,0,2" Width="100"/>
             <RadioButton GroupName="BType" Content="Daily"
                          IsChecked="{Binding BudgetRecord.Daily}"
                          Grid.Column="0" Grid.Row="2"
@@ -78,7 +78,7 @@
             <ComboBox ItemsSource="{Binding DaysOfWeek}"
                       Grid.Column="1" Grid.Row="3" IsEnabled="{Binding ElementName=weekly, Path=IsChecked}"
                       SelectedIndex="{Binding BudgetRecord.OnDay}"
-                      Margin="0,2,0,0"/>
+                      Margin="0,2,0,0" Width="100"/>
         </Grid>
         <Button DockPanel.Dock="Bottom"
                 Content="Update" Click="Button_Click"
