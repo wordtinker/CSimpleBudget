@@ -11,6 +11,8 @@ namespace Models
     {
         private static readonly Core instance = new Core();
         private FileReader storage;
+        private int currentYear = DateTime.Now.Year;
+        private int currentMonth = DateTime.Now.Month;
 
         public static Core Instance
         {
@@ -129,8 +131,11 @@ namespace Models
         {
             if (storage.DeleteTransaction(transaction))
             {
-                // Changes the spending view
-                OnPropertyChanged(() => CurrentMonthSpendings);
+                if (transaction.Date.Year == currentYear && transaction.Date.Month == currentMonth)
+                {
+                    // Spending table has changed
+                    OnPropertyChanged(() => CurrentMonthSpendings);
+                }
                 return true;
             }
             else
@@ -142,27 +147,33 @@ namespace Models
         public bool AddTransaction(
             Account acc, DateTime date, decimal amount, string info, Category category, out Transaction newTransaction)
         {
-            Transaction newTr;
-            if (storage.AddTransaction(acc, date, amount, info, category, out newTr))
+            if (storage.AddTransaction(acc, date, amount, info, category, out newTransaction))
             {
-                // Changes the spending view
-                OnPropertyChanged(() => CurrentMonthSpendings);
-                newTransaction = newTr;
+                if (newTransaction.Date.Year == currentYear && newTransaction.Date.Month == currentMonth)
+                {
+                    // Spending table has changed
+                    OnPropertyChanged(() => CurrentMonthSpendings);
+                }
                 return true;
             }
             else
             {
-                newTransaction = null;
                 return false;
             }
         }
 
-
         public void UpdateTransaction(Transaction tr, DateTime date, decimal amount, string info, Category category)
         {
-            storage.UpdateTransaction(tr, date, amount, info, category);
-            // Might change the spending view
-            OnPropertyChanged(() => CurrentMonthSpendings);
+            bool updateFlag = (tr.Date.Year == currentYear && tr.Date.Month == currentMonth) ||
+                              (date.Year == currentYear && date.Month == currentMonth);
+            if (storage.UpdateTransaction(tr, date, amount, info, category))
+            {
+                if (updateFlag)
+                {
+                    // Spending table has changed
+                    OnPropertyChanged(() => CurrentMonthSpendings);
+                }
+            }
         }
 
         /// <summary>
@@ -190,9 +201,11 @@ namespace Models
         {
             if (storage.DeleteRecord(record))
             {
-                // TODO only if month and year match
-                // Changes the spending view
-                OnPropertyChanged(() => CurrentMonthSpendings);
+                if (record.Month == currentMonth && record.Year == currentYear)
+                {
+                    // Spending table has changed
+                    OnPropertyChanged(() => CurrentMonthSpendings);
+                }
                 return true;
             }
             else
@@ -209,9 +222,11 @@ namespace Models
             if (storage.AddRecord(
                 amount, category, budgetType, onDay, selectedMonth, selectedYear, out newRecord))
             {
-                // TODO if month and year match
-                // Changes the spending view
-                OnPropertyChanged(() => CurrentMonthSpendings);
+                if (newRecord.Month == currentMonth && newRecord.Year == currentYear)
+                {
+                    // Spending table has changed
+                    OnPropertyChanged(() => CurrentMonthSpendings);
+                }
                 return true;
             }
             else
@@ -224,11 +239,15 @@ namespace Models
             decimal amount, Category category, BudgetType budgetType,
             int onDay, int selectedMonth, int selectedYear)
         {
+            bool updateFlag = (record.Month == currentMonth && record.Year == currentYear) ||
+                              (selectedMonth == currentMonth && selectedYear == currentYear);
             if (storage.UpdateRecord(record, amount, category, budgetType, onDay, selectedMonth, selectedYear))
             {
-                // TODO if month and year match
-                // Might change the spending view
-                OnPropertyChanged(() => CurrentMonthSpendings);
+                if (updateFlag)
+                {
+                    // Spending table has changed
+                    OnPropertyChanged(() => CurrentMonthSpendings);
+                }
                 return true;
             }
             else
@@ -241,9 +260,6 @@ namespace Models
         {
             get
             {
-                int currentYear = DateTime.Today.Year;
-                int currentMonth = DateTime.Today.Month;
-
                 List<Spending> spendings = new List<Spending>();
 
                 var subcats = from c in Categories
