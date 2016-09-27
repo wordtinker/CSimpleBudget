@@ -285,9 +285,7 @@ namespace ViewModels
                         int monthToCopyFrom, yearToCopyFrom;
                         if (windowService.RequestMonthAndYear(out monthToCopyFrom, out yearToCopyFrom))
                         {
-                            // TODO
-                            // monthToCopyFrom is zero based
-                            Core.Instance.CopyRecords(monthToCopyFrom + 1, yearToCopyFrom, SelectedMonth, SelectedYear);
+                            Core.Instance.CopyRecords(monthToCopyFrom, yearToCopyFrom, SelectedMonth, SelectedYear);
                             UpdateRecords();
                         }
                     }));

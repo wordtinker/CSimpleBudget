@@ -10,7 +10,7 @@
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
             <Label Content="Month"
                    Margin="0,0,10,0"/>
-            <ComboBox ItemsSource="{Binding Months}" SelectedIndex="{Binding SelectedMonth}"/>
+            <ComboBox ItemsSource="{Binding Months}" SelectedItem="{Binding SelectedMonthName}"/>
             <Label Content="Year"
                    Margin="10,0,10,0"/>
             <ComboBox ItemsSource="{Binding Years}" SelectedValue="{Binding SelectedYear}"/>
