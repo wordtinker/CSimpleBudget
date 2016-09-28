@@ -66,6 +66,19 @@ namespace Models
             }
         }
 
+        public bool DeleteAccType(string name)
+        {
+            if (Storage.DeleteAccType(name))
+            {
+                AccountTypes.Remove(name);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public BindingList<Account> Accounts { get; } = new BindingList<Account>();
 
         public void UpdateAccount(Account acc)

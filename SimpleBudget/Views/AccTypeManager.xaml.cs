@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using ViewModels;
 
 namespace SimpleBudget
@@ -15,7 +16,12 @@ namespace SimpleBudget
 
         private void DeleteAccountType_Click(object sender, RoutedEventArgs e)
         {
-            // TODO
+            MenuItem mi = (MenuItem)sender;
+            AccTypeItem item = (AccTypeItem)mi.DataContext;
+            if (!((AccTypeViewModel)this.DataContext).DeleteAccType(item))
+            {
+                MessageBox.Show("Can't delete account type.");
+            }
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)

@@ -270,11 +270,50 @@ namespace Models
 
         internal override bool DeleteAccType(string name)
         {
-            // TODO
-            throw new NotImplementedException();
+            // Cant delete if there is an account of this type
+            if (ExistsAccount(name))
+            {
+                return false;
+            }
+
+            string sql = "DELETE FROM AccountTypes WHERE name=@name";
+            try
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+                {
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@name",
+                        DbType = System.Data.DbType.String,
+                        Value = name
+                    });
+                    cmd.ExecuteNonQuery();
+                }
+                return true;
+            }
+            catch (SQLiteException)
+            {
+                return false;
+            }
         }
 
         /************** Accounts *****************/
+
+        private bool ExistsAccount(string accountType)
+        {
+            string sql = "SELECT COUNT(*) FROM Accounts WHERE type=@type";
+            using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+            {
+                cmd.Parameters.Add(new SQLiteParameter()
+                {
+                    ParameterName = "@type",
+                    DbType = System.Data.DbType.String,
+                    Value = accountType
+                });
+                Int32 count = Convert.ToInt32(cmd.ExecuteScalar());
+                return count > 0;
+            }
+        }
 
         internal override List<Account> SelectAccounts()
         {

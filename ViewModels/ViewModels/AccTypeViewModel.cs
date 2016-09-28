@@ -27,6 +27,11 @@ namespace ViewModels
             }
         }
 
+        public bool DeleteAccType(AccTypeItem item)
+        {
+            return Core.Instance.DeleteAccType(item.Name);
+        }
+
         public bool AddAccType(string accTypeName)
         {
             return Core.Instance.AddAccType(accTypeName);
