@@ -135,7 +135,14 @@ namespace ViewModels
                 return manageAccounts ??
                 (manageAccounts = new DelegateCommand(() =>
                 {
-                    windowService.ManageAccounts();
+                    if (Core.Instance.AccountTypes.Count == 0)
+                    {
+                        windowService.ShowMessage("Set account types first!");
+                    }
+                    else
+                    {
+                        windowService.ManageAccounts();
+                    }
                 }, () =>
                 {
                     return !string.IsNullOrEmpty(OpenedFile);

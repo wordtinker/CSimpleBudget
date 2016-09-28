@@ -91,7 +91,6 @@ namespace Models
 
         public bool AddAccount(string accName)
         {
-            // TODO Block before we have accTypes
             string newAccDefaultType = AccountTypes[0];
             Account newAcc;
             if (storage.AddAccount(accName, newAccDefaultType, out newAcc))
