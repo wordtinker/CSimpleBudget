@@ -50,6 +50,7 @@ namespace ViewModels
         private ICommand showHelp;
         private ICommand showBudgetReport;
         private ICommand showBalanceReport;
+        private ICommand manageAccTypes;
         private ICommand manageAccounts;
         private ICommand manageCategories;
         private ICommand manageBudget;
@@ -58,7 +59,6 @@ namespace ViewModels
         private ICommand closeFile;
         private ICommand openFile;
         private string openedFile;
-        
 
         public string OpenedFile
         {
@@ -113,6 +113,21 @@ namespace ViewModels
             }
         }
 		
+        public ICommand ManageAccTypes
+        {
+            get
+            {
+                return manageAccTypes ??
+                (manageAccTypes = new DelegateCommand(() =>
+                {
+                    windowService.ManageAccountTypes();
+                }, () =>
+                {
+                    return !string.IsNullOrEmpty(OpenedFile);
+                }).ObservesProperty(() => OpenedFile));
+            }
+        }
+
 		public ICommand ManageAccounts
         {
             get

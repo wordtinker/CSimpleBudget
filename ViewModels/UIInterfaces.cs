@@ -8,6 +8,7 @@ namespace ViewModels
         void ShowBudgetReport();
         void ShowBalanceReport();
         void ShowTransactionRoll(AccountItem accItem);
+        void ManageAccountTypes();
 		void ManageAccounts();
 		void ManageCategories();
 		void ManageBudget();

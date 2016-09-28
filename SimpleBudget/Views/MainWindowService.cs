@@ -40,6 +40,15 @@ namespace SimpleBudget
             window.ShowDialog();
         }
 		
+        public void ManageAccountTypes()
+        {
+            AccTypeViewModel vm = new AccTypeViewModel();
+            AccTypeManager window = new AccTypeManager();
+            window.DataContext = vm;
+            window.Owner = mainWindow;
+            window.ShowDialog();
+        }
+
 		public void ManageAccounts()
 		{
             AccountsViewModel vm = new AccountsViewModel();

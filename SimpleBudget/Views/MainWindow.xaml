@@ -21,6 +21,7 @@
                 <MenuItem Header="E_xit" Command="{Binding Exit}"/>
             </MenuItem>
             <MenuItem Header="Manage">
+                <MenuItem Header="Account Types" Command="{Binding ManageAccTypes}"/>
                 <MenuItem Header="Accounts" Command="{Binding ManageAccounts}"/>
                 <MenuItem Header="Categories" Command="{Binding ManageCategories}"/>
                 <MenuItem Header="Budget" Command="{Binding ManageBudget}"/>

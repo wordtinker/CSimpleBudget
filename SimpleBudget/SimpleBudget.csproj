@@ -112,6 +112,9 @@
     <Compile Include="Views\AccountsManager.xaml.cs">
       <DependentUpon>AccountsManager.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\AccTypeManager.xaml.cs">
+      <DependentUpon>AccTypeManager.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\BudgetManager.xaml.cs">
       <DependentUpon>BudgetManager.xaml</DependentUpon>
     </Compile>
@@ -134,6 +137,10 @@
     </Compile>
     <Compile Include="Views\TransactionRollService.cs" />
     <Page Include="Views\AccountsManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AccTypeManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
