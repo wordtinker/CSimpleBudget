@@ -18,7 +18,6 @@ namespace ViewModels
 
     public class AccTypeViewModel : BindableBase
     {
-        // TODO
         public IEnumerable<AccTypeItem> AccTypes
         {
             get
@@ -26,6 +25,19 @@ namespace ViewModels
                 return from t in Core.Instance.AccountTypes
                        select new AccTypeItem(t);
             }
+        }
+
+        public bool AddAccType(string accTypeName)
+        {
+            return Core.Instance.AddAccType(accTypeName);
+        }
+
+        public AccTypeViewModel()
+        {
+            Core.Instance.AccountTypes.CollectionChanged += (sender, e) =>
+            {
+                OnPropertyChanged(() => AccTypes);
+            };
         }
     }
 }

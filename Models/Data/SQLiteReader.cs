@@ -226,7 +226,7 @@ namespace Models
         internal override List<string> SelectAccTypes()
         {
             List<string> types = new List<string>();
-            string sql = "SELECT * FROM AcoountTypes";
+            string sql = "SELECT * FROM AccountTypes";
             using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
             {
                 SQLiteDataReader dr = cmd.ExecuteReader();
@@ -241,8 +241,31 @@ namespace Models
 
         internal override bool AddAccType(string name)
         {
-            // TODO
-            throw new NotImplementedException();
+            // Can't add empty account type name
+            if (name == string.Empty)
+            {
+                return false;
+            }
+
+            string sql = "INSERT INTO AccountTypes VALUES(@name)";
+            try
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+                {
+                    cmd.Parameters.Add(new SQLiteParameter()
+                    {
+                        ParameterName = "@name",
+                        DbType = System.Data.DbType.String,
+                        Value = name
+                    });
+                    cmd.ExecuteNonQuery();
+                }
+                return true;
+            }
+            catch (SQLiteException)
+            {
+                return false;
+            }
         }
 
         internal override bool DeleteAccType(string name)
@@ -943,7 +966,7 @@ namespace Models
                 SQLiteConnection dbConn = new SQLiteConnection(cString);
                 dbConn.Open();
 
-                string sql = "CREATE TABLE IF NOT EXISTS AcoountTypes(name TEXT UNIQUE)";
+                string sql = "CREATE TABLE IF NOT EXISTS AccountTypes(name TEXT UNIQUE)";
                 using (SQLiteCommand cmd = new SQLiteCommand(sql, dbConn))
                 {
                     cmd.ExecuteNonQuery();

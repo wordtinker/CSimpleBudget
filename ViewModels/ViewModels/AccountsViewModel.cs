@@ -11,7 +11,7 @@ namespace ViewModels
 
         public string Name { get { return account.Name; }}
 
-        public List<string> AccTypes
+        public IEnumerable<string> AccTypes
         {
             get
             {

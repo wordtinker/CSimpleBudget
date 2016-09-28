@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using ViewModels;
 
 namespace SimpleBudget
 {
@@ -19,7 +20,11 @@ namespace SimpleBudget
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            // TODO
+            string accTypeName = AccTypeName.Text;
+            if (!((AccTypeViewModel)this.DataContext).AddAccType(accTypeName))
+            {
+                MessageBox.Show("Can't add account type.");
+            }
         }
     }
 }

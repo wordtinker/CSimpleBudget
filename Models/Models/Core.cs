@@ -51,9 +51,21 @@ namespace Models
             maxYear = storage.GetMaximumYear() ?? DateTime.Today.Year;
         }
 
-        // TODO Stub
-        // ADD GUI for adding, deleting, and retrieving Acc Types
-        public List<string> AccountTypes { get; } = new List<string>();
+        public ObservableCollection<string> AccountTypes { get; } = new ObservableCollection<string>();
+
+        public bool AddAccType(string name)
+        {
+            if (Storage.AddAccType(name))
+            {
+                AccountTypes.Add(name);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public BindingList<Account> Accounts { get; } = new BindingList<Account>();
 
         public void UpdateAccount(Account acc)
