@@ -11,6 +11,10 @@ namespace Models
         public abstract bool InitializeFile(string fileName);
         public abstract bool LoadFile(string fileName);
 
+        internal abstract List<string> SelectAccTypes();
+        internal abstract bool AddAccType(string name);
+        internal abstract bool DeleteAccType(string name);
+
         internal abstract List<Account> SelectAccounts();
         internal abstract bool AddAccount(string name, string accType, out Account acc);
         internal abstract bool UpdateAccount(Account acc);

@@ -221,6 +221,36 @@ namespace Models
             }
         }
 
+        /************** Acc Types ****************/
+
+        internal override List<string> SelectAccTypes()
+        {
+            List<string> types = new List<string>();
+            string sql = "SELECT * FROM AcoountTypes";
+            using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+            {
+                SQLiteDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    types.Add(dr.GetString(0));
+                }
+                dr.Close();
+            }
+            return types;
+        }
+
+        internal override bool AddAccType(string name)
+        {
+            // TODO
+            throw new NotImplementedException();
+        }
+
+        internal override bool DeleteAccType(string name)
+        {
+            // TODO
+            throw new NotImplementedException();
+        }
+
         /************** Accounts *****************/
 
         internal override List<Account> SelectAccounts()
@@ -912,8 +942,14 @@ namespace Models
                 string cString = string.Format(connString, fileName);
                 SQLiteConnection dbConn = new SQLiteConnection(cString);
                 dbConn.Open();
-                
-                string sql = "CREATE TABLE IF NOT EXISTS Accounts(name TEXT, " +
+
+                string sql = "CREATE TABLE IF NOT EXISTS AcoountTypes(name TEXT UNIQUE)";
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, dbConn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+
+                sql = "CREATE TABLE IF NOT EXISTS Accounts(name TEXT, " +
                     "type TEXT, balance INTEGER, closed INTEGER, exbudget INTEGER)";
                 using (SQLiteCommand cmd = new SQLiteCommand(sql, dbConn))
                 {

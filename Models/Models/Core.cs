@@ -32,10 +32,12 @@ namespace Models
             {
                 storage = value;
 
+                AccountTypes.Clear();
                 Accounts.Clear();
                 Categories.Clear();
                 if (storage != null)
                 {
+                    storage.SelectAccTypes().ForEach(AccountTypes.Add);
                     storage.SelectAccounts().ForEach(Accounts.Add);
                     storage.SelectCategories().ForEach(Categories.Add);
                 }
@@ -51,8 +53,7 @@ namespace Models
 
         // TODO Stub
         // ADD GUI for adding, deleting, and retrieving Acc Types
-        public List<string> AccountTypes { get; } = new List<string> { "Bank", "Cash", "Credit Card" };
-
+        public List<string> AccountTypes { get; } = new List<string>();
         public BindingList<Account> Accounts { get; } = new BindingList<Account>();
 
         public void UpdateAccount(Account acc)
