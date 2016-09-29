@@ -47,8 +47,8 @@ namespace Models
 
         public void GetActiveBudgetYears(out int minYear, out int maxYear)
         {
-            minYear = storage.GetMinimumYear() ?? DateTime.Today.Year;
-            maxYear = storage.GetMaximumYear() ?? DateTime.Today.Year;
+            minYear = Storage.GetMinimumYear() ?? DateTime.Today.Year;
+            maxYear = Storage.GetMaximumYear() ?? DateTime.Today.Year;
         }
 
         public ObservableCollection<string> AccountTypes { get; } = new ObservableCollection<string>();
@@ -93,7 +93,7 @@ namespace Models
         {
             string newAccDefaultType = AccountTypes[0];
             Account newAcc;
-            if (storage.AddAccount(accName, newAccDefaultType, out newAcc))
+            if (Storage.AddAccount(accName, newAccDefaultType, out newAcc))
             {
                 Accounts.Add(newAcc);
                 return true;
@@ -106,7 +106,7 @@ namespace Models
 
         public bool DeleteAccount(Account account)
         {
-            if (storage.DeleteAccount(account))
+            if (Storage.DeleteAccount(account))
             {
                 Accounts.Remove(account);
                 return true;
@@ -122,7 +122,7 @@ namespace Models
         public bool AddCategory(string name, Category parent)
         {
             Category newCat;
-            if (storage.AddCategory(name, parent, out newCat))
+            if (Storage.AddCategory(name, parent, out newCat))
             {
                 Categories.Add(newCat);
                 return true;
@@ -135,7 +135,7 @@ namespace Models
 
         public bool DeleteCategory(Category cat)
         {
-            if (storage.DeleteCategory(cat))
+            if (Storage.DeleteCategory(cat))
             {
                 cat.Parent?.Children.Remove(cat);
                 Categories.Remove(cat);
@@ -149,12 +149,12 @@ namespace Models
 
         public List<Transaction> GetTransactions(Account selectedAccount)
         {
-            return storage.SelectTransactions(selectedAccount);
+            return Storage.SelectTransactions(selectedAccount);
         }
 
         public bool DeleteTransaction(Transaction transaction)
         {
-            if (storage.DeleteTransaction(transaction))
+            if (Storage.DeleteTransaction(transaction))
             {
                 if (transaction.Date.Year == currentYear && transaction.Date.Month == currentMonth)
                 {
@@ -172,7 +172,7 @@ namespace Models
         public bool AddTransaction(
             Account acc, DateTime date, decimal amount, string info, Category category, out Transaction newTransaction)
         {
-            if (storage.AddTransaction(acc, date, amount, info, category, out newTransaction))
+            if (Storage.AddTransaction(acc, date, amount, info, category, out newTransaction))
             {
                 if (newTransaction.Date.Year == currentYear && newTransaction.Date.Month == currentMonth)
                 {
@@ -191,7 +191,7 @@ namespace Models
         {
             bool updateFlag = (tr.Date.Year == currentYear && tr.Date.Month == currentMonth) ||
                               (date.Year == currentYear && date.Month == currentMonth);
-            if (storage.UpdateTransaction(tr, date, amount, info, category))
+            if (Storage.UpdateTransaction(tr, date, amount, info, category))
             {
                 if (updateFlag)
                 {
@@ -209,12 +209,12 @@ namespace Models
         /// <returns></returns>
         public List<BudgetRecord> GetRecords(int selectedYear, int selectedMonth)
         {
-            return storage.SelectRecords(selectedYear, selectedMonth);
+            return Storage.SelectRecords(selectedYear, selectedMonth);
         }
 
         public void CopyRecords(int fromMonth, int fromYear, int toMonth, int toYear)
         {
-            storage.SelectRecords(fromYear, fromMonth).ForEach((r) =>
+            Storage.SelectRecords(fromYear, fromMonth).ForEach((r) =>
             {
                 BudgetRecord _;
                 AddRecord(r.Amount, r.Category, r.Type, r.OnDay,
@@ -224,7 +224,7 @@ namespace Models
 
         public bool DeleteRecord(BudgetRecord record)
         {
-            if (storage.DeleteRecord(record))
+            if (Storage.DeleteRecord(record))
             {
                 if (record.Month == currentMonth && record.Year == currentYear)
                 {
@@ -244,7 +244,7 @@ namespace Models
             int onDay, int selectedMonth, int selectedYear,
             out BudgetRecord newRecord)
         {
-            if (storage.AddRecord(
+            if (Storage.AddRecord(
                 amount, category, budgetType, onDay, selectedMonth, selectedYear, out newRecord))
             {
                 if (newRecord.Month == currentMonth && newRecord.Year == currentYear)
@@ -266,7 +266,7 @@ namespace Models
         {
             bool updateFlag = (record.Month == currentMonth && record.Year == currentYear) ||
                               (selectedMonth == currentMonth && selectedYear == currentYear);
-            if (storage.UpdateRecord(record, amount, category, budgetType, onDay, selectedMonth, selectedYear))
+            if (Storage.UpdateRecord(record, amount, category, budgetType, onDay, selectedMonth, selectedYear))
             {
                 if (updateFlag)
                 {
@@ -293,8 +293,8 @@ namespace Models
 
                 foreach (Category cat in subcats)
                 {
-                    decimal budget = Math.Abs(storage.SelectRecordsCombined(currentYear, currentMonth, cat));
-                    decimal spent = Math.Abs(storage.SelectTransactionsCombined(currentYear, currentMonth, cat));
+                    decimal budget = Math.Abs(Storage.SelectRecordsCombined(currentYear, currentMonth, cat));
+                    decimal spent = Math.Abs(Storage.SelectTransactionsCombined(currentYear, currentMonth, cat));
                     if (budget == 0m && spent == 0m)
                     {
                         continue;
