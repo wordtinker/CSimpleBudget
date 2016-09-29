@@ -1,7 +1,7 @@
 ﻿using Models;
 using Prism.Mvvm;
 using System;
-using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace ViewModels
 {
@@ -9,9 +9,9 @@ namespace ViewModels
     {
         internal Transaction tr;
 
-        public string Date
+        public DateTime Date
         {
-            get { return tr.Date.ToString("dd/MM/yyyy"); }
+            get { return tr.Date; }
         }
 
         public string Value
@@ -48,7 +48,7 @@ namespace ViewModels
         private IUITransactionRollService service;
         private Account account;
 
-        public BindingList<TransactionItem> Transactions { get; } = new BindingList<TransactionItem>();
+        public ObservableCollection<TransactionItem> Transactions { get; } = new ObservableCollection<TransactionItem>();
 
         public bool DeleteTransaction(TransactionItem item)
         {

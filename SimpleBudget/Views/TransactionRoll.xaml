@@ -26,11 +26,10 @@
                   GridLinesVisibility="None"
                   IsReadOnly="True"
                   BorderThickness="0"
-                  CanUserSortColumns="False"
                   CanUserReorderColumns="False"
                   RowStyle="{StaticResource DefaultRowStyle}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Date" Width="Auto" Binding="{Binding Date}"/>
+                <DataGridTextColumn Header="Date" Width="Auto" Binding="{Binding Date, StringFormat=dd/MM/yyyy}"/>
                 <DataGridTextColumn Header="Amount" Width="Auto" Binding="{Binding Value}"/>
                 <DataGridTextColumn Header="Info" Width="*" Binding="{Binding Info}"/>
                 <DataGridTextColumn Header="Category" Width="Auto" Binding="{Binding Category}"/>

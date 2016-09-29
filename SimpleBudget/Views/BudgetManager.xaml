@@ -36,7 +36,6 @@
                   IsReadOnly="True"
                   BorderThickness="0"
                   CanUserResizeColumns="False"
-                  CanUserSortColumns="False"
                   CanUserReorderColumns="False"
                   RowStyle="{StaticResource DefaultRowStyle}">
             <DataGrid.Columns>

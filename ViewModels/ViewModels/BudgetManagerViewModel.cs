@@ -3,7 +3,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
@@ -162,7 +162,7 @@ namespace ViewModels
         private string selectedMonthName = DateTime.Now.ToString("MMMM");
         private int selectedYear = DateTime.Now.Year;
 
-        public BindingList<RecordItem> Records { get; } = new BindingList<RecordItem>();
+        public ObservableCollection<RecordItem> Records { get; } = new ObservableCollection<RecordItem>();
         public List<string> Months { get; } = DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12).ToList();
         private int SelectedMonth {
             get
