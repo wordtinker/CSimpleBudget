@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 
 namespace Models
 {
@@ -1055,6 +1056,11 @@ namespace Models
 
         public override bool LoadFile(string fileName)
         {
+            if (!File.Exists(fileName))
+            {
+                return false;
+            }
+
             try
             {
                 string cString = string.Format(connString, fileName);
