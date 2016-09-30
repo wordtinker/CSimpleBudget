@@ -8,6 +8,10 @@ using System;
 
 namespace ViewModels
 {
+    // TODO LATER Enum extension for busget types
+    // TODO LATER localization
+    // TODO LATER Move DB to cascade
+
     public class BudgetBar
     {
         private Spending spending;
