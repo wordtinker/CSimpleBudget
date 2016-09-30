@@ -203,6 +203,10 @@ namespace ViewModels
                     string fileName = windowService.SaveFileDialog(fileHandler.Extension);
                     if (fileName != null)
                     {
+                        // Close the file if we have one opened
+                        CloseFile.Execute(null);
+
+                        // Create new file
                         if (fileHandler.InitializeFile(fileName) &&
                             fileHandler.LoadFile(fileName))
                         {

@@ -1000,6 +1000,19 @@ namespace Models
 
         public override bool InitializeFile(string fileName)
         {
+            // Delete file in order to replace it with newly created one
+            try
+            {
+                if (File.Exists(fileName))
+                {
+                    File.Delete(fileName);
+                }
+            }
+            catch(Exception)
+            {
+                return false;
+            }
+
             try
             {
                 string cString = string.Format(connString, fileName);
@@ -1072,6 +1085,11 @@ namespace Models
             {
                 return false;
             }
+        }
+
+        public override void ReleaseFile()
+        {
+            connection.Close();
         }
     }
 }

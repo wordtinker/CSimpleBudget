@@ -30,8 +30,11 @@ namespace Models
             }
             set
             {
-                storage = value;
+                // Release previous storage
+                storage?.ReleaseFile();
 
+                // Get data from new storage
+                storage = value;
                 AccountTypes.Clear();
                 Accounts.Clear();
                 Categories.Clear();

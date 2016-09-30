@@ -10,6 +10,7 @@ namespace Models
 
         public abstract bool InitializeFile(string fileName);
         public abstract bool LoadFile(string fileName);
+        public abstract void ReleaseFile();
 
         internal abstract List<string> SelectAccTypes();
         internal abstract bool AddAccType(string name);
