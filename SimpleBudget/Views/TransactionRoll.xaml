@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimpleBudget"
+        xmlns:scm ="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         mc:Ignorable="d"
         Title="Transactions" Height="300" Width="300">
     <Window.Resources>
@@ -14,12 +15,19 @@
             <Setter Property="ContextMenu" Value="{StaticResource RowMenu}" />
             <EventSetter Event="MouseDoubleClick" Handler="Transaction_DoubleClick"/>
         </Style>
+        <CollectionViewSource x:Key="cvsTransactions"
+                              Source="{Binding Transactions}"
+                              IsLiveSortingRequested="True">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Date" Direction="Descending"/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
     </Window.Resources>
     <DockPanel>
         <Button DockPanel.Dock="Bottom" Content="Add" Click="AddButton_Click"
                 Margin="0,10" Width="100" HorizontalAlignment="Center"/>
         <DataGrid DockPanel.Dock="Top"
-                  ItemsSource="{Binding Transactions}"
+                  ItemsSource="{Binding Source={StaticResource cvsTransactions}}"
                   AutoGenerateColumns="False"
                   SelectionMode="Single"
                   HeadersVisibility="Column"
