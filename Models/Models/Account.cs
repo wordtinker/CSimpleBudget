@@ -37,6 +37,11 @@ namespace Models
                 SetProperty(ref balance, value);
             }
         }
+        /// <summary>
+        /// Defines if the account is closed. Closed accounts do
+        /// not contibute to totals. Closed accounts are considered
+        /// in budgeting.
+        /// </summary>
         public bool Closed
         {
             get { return closed; }
@@ -45,6 +50,11 @@ namespace Models
                 SetProperty(ref closed, value);
             }
         }
+        /// <summary>
+        /// Defines if the account is considered in budgeting.
+        /// Excluded account transactions will not be included in
+        /// any budget report or forecast.
+        /// </summary>
         public bool Excluded
         {
             get { return excluded; }
