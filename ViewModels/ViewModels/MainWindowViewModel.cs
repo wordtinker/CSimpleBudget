@@ -215,7 +215,11 @@ namespace ViewModels
                             fileHandler.LoadFile(fileName))
                         {
                             SaveLastOpenedFile(fileName);
-                            core.Storage = fileHandler;
+                            if (!core.InitializeNewFileReader(fileHandler))
+                            {
+                                windowService.ShowMessage("File is corrupted.");
+                                CloseFile.Execute(null);
+                            }
                         }
                         else
                         {
@@ -240,7 +244,11 @@ namespace ViewModels
                         if (fileHandler.LoadFile(fileName))
                         {
                             SaveLastOpenedFile(fileName);
-                            core.Storage = fileHandler;
+                            if (!core.InitializeNewFileReader(fileHandler))
+                            {
+                                windowService.ShowMessage("File is corrupted.");
+                                CloseFile.Execute(null);
+                            }
                         }
                         else
                         {
@@ -259,7 +267,7 @@ namespace ViewModels
                 (closeFile = new DelegateCommand(() =>
                 {
                     SaveLastOpenedFile(string.Empty);
-                    core.Storage = null;
+                    core.InitializeNewFileReader(null);
                 }, () =>
                 {
                     return !string.IsNullOrEmpty(OpenedFile);
@@ -322,7 +330,11 @@ namespace ViewModels
                 FileReader fileHandler = new SQLiteReader();
                 if (fileHandler.LoadFile(fileName))
                 {
-                    core.Storage = fileHandler;
+                    if (!core.InitializeNewFileReader(fileHandler))
+                    {
+                        windowService.ShowMessage("File is corrupted.");
+                        CloseFile.Execute(null);
+                    }
                     OpenedFile = fileName;
                 }
             }

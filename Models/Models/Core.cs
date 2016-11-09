@@ -22,43 +22,44 @@ namespace Models
             }
         }
 
-        public FileReader Storage
+        public bool InitializeNewFileReader(FileReader fileReader)
         {
-            internal get
-            {
-                return storage;
-            }
-            set
-            {
-                // Release previous storage
-                storage?.ReleaseFile();
+            // Release previous storage
+            storage?.ReleaseFile();
 
-                // Get data from new storage
-                storage = value;
-                AccountTypes.Clear();
-                Accounts.Clear();
-                Categories.Clear();
-                if (storage != null)
+            // Get data from new storage
+            storage = fileReader;
+            AccountTypes.Clear();
+            Accounts.Clear();
+            Categories.Clear();
+            if (storage != null)
+            {
+                try
                 {
                     storage.SelectAccTypes().ForEach(AccountTypes.Add);
                     storage.SelectAccounts().ForEach(Accounts.Add);
                     storage.SelectCategories().ForEach(Categories.Add);
                 }
-                OnPropertyChanged(() => CurrentMonthSpendings);
+                catch (Exception)
+                {
+                    return false;
+                }
             }
+            OnPropertyChanged(() => CurrentMonthSpendings);
+            return true;
         }
 
         public void GetActiveBudgetYears(out int minYear, out int maxYear)
         {
-            minYear = Storage.GetMinimumYear() ?? DateTime.Today.Year;
-            maxYear = Storage.GetMaximumYear() ?? DateTime.Today.Year;
+            minYear = storage.GetMinimumYear() ?? DateTime.Today.Year;
+            maxYear = storage.GetMaximumYear() ?? DateTime.Today.Year;
         }
 
         public ObservableCollection<string> AccountTypes { get; } = new ObservableCollection<string>();
 
         public bool AddAccType(string name)
         {
-            if (Storage.AddAccType(name))
+            if (storage.AddAccType(name))
             {
                 AccountTypes.Add(name);
                 return true;
@@ -71,7 +72,7 @@ namespace Models
 
         public bool DeleteAccType(string name)
         {
-            if (Storage.DeleteAccType(name))
+            if (storage.DeleteAccType(name))
             {
                 AccountTypes.Remove(name);
                 return true;
@@ -86,7 +87,7 @@ namespace Models
 
         public void UpdateAccount(Account acc)
         {
-            Storage.UpdateAccount(acc);
+            storage.UpdateAccount(acc);
 
             // exbudget on/off could change spending view 
             OnPropertyChanged(() => CurrentMonthSpendings);
@@ -96,7 +97,7 @@ namespace Models
         {
             string newAccDefaultType = AccountTypes[0];
             Account newAcc;
-            if (Storage.AddAccount(accName, newAccDefaultType, out newAcc))
+            if (storage.AddAccount(accName, newAccDefaultType, out newAcc))
             {
                 Accounts.Add(newAcc);
                 return true;
@@ -109,7 +110,7 @@ namespace Models
 
         public bool DeleteAccount(Account account)
         {
-            if (Storage.DeleteAccount(account))
+            if (storage.DeleteAccount(account))
             {
                 Accounts.Remove(account);
                 return true;
@@ -125,7 +126,7 @@ namespace Models
         public bool AddCategory(string name, Category parent)
         {
             Category newCat;
-            if (Storage.AddCategory(name, parent, out newCat))
+            if (storage.AddCategory(name, parent, out newCat))
             {
                 Categories.Add(newCat);
                 return true;
@@ -138,7 +139,7 @@ namespace Models
 
         public bool DeleteCategory(Category cat)
         {
-            if (Storage.DeleteCategory(cat))
+            if (storage.DeleteCategory(cat))
             {
                 cat.Parent?.Children.Remove(cat);
                 Categories.Remove(cat);
@@ -152,12 +153,12 @@ namespace Models
 
         public List<Transaction> GetTransactions(Account selectedAccount)
         {
-            return Storage.SelectTransactions(selectedAccount);
+            return storage.SelectTransactions(selectedAccount);
         }
 
         public bool DeleteTransaction(Transaction transaction)
         {
-            if (Storage.DeleteTransaction(transaction))
+            if (storage.DeleteTransaction(transaction))
             {
                 if (transaction.Date.Year == currentYear && transaction.Date.Month == currentMonth)
                 {
@@ -175,7 +176,7 @@ namespace Models
         public bool AddTransaction(
             Account acc, DateTime date, decimal amount, string info, Category category, out Transaction newTransaction)
         {
-            if (Storage.AddTransaction(acc, date, amount, info, category, out newTransaction))
+            if (storage.AddTransaction(acc, date, amount, info, category, out newTransaction))
             {
                 if (newTransaction.Date.Year == currentYear && newTransaction.Date.Month == currentMonth)
                 {
@@ -194,7 +195,7 @@ namespace Models
         {
             bool updateFlag = (tr.Date.Year == currentYear && tr.Date.Month == currentMonth) ||
                               (date.Year == currentYear && date.Month == currentMonth);
-            if (Storage.UpdateTransaction(tr, date, amount, info, category))
+            if (storage.UpdateTransaction(tr, date, amount, info, category))
             {
                 if (updateFlag)
                 {
@@ -212,12 +213,12 @@ namespace Models
         /// <returns></returns>
         public List<BudgetRecord> GetRecords(int selectedYear, int selectedMonth)
         {
-            return Storage.SelectRecords(selectedYear, selectedMonth);
+            return storage.SelectRecords(selectedYear, selectedMonth);
         }
 
         public void CopyRecords(int fromMonth, int fromYear, int toMonth, int toYear)
         {
-            Storage.SelectRecords(fromYear, fromMonth).ForEach((r) =>
+            storage.SelectRecords(fromYear, fromMonth).ForEach((r) =>
             {
                 BudgetRecord _;
                 AddRecord(r.Amount, r.Category, r.Type, r.OnDay,
@@ -227,7 +228,7 @@ namespace Models
 
         public bool DeleteRecord(BudgetRecord record)
         {
-            if (Storage.DeleteRecord(record))
+            if (storage.DeleteRecord(record))
             {
                 if (record.Month == currentMonth && record.Year == currentYear)
                 {
@@ -247,7 +248,7 @@ namespace Models
             int onDay, int selectedMonth, int selectedYear,
             out BudgetRecord newRecord)
         {
-            if (Storage.AddRecord(
+            if (storage.AddRecord(
                 amount, category, budgetType, onDay, selectedMonth, selectedYear, out newRecord))
             {
                 if (newRecord.Month == currentMonth && newRecord.Year == currentYear)
@@ -269,7 +270,7 @@ namespace Models
         {
             bool updateFlag = (record.Month == currentMonth && record.Year == currentYear) ||
                               (selectedMonth == currentMonth && selectedYear == currentYear);
-            if (Storage.UpdateRecord(record, amount, category, budgetType, onDay, selectedMonth, selectedYear))
+            if (storage.UpdateRecord(record, amount, category, budgetType, onDay, selectedMonth, selectedYear))
             {
                 if (updateFlag)
                 {
@@ -296,8 +297,8 @@ namespace Models
 
                 foreach (Category cat in subcats)
                 {
-                    decimal budget = Math.Abs(Storage.SelectRecordsCombined(currentYear, currentMonth, cat));
-                    decimal spent = Math.Abs(Storage.SelectTransactionsCombined(currentYear, currentMonth, cat));
+                    decimal budget = Math.Abs(storage.SelectRecordsCombined(currentYear, currentMonth, cat));
+                    decimal spent = Math.Abs(storage.SelectTransactionsCombined(currentYear, currentMonth, cat));
                     if (budget == 0m && spent == 0m)
                     {
                         continue;
