@@ -24,6 +24,19 @@ namespace ViewModels
 
         public string TypeName { get { return Type.ToString(); } }
         public int OnDay { get; set; }
+        public string OnDayText { get
+            {
+                if (Monthly || Daily)
+                {
+                    return string.Empty;
+                }
+                if (Weekly)
+                {
+                    return ((DayOfWeek)OnDay).ToString();
+                }
+                return OnDay.ToString();
+            }
+        }
         public decimal Amount { get; set; }
         public int Year { get; set; }
         public int Month

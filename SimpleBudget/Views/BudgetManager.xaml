@@ -42,7 +42,7 @@
                 <DataGridTextColumn Header="Amount" Width="*" Binding="{Binding Amount}"/>
                 <DataGridTextColumn Header="Category" Width="Auto" Binding="{Binding Category.FullName}"/>
                 <DataGridTextColumn Header="Type" Width="*" Binding="{Binding TypeName}"/>
-                <DataGridTextColumn Header="On day" Width="*" Binding="{Binding OnDay}"/>
+                <DataGridTextColumn Header="On day" Width="*" Binding="{Binding OnDayText}"/>
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>
