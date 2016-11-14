@@ -13,6 +13,13 @@ namespace Models
 
         public override string Extension { get; } = "Budget files (*.sbdb)|*.sbdb";
 
+        /************** Utils ********************/
+
+        /// <summary>
+        /// Converts object to decimal value.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         private static decimal FromDBValToDecimal(object obj)
         {
             if (obj == null || obj == DBNull.Value)
@@ -25,12 +32,22 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Converts decimal value to int value.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         private static int FromDecimaltoDBInt(decimal value)
         {
             return decimal.ToInt32(value * 100);
         }
 
         /************** Categories *****************/
+
+        /// <summary>
+        /// Selects all categories from DB.
+        /// </summary>
+        /// <returns></returns>
         internal override List<Category> SelectCategories()
         {
             // Get top categories
@@ -59,6 +76,11 @@ namespace Models
             return categories;
         }
 
+        /// <summary>
+        /// Selects subcategories for a given category name.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <returns></returns>
         private List<Category> SelectSubcategoriesFor(string parent)
         {
             List<Category> categories = new List<Category>();
@@ -81,6 +103,13 @@ namespace Models
             return categories;
         }
 
+        /// <summary>
+        /// Executes sql for a given category name.
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="name"></param>
+        /// <param name="rowid"></param>
+        /// <returns></returns>
         private bool ManageCategory(string sql, string name, out int rowid )
         {
             try
@@ -105,6 +134,13 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Adds new category to DB.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="parent"></param>
+        /// <param name="cat"></param>
+        /// <returns></returns>
         internal override bool AddCategory(string name, Category parent, out Category cat)
         {
             // Can't add empty name 
@@ -147,6 +183,11 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Deletes category from DB.
+        /// </summary>
+        /// <param name="cat"></param>
+        /// <returns></returns>
         internal override bool DeleteCategory(Category cat)
         {
             // Top category with no children
@@ -158,7 +199,7 @@ namespace Models
             }
             else if (cat.Parent != null)
             {
-                // Can't delete if there is a transaction or budget record
+                // Can't delete if transaction or budget record exists for a given category.
                 if (ExistsTransaction(cat) || ExistsRecord(cat))
                 {
                     return false;
@@ -187,11 +228,19 @@ namespace Models
                 }
             }
             else
-            {   // Can't delete if there is a child category
+            {   // Can't delete if child category exists for a given category.
                 return false;
             }
         }
 
+        /// <summary>
+        /// Executes SQL for a given subcategory name and parent category name
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="name"></param>
+        /// <param name="parent"></param>
+        /// <param name="rowid"></param>
+        /// <returns></returns>
         private bool ManageSubcategory(string sql, string name, string parent, out int rowid)
         {
             try
@@ -224,6 +273,10 @@ namespace Models
 
         /************** Acc Types ****************/
 
+        /// <summary>
+        /// Selects account types.
+        /// </summary>
+        /// <returns></returns>
         internal override List<string> SelectAccTypes()
         {
             List<string> types = new List<string>();
@@ -240,6 +293,11 @@ namespace Models
             return types;
         }
 
+        /// <summary>
+        /// Adds new account type to DB.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         internal override bool AddAccType(string name)
         {
             // Can't add empty account type name
@@ -269,6 +327,11 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Deletes account type from DB.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         internal override bool DeleteAccType(string name)
         {
             // Cant delete if there is an account of this type
@@ -300,6 +363,11 @@ namespace Models
 
         /************** Accounts *****************/
 
+        /// <summary>
+        /// Checks if account type has associated accounts in DB.
+        /// </summary>
+        /// <param name="accountType"></param>
+        /// <returns></returns>
         private bool ExistsAccount(string accountType)
         {
             string sql = "SELECT COUNT(*) FROM Accounts WHERE type=@type";
@@ -316,6 +384,10 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Selects every account from DB.
+        /// </summary>
+        /// <returns></returns>
         internal override List<Account> SelectAccounts()
         {
             List<Account> accounts = new List<Account>();
@@ -339,6 +411,13 @@ namespace Models
             return accounts;
         }
 
+        /// <summary>
+        /// Adds new account to DB. Method will not restrict non-unique account names.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="accType"></param>
+        /// <param name="acc"></param>
+        /// <returns></returns>
         internal override bool AddAccount(string name, string accType, out Account acc)
         {
             // Can't add empty account name
@@ -385,6 +464,11 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Writes account changes to DB.
+        /// </summary>
+        /// <param name="acc"></param>
+        /// <returns></returns>
         internal override bool UpdateAccount(Account acc)
         {
             string sql = "UPDATE Accounts SET type=@type, balance=@balance, closed=@closed, " +
@@ -433,6 +517,11 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Deletes account from DB.
+        /// </summary>
+        /// <param name="acc"></param>
+        /// <returns></returns>
         internal override bool DeleteAccount(Account acc)
         {
             // Cant delete if there is a transaction on account
@@ -462,6 +551,10 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Recalculates total for a given account and saves new value to DB. 
+        /// </summary>
+        /// <param name="acc"></param>
         private void UpdateTotal(Account acc)
         {
             Decimal total;
@@ -483,6 +576,11 @@ namespace Models
 
         /************** Transactions *****************/
 
+        /// <summary>
+        /// Returns Category for a given category Id.
+        /// </summary>
+        /// <param name="catId"></param>
+        /// <returns></returns>
         private Category GetCategoryForId(int catId)
         {
             return (from cat in Core.Instance.Categories
@@ -490,6 +588,11 @@ namespace Models
             select cat).First();
         }
 
+        /// <summary>
+        /// Selects all transactions for a given account.
+        /// </summary>
+        /// <param name="acc"></param>
+        /// <returns></returns>
         internal override List<Transaction> SelectTransactions(Account acc)
         {
             List<Transaction> transactions = new List<Transaction>();
@@ -519,9 +622,17 @@ namespace Models
             return transactions;
         }
 
-        internal override decimal SelectTransactionsCombined(int currentYear, int currentMonth, Category cat)
+        /// <summary>
+        /// Returns total decimal value of all transactions for specified
+        /// year, month and category.
+        /// </summary>
+        /// <param name="year"></param>
+        /// <param name="month"></param>
+        /// <param name="category"></param>
+        /// <returns></returns>
+        internal override decimal SelectTransactionsCombined(int year, int month, Category category)
         {
-            DateTime firstDayOfMonth = new DateTime(currentYear, currentMonth, 1);
+            DateTime firstDayOfMonth = new DateTime(year, month, 1);
             DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddSeconds(-1);
             DateTime lastDayofPrevMonth = firstDayOfMonth.AddSeconds(-1);
 
@@ -539,7 +650,7 @@ namespace Models
                 {
                     ParameterName = "@catId",
                     DbType = System.Data.DbType.Int32,
-                    Value = cat.Id
+                    Value = category.Id
                 });
                 cmd.Parameters.Add(new SQLiteParameter()
                 {
@@ -557,6 +668,11 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Deletes specified transaction from DB.
+        /// </summary>
+        /// <param name="transaction"></param>
+        /// <returns></returns>
         internal override bool DeleteTransaction(Transaction transaction)
         {
             string sql = "DELETE FROM Transactions WHERE rowid=@id";
@@ -581,6 +697,16 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Add transaction to DB.
+        /// </summary>
+        /// <param name="currentAccount"></param>
+        /// <param name="date"></param>
+        /// <param name="amount"></param>
+        /// <param name="info"></param>
+        /// <param name="category"></param>
+        /// <param name="newTr"></param>
+        /// <returns></returns>
         internal override bool AddTransaction(
             Account currentAccount, DateTime date, decimal amount, string info, Category category, out Transaction newTr)
         {
@@ -638,6 +764,15 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Updates transaction parameters in DB.
+        /// </summary>
+        /// <param name="tr"></param>
+        /// <param name="date"></param>
+        /// <param name="amount"></param>
+        /// <param name="info"></param>
+        /// <param name="category"></param>
+        /// <returns></returns>
         internal override bool UpdateTransaction(Transaction tr, DateTime date, decimal amount, string info, Category category)
         {
             string sql = "UPDATE Transactions SET date=@date, amount=@amount, info=@info, category_id=@catId WHERE rowid=@rowId";
@@ -690,6 +825,11 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Checks if given account has any transactions.
+        /// </summary>
+        /// <param name="acc"></param>
+        /// <returns></returns>
         private bool ExistsTransaction(Account acc)
         {
             string sql = "SELECT COUNT(*) FROM Transactions WHERE acc_id=@rowid";
@@ -706,6 +846,11 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Checks if given category has any associated transactions.
+        /// </summary>
+        /// <param name="cat"></param>
+        /// <returns></returns>
         private bool ExistsTransaction(Category cat)
         {
             string sql = "SELECT COUNT(*) FROM Transactions WHERE category_id=@catid";
@@ -724,6 +869,11 @@ namespace Models
 
         /************** Records *****************/
 
+        /// <summary>
+        /// Checks if provided category has any associated budget records.
+        /// </summary>
+        /// <param name="cat"></param>
+        /// <returns></returns>
         private bool ExistsRecord(Category cat)
         {
             string sql = "SELECT COUNT(*) FROM Budget WHERE category_id=@catid";
@@ -740,7 +890,13 @@ namespace Models
             }
         }
 
-        internal override List<BudgetRecord> SelectRecords(int currentYear, int currentMonth)
+        /// <summary>
+        /// Selects budget records for a given year and month.
+        /// </summary>
+        /// <param name="year"></param>
+        /// <param name="month"></param>
+        /// <returns></returns>
+        internal override List<BudgetRecord> SelectRecords(int year, int month)
         {
             string sql = "SELECT *, rowid FROM Budget WHERE month=@month AND year=@year";
             List<BudgetRecord> records = new List<BudgetRecord>();
@@ -750,13 +906,13 @@ namespace Models
                 {
                     ParameterName = "@month",
                     DbType = System.Data.DbType.Int32,
-                    Value = currentMonth
+                    Value = month
                 });
                 cmd.Parameters.Add(new SQLiteParameter()
                 {
                     ParameterName = "@year",
                     DbType = System.Data.DbType.Int32,
-                    Value = currentYear
+                    Value = year
                 });
                 SQLiteDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
@@ -769,8 +925,8 @@ namespace Models
                         Category = GetCategoryForId(dr.GetInt32(1)),
                         Type = type,
                         OnDay = dr.GetInt32(3),
-                        Month = currentMonth,
-                        Year = currentYear
+                        Month = month,
+                        Year = year
                     });
                 }
                 dr.Close();
@@ -778,7 +934,14 @@ namespace Models
             return records;
         }
 
-        internal override decimal SelectRecordsCombined(int currentYear, int currentMonth, Category cat)
+        /// <summary>
+        /// Calculates decimal value of all budget records for a given year, month and category.
+        /// </summary>
+        /// <param name="year"></param>
+        /// <param name="month"></param>
+        /// <param name="category"></param>
+        /// <returns></returns>
+        internal override decimal SelectRecordsCombined(int year, int month, Category category)
         {
             string sql = "SELECT sum(amount) FROM Budget WHERE month=@month AND year=@year AND category_id=@catId";
             using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
@@ -787,24 +950,29 @@ namespace Models
                 {
                     ParameterName = "@catId",
                     DbType = System.Data.DbType.Int32,
-                    Value = cat.Id
+                    Value = category.Id
                 });
                 cmd.Parameters.Add(new SQLiteParameter()
                 {
                     ParameterName = "@month",
                     DbType = System.Data.DbType.Int32,
-                    Value = currentMonth
+                    Value = month
                 });
                 cmd.Parameters.Add(new SQLiteParameter()
                 {
                     ParameterName = "@year",
                     DbType = System.Data.DbType.Int32,
-                    Value = currentYear
+                    Value = year
                 });
                 return FromDBValToDecimal(cmd.ExecuteScalar());
             }
         }
 
+        /// <summary>
+        /// Deletes budget record from DB.
+        /// </summary>
+        /// <param name="record"></param>
+        /// <returns></returns>
         internal override bool DeleteRecord(BudgetRecord record)
         {
             string sql = "DELETE FROM Budget WHERE rowid=@rowid";
@@ -828,6 +996,17 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Adds new budget record to DB.
+        /// </summary>
+        /// <param name="amount"></param>
+        /// <param name="category"></param>
+        /// <param name="budgetType"></param>
+        /// <param name="onDay"></param>
+        /// <param name="selectedMonth"></param>
+        /// <param name="selectedYear"></param>
+        /// <param name="newRecord"></param>
+        /// <returns></returns>
         internal override bool AddRecord(
             decimal amount, Category category, BudgetType budgetType, int onDay,
             int selectedMonth, int selectedYear, out BudgetRecord newRecord)
@@ -893,6 +1072,17 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Updates parameters of provided budget record in DB.
+        /// </summary>
+        /// <param name="record"></param>
+        /// <param name="amount"></param>
+        /// <param name="category"></param>
+        /// <param name="budgetType"></param>
+        /// <param name="onDay"></param>
+        /// <param name="selectedMonth"></param>
+        /// <param name="selectedYear"></param>
+        /// <returns></returns>
         internal override bool UpdateRecord(
             BudgetRecord record, decimal amount, Category category, BudgetType budgetType,
             int onDay, int selectedMonth, int selectedYear)
@@ -962,6 +1152,10 @@ namespace Models
 
         /************** Misc *****************/
 
+        /// <summary>
+        /// Returns the last year of the available budget records.
+        /// </summary>
+        /// <returns></returns>
         internal override int? GetMaximumYear()
         {
             string sql = "SELECT MAX(year) FROM Budget";
@@ -979,6 +1173,10 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Returns the earliest year of the available budget records.
+        /// </summary>
+        /// <returns></returns>
         internal override int? GetMinimumYear()
         {
             string sql = "SELECT MIN(year) FROM Budget";
@@ -998,6 +1196,11 @@ namespace Models
 
         /************** File *****************/
 
+        /// <summary>
+        /// Initializes new empty file with proper DB structure.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public override bool InitializeFile(string fileName)
         {
             // Delete file in order to replace it with newly created one
@@ -1067,6 +1270,11 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Establishes connection with DB file.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public override bool LoadFile(string fileName)
         {
             if (!File.Exists(fileName))
@@ -1087,6 +1295,9 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Releases connections with opened DB file.
+        /// </summary>
         public override void ReleaseFile()
         {
             connection.Close();
