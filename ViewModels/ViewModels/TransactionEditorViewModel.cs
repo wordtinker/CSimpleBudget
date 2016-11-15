@@ -7,8 +7,6 @@ namespace ViewModels
 {
     public class TransactionEditorViewModel
     {
-        private Transaction tr;
-
         public IEnumerable<CategoryNode> Categories
         {
             get
@@ -31,7 +29,6 @@ namespace ViewModels
 
         public TransactionEditorViewModel(Transaction tr)
         {
-            this.tr = tr;
             Date = tr.Date;
             Amount = tr.Amount;
             Info = tr.Info;

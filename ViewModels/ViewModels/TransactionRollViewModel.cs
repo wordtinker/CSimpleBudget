@@ -65,14 +65,16 @@ namespace ViewModels
 
         public void ShowTransactionEditor()
         {
-            DateTime date;
-            decimal amount;
-            string info;
-            CategoryNode catNode;
-
             TransactionEditorViewModel vm = new TransactionEditorViewModel();
-            if (service.ShowTransactionEditor(vm, out date, out amount, out info, out catNode))
+            if (service.ShowTransactionEditor(vm) == true)
             {
+                // Properties were edited, read them.
+                DateTime date = vm.Date;
+                decimal amount = vm.Amount;
+                string info = vm.Info;
+                CategoryNode catNode = vm.Category;
+
+                // Create new transaction.
                 Transaction newTr;
                 if (Core.Instance.AddTransaction(account, date, amount, info, catNode.category, out newTr))
                 {
@@ -83,14 +85,15 @@ namespace ViewModels
 
         public void ShowTransactionEditor(TransactionItem item)
         {
-            DateTime date;
-            decimal amount;
-            string info;
-            CategoryNode catNode;
-
             TransactionEditorViewModel vm = new TransactionEditorViewModel(item.tr);
-            if (service.ShowTransactionEditor(vm, out date, out amount, out info, out catNode))
+            if (service.ShowTransactionEditor(vm) == true)
             {
+                // Properties were edited, read them.
+                DateTime date = vm.Date;
+                decimal amount = vm.Amount;
+                string info = vm.Info;
+                CategoryNode catNode = vm.Category;
+
                 Core.Instance.UpdateTransaction(item.tr, date, amount, info, catNode.category);
             }
         }

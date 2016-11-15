@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ViewModels
+﻿namespace ViewModels
 {
     public interface IUIMainWindowService
     {
@@ -21,8 +19,7 @@ namespace ViewModels
 
     public interface IUITransactionRollService
     {
-        bool ShowTransactionEditor(
-            TransactionEditorViewModel vm, out DateTime date, out decimal amount, out string info, out CategoryNode catNode);
+        bool? ShowTransactionEditor(TransactionEditorViewModel vm);
     }
 
     public interface IUIBudgetWindowService
