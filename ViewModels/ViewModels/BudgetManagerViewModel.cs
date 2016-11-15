@@ -10,159 +10,40 @@ using System.Windows.Input;
 
 namespace ViewModels
 {
+
+    /// <summary>
+    /// Container type for budget record.
+    /// TODO refactor + comment.
+    /// </summary>
     public class RecordItem : BindableBase
     {
         internal BudgetRecord record;
-        internal BudgetType Type;
 
-        private int month;
-        private string monthName;
-        private bool monthly;
-        private bool point;
-        private bool daily;
-        private bool weekly;
-
-        public string TypeName { get { return Type.ToString(); } }
-        public int OnDay { get; set; }
-        public string OnDayText { get
+        public decimal Amount { get { return record.Amount; } }
+        public CategoryNode Category { get { return new CategoryNode(record.Category); } }
+        public string TypeName { get { return record.Type.ToString(); } }
+        public string OnDayText
+        {
+            get
             {
-                if (Monthly || Daily)
+                if(record.Type == BudgetType.Monthly || record.Type == BudgetType.Daily)
                 {
                     return string.Empty;
                 }
-                if (Weekly)
+                if (record.Type == BudgetType.Weekly)
                 {
-                    return ((DayOfWeek)OnDay).ToString();
+                    return ((DayOfWeek)record.OnDay).ToString();
                 }
-                return OnDay.ToString();
+                return record.OnDay.ToString();
             }
-        }
-        public decimal Amount { get; set; }
-        public int Year { get; set; }
-        public int Month
-        {
-            get { return month; }
-            set
-            {
-                if (SetProperty(ref month, value))
-                {
-                    MonthName = DateTimeFormatInfo.CurrentInfo.MonthNames[value - 1];
-                }
-            }
-        }
-        public string MonthName
-        {
-            get { return monthName; }
-            set
-            {
-                if (SetProperty(ref monthName, value))
-                {
-                    Month = DateTime.ParseExact(value, "MMMM", CultureInfo.CurrentCulture).Month;
-                }
-            }
-        }
-        public CategoryNode Category { get; set; }
-        public bool Monthly
-        {
-            get { return monthly; }
-            set
-            {
-                monthly = value;
-                if (monthly)
-                {
-                    Type = BudgetType.Monthly;
-                    OnDay = 0;
-                }
-            }
-        }
-        public bool Point
-        {
-            get { return point; }
-            set
-            {
-                point = value;
-                if (point)
-                {
-                    Type = BudgetType.Point;
-                    OnDay = 1;
-                }
-            }
-        }
-        public bool Daily
-        {
-            get { return daily; }
-            set
-            {
-                daily = value;
-                if (daily)
-                {
-                    Type = BudgetType.Daily;
-                    OnDay = 0;
-                }
-            }
-        }
-        public bool Weekly
-        {
-            get { return weekly; }
-            set
-            {
-                weekly = value;
-                if (weekly)
-                {
-                    Type = BudgetType.Weekly;
-                    OnDay = 0;
-                }
-            }
-        }
-
-        private void Update()
-        {
-            Year = record.Year;
-            Month = record.Month;
-            Amount = record.Amount;
-            Category = new CategoryNode(record.Category);
-
-            switch (record.Type)
-            {
-                case BudgetType.Monthly:
-                    Monthly = true;
-                    break;
-                case BudgetType.Point:
-                    Point = true;
-                    OnDay = record.OnDay;
-                    break;
-                case BudgetType.Daily:
-                    Daily = true;
-                    break;
-                case BudgetType.Weekly:
-                    Weekly = true;
-                    OnDay = record.OnDay;
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Creates fake RecordItem with no real record behind
-        /// </summary>
-        public RecordItem()
-        {
-            this.record = null;
-            Year = DateTime.Now.Year;
-            Month = DateTime.Now.Month;
-            Category = new CategoryNode((from c in Core.Instance.Categories where c.Parent != null select c).First());
-            Monthly = true;
         }
 
         public RecordItem(BudgetRecord rec)
         {
             this.record = rec;
-            Update();
             rec.PropertyChanged += (sender, e) =>
             {
                 // Raise all properties changed.
-                Update();
                 OnPropertyChanged(string.Empty);
             };
         }
@@ -253,13 +134,11 @@ namespace ViewModels
                 BudgetRecordEditorViewModel vm = new BudgetRecordEditorViewModel();
                 if (windowService.ShowBudgetRecordEditor(vm) == true)
                 {
-                    RecordItem newRecordItem = vm.BudgetRecord;
-
                     BudgetRecord newRecord;
                     if (Core.Instance.AddRecord(
-                        newRecordItem.Amount, newRecordItem.Category.category,
-                        newRecordItem.Type, newRecordItem.OnDay,
-                        newRecordItem.Month, newRecordItem.Year, out newRecord))
+                        vm.Amount, vm.Category.category,
+                        vm.BudgetType, vm.OnDay,
+                        vm.Month, vm.Year, out newRecord))
                     {
                         if (newRecord.Month == SelectedMonth && newRecord.Year == SelectedYear)
                         {
@@ -275,14 +154,12 @@ namespace ViewModels
             BudgetRecordEditorViewModel vm = new BudgetRecordEditorViewModel(item.record);
             if (windowService.ShowBudgetRecordEditor(vm) == true)
             {
-                RecordItem editedRecordItem = vm.BudgetRecord;
-
                 if (Core.Instance.UpdateRecord(
-                    item.record, editedRecordItem.Amount, editedRecordItem.Category.category,
-                    editedRecordItem.Type, editedRecordItem.OnDay,
-                    editedRecordItem.Month, editedRecordItem.Year))
+                    item.record, vm.Amount, vm.Category.category,
+                    vm.BudgetType, vm.OnDay,
+                    vm.Month, vm.Year))
                 {
-                    if (editedRecordItem.Month != SelectedMonth || editedRecordItem.Year != selectedYear)
+                    if (vm.Month != SelectedMonth || vm.Year != selectedYear)
                     {
                         Records.Remove(item);
                     }
