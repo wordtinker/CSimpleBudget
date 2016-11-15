@@ -5,9 +5,12 @@ using System.Linq;
 
 namespace ViewModels
 {
+    /// <summary>
+    /// Container type for Account.
+    /// </summary>
     public class AccountItem : BindableBase
     {
-        public Account account;
+        internal Account account;
 
         public string Name { get { return account.Name; }}
 
@@ -52,6 +55,12 @@ namespace ViewModels
             get { return account.Balance; }
         }
 
+        /// <summary>
+        /// Flag showing that this AccountItem and Account behind it are
+        /// virtual. Virtual accounts have no real representation
+        /// in the core(DB) and are used for aggregating data
+        /// of several real accounts.
+        /// </summary>
         public bool Aggregated { get; internal set; }
 
         public AccountItem(Account acc)
@@ -59,7 +68,6 @@ namespace ViewModels
             this.account = acc;
         }
     }
-
 
     public class AccountsViewModel : BindableBase
     {

@@ -6,9 +6,15 @@ using System.Linq;
 
 namespace ViewModels
 {
+    /// <summary>
+    /// VM for copy request window.
+    /// </summary>
     public class BudgetManagerCopyRequestViewModel
     {
         public List<string> Months { get; } = DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12).ToList();
+        /// <summary>
+        /// This value is uses as "return" value of copy request.
+        /// </summary>
         public int SelectedMonth
         {
             get
@@ -26,6 +32,9 @@ namespace ViewModels
                 return Enumerable.Range(minYear, 1 + maxYear - minYear);
             }
         }
+        /// <summary>
+        /// This value is used as "return" value of copy request.
+        /// </summary>
         public int SelectedYear { get; set; } = DateTime.Now.Year;
     }
 }

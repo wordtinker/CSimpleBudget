@@ -6,6 +6,9 @@ using System.Linq;
 namespace ViewModels
 {
 
+    /// <summary>
+    /// Simple container for storing Account type object(string).
+    /// </summary>
     public class AccTypeItem
     {
         public string Name { get; }
