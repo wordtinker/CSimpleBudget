@@ -5,9 +5,13 @@ namespace Models
 {
     public class Transaction : BindableBase
     {
+        // Date of the transaction.
         private DateTime date;
+        // Transaction value in decimal 0.00m format.
         private decimal amount;
+        // Textual commentary for the transaction.
         private string info;
+        // Transaction category. Every transaction has a category.
         private Category cat;
 
         public DateTime Date
@@ -31,9 +35,12 @@ namespace Models
             set { SetProperty(ref cat, value); }
         }
 
+        // Unique transaction ID.
         internal int Id { get; }
+        // Corresponding account reference.
         internal Account Account { get; }
 
+        // ctor
         public Transaction(int id, Account acc)
         {
             this.Id = id;

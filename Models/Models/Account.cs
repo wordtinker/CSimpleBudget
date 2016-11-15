@@ -5,12 +5,29 @@ namespace Models
 {
     public class Account : BindableBase
     {
+        // Account name. Name in NOT unique.
         private string name;
+        // Corresponding account type reference. Acc type is of
+        // object type shortened to string type.
         private string accType;
+        // Total sum of all transactions.
         private decimal balance;
+        // Flag "Closed"
+        // Defines if the account is closed. Closed accounts do
+        // not contibute to totals. Closed accounts are considered
+        // in budgeting.
+        // T - Account is closed.
+        // F - Account is opened.
         private bool closed;
+        // Flag "Out of Budget"
+        // Defines if the account is considered in budgeting.
+        // F - Transactions from that account are included in all budget
+        // reports and forecasts.
+        // T - Transactions from that account are excluded from all budget
+        // reports and forecasts.
         private bool excluded;
 
+        // Unique account ID.
         internal int Id { get; set; }
 
         public string Name
@@ -37,11 +54,7 @@ namespace Models
                 SetProperty(ref balance, value);
             }
         }
-        /// <summary>
-        /// Defines if the account is closed. Closed accounts do
-        /// not contibute to totals. Closed accounts are considered
-        /// in budgeting.
-        /// </summary>
+
         public bool Closed
         {
             get { return closed; }
@@ -50,11 +63,7 @@ namespace Models
                 SetProperty(ref closed, value);
             }
         }
-        /// <summary>
-        /// Defines if the account is considered in budgeting.
-        /// Excluded account transactions will not be included in
-        /// any budget report or forecast.
-        /// </summary>
+
         public bool Excluded
         {
             get { return excluded; }

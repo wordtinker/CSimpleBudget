@@ -9,6 +9,7 @@ namespace Models
 {
     public class Core : BindableBase
     {
+        // Singletone instance of the core
         private static readonly Core instance = new Core();
         private FileReader storage;
         private int currentYear = DateTime.Now.Year;
@@ -22,6 +23,12 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Connects to the new instance of fileReader
+        /// and (re)initializes all data of the programm.
+        /// </summary>
+        /// <param name="fileReader"></param>
+        /// <returns></returns>
         public bool InitializeNewFileReader(FileReader fileReader)
         {
             // Release previous storage
@@ -49,14 +56,28 @@ namespace Models
             return true;
         }
 
+        /// <summary>
+        /// Provides a pair of years during which a budget records were set.
+        /// Default is current year.
+        /// </summary>
+        /// <param name="minYear"></param>
+        /// <param name="maxYear"></param>
         public void GetActiveBudgetYears(out int minYear, out int maxYear)
         {
             minYear = storage.GetMinimumYear() ?? DateTime.Today.Year;
             maxYear = storage.GetMaximumYear() ?? DateTime.Today.Year;
         }
 
+        /// <summary>
+        /// Collection of account types.
+        /// </summary>
         public ObservableCollection<string> AccountTypes { get; } = new ObservableCollection<string>();
 
+        /// <summary>
+        /// Adds new account type to acc type collection.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public bool AddAccType(string name)
         {
             if (storage.AddAccType(name))
@@ -70,6 +91,11 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Deletes account type from acc type collection.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public bool DeleteAccType(string name)
         {
             if (storage.DeleteAccType(name))
@@ -83,8 +109,15 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Collection of accounts.
+        /// </summary>
         public BindingList<Account> Accounts { get; } = new BindingList<Account>();
 
+        /// <summary>
+        /// Updates properties of the account.
+        /// </summary>
+        /// <param name="acc"></param>
         public void UpdateAccount(Account acc)
         {
             storage.UpdateAccount(acc);
@@ -93,6 +126,11 @@ namespace Models
             OnPropertyChanged(() => CurrentMonthSpendings);
         }
 
+        /// <summary>
+        /// Adds account to account list.
+        /// </summary>
+        /// <param name="accName"></param>
+        /// <returns></returns>
         public bool AddAccount(string accName)
         {
             string newAccDefaultType = AccountTypes[0];
@@ -108,6 +146,11 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Deletes account from account list.
+        /// </summary>
+        /// <param name="account"></param>
+        /// <returns></returns>
         public bool DeleteAccount(Account account)
         {
             if (storage.DeleteAccount(account))
@@ -121,8 +164,17 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Collection of categories.
+        /// </summary>
         public ObservableCollection<Category> Categories { get; } = new ObservableCollection<Category>();
 
+        /// <summary>
+        /// Adds category to the collection of categories.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="parent"></param>
+        /// <returns></returns>
         public bool AddCategory(string name, Category parent)
         {
             Category newCat;
@@ -137,6 +189,11 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Deletes category from the collection of categories.
+        /// </summary>
+        /// <param name="cat"></param>
+        /// <returns></returns>
         public bool DeleteCategory(Category cat)
         {
             if (storage.DeleteCategory(cat))
@@ -151,11 +208,21 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Provides list of transactions for a given account.
+        /// </summary>
+        /// <param name="selectedAccount"></param>
+        /// <returns></returns>
         public List<Transaction> GetTransactions(Account selectedAccount)
         {
             return storage.SelectTransactions(selectedAccount);
         }
 
+        /// <summary>
+        /// Deletes transaction.
+        /// </summary>
+        /// <param name="transaction"></param>
+        /// <returns></returns>
         public bool DeleteTransaction(Transaction transaction)
         {
             if (storage.DeleteTransaction(transaction))
@@ -173,6 +240,16 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Adds transaction.
+        /// </summary>
+        /// <param name="acc"></param>
+        /// <param name="date"></param>
+        /// <param name="amount"></param>
+        /// <param name="info"></param>
+        /// <param name="category"></param>
+        /// <param name="newTransaction"></param>
+        /// <returns></returns>
         public bool AddTransaction(
             Account acc, DateTime date, decimal amount, string info, Category category, out Transaction newTransaction)
         {
@@ -191,6 +268,14 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Updates properties of the transaction.
+        /// </summary>
+        /// <param name="tr"></param>
+        /// <param name="date"></param>
+        /// <param name="amount"></param>
+        /// <param name="info"></param>
+        /// <param name="category"></param>
         public void UpdateTransaction(Transaction tr, DateTime date, decimal amount, string info, Category category)
         {
             bool updateFlag = (tr.Date.Year == currentYear && tr.Date.Month == currentMonth) ||
@@ -206,7 +291,7 @@ namespace Models
         }
 
         /// <summary>
-        /// 
+        /// Provides list of budget records for a given year and month.
         /// </summary>
         /// <param name="selectedYear"></param>
         /// <param name="selectedMonth">1-based</param>
@@ -216,6 +301,13 @@ namespace Models
             return storage.SelectRecords(selectedYear, selectedMonth);
         }
 
+        /// <summary>
+        /// Copy budget records from one month to another.
+        /// </summary>
+        /// <param name="fromMonth"></param>
+        /// <param name="fromYear"></param>
+        /// <param name="toMonth"></param>
+        /// <param name="toYear"></param>
         public void CopyRecords(int fromMonth, int fromYear, int toMonth, int toYear)
         {
             storage.SelectRecords(fromYear, fromMonth).ForEach((r) =>
@@ -226,6 +318,11 @@ namespace Models
             });
         }
 
+        /// <summary>
+        /// Deletes budget record.
+        /// </summary>
+        /// <param name="record"></param>
+        /// <returns></returns>
         public bool DeleteRecord(BudgetRecord record)
         {
             if (storage.DeleteRecord(record))
@@ -243,6 +340,17 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Adds budget record.
+        /// </summary>
+        /// <param name="amount"></param>
+        /// <param name="category"></param>
+        /// <param name="budgetType"></param>
+        /// <param name="onDay"></param>
+        /// <param name="selectedMonth"></param>
+        /// <param name="selectedYear"></param>
+        /// <param name="newRecord"></param>
+        /// <returns></returns>
         public bool AddRecord(
             decimal amount, Category category, BudgetType budgetType,
             int onDay, int selectedMonth, int selectedYear,
@@ -264,6 +372,17 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Updates properties of the budget record.
+        /// </summary>
+        /// <param name="record"></param>
+        /// <param name="amount"></param>
+        /// <param name="category"></param>
+        /// <param name="budgetType"></param>
+        /// <param name="onDay"></param>
+        /// <param name="selectedMonth"></param>
+        /// <param name="selectedYear"></param>
+        /// <returns></returns>
         public bool UpdateRecord(BudgetRecord record,
             decimal amount, Category category, BudgetType budgetType,
             int onDay, int selectedMonth, int selectedYear)
@@ -285,6 +404,9 @@ namespace Models
             }
         }
 
+        /// <summary>
+        /// Property that holds the list of spendings for current month.
+        /// </summary>
         public List<Spending> CurrentMonthSpendings
         {
             get
@@ -314,7 +436,7 @@ namespace Models
             }
         }
 
+        // Private constructor of the singletone.
         private Core() { /* Empty */ }
-
     }
 }
