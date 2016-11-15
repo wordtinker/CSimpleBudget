@@ -13,7 +13,6 @@ namespace ViewModels
 
     /// <summary>
     /// Container type for budget record.
-    /// TODO refactor + comment.
     /// </summary>
     public class RecordItem : BindableBase
     {
@@ -101,6 +100,9 @@ namespace ViewModels
             }
         }
 
+        /// <summary>
+        /// Clears list of records and loads new list for selected month and year.
+        /// </summary>
         private void UpdateRecords()
         {
             Records.Clear();
@@ -123,6 +125,9 @@ namespace ViewModels
             }
         }
 
+        /// <summary>
+        /// Raises request for editing control for new budget record.
+        /// </summary>
         public void ShowRecordEditor()
         {
             if (Core.Instance.Categories.Count == 0)
@@ -149,6 +154,10 @@ namespace ViewModels
             }
         }
 
+        /// <summary>
+        /// Raises request for editing control for existing budget record.
+        /// </summary>
+        /// <param name="item"></param>
         public void ShowRecordEditor(RecordItem item)
         {
             BudgetRecordEditorViewModel vm = new BudgetRecordEditorViewModel(item.record);
@@ -167,6 +176,10 @@ namespace ViewModels
             }
         }
 
+        /// <summary>
+        /// Raises request for managing control to retrieve month and year 
+        /// amd copy all budget records to selected month and year.
+        /// </summary>
         public ICommand RequestCopyFrom
         {
             get
