@@ -250,10 +250,11 @@ namespace ViewModels
             }
             else
             {
-                RecordItem newRecordItem;
                 BudgetRecordEditorViewModel vm = new BudgetRecordEditorViewModel();
-                if (windowService.ShowBudgetRecordEditor(vm, out newRecordItem))
+                if (windowService.ShowBudgetRecordEditor(vm) == true)
                 {
+                    RecordItem newRecordItem = vm.BudgetRecord;
+
                     BudgetRecord newRecord;
                     if (Core.Instance.AddRecord(
                         newRecordItem.Amount, newRecordItem.Category.category,
@@ -271,10 +272,11 @@ namespace ViewModels
 
         public void ShowRecordEditor(RecordItem item)
         {
-            RecordItem editedRecordItem;
             BudgetRecordEditorViewModel vm = new BudgetRecordEditorViewModel(item.record);
-            if (windowService.ShowBudgetRecordEditor(vm, out editedRecordItem))
+            if (windowService.ShowBudgetRecordEditor(vm) == true)
             {
+                RecordItem editedRecordItem = vm.BudgetRecord;
+
                 if (Core.Instance.UpdateRecord(
                     item.record, editedRecordItem.Amount, editedRecordItem.Category.category,
                     editedRecordItem.Type, editedRecordItem.OnDay,

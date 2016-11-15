@@ -24,7 +24,7 @@
 
     public interface IUIBudgetWindowService
     {
-        bool ShowBudgetRecordEditor(BudgetRecordEditorViewModel vm, out RecordItem newRecordItem);
+        bool? ShowBudgetRecordEditor(BudgetRecordEditorViewModel vm);
         void ShowMessage(string message);
         bool RequestMonthAndYear(out int monthToCopyFrom, out int yearToCopyFrom);
     }
