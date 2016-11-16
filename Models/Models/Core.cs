@@ -419,8 +419,10 @@ namespace Models
 
                 foreach (Category cat in subcats)
                 {
+                    // should be positive
                     decimal budget = Math.Abs(storage.SelectRecordsCombined(currentYear, currentMonth, cat));
                     decimal spent = Math.Abs(storage.SelectTransactionsCombined(currentYear, currentMonth, cat));
+
                     if (budget == 0m && spent == 0m)
                     {
                         continue;

@@ -6,10 +6,13 @@ using System.Linq;
 
 namespace ViewModels
 {
+    /// <summary>
+    /// Container for Category object.
+    /// </summary>
     public class CategoryNode
     {
         private string separator = "--";
-        public Category category;
+        internal Category category;
 
         public string Title { get { return category.Name; } }
         public string FullName
@@ -19,6 +22,7 @@ namespace ViewModels
                 return string.Format("{0}{1}{2}", category.Parent?.Name, separator, category.Name);
             }
         }
+        // Child Category Nodes
         public ObservableCollection<CategoryNode> Items { get; }
 
         public CategoryNode(Category cat)
@@ -31,6 +35,11 @@ namespace ViewModels
             }
         }
 
+        /// <summary>
+        /// Nodes are equal if contained categories are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             var item = obj as CategoryNode;

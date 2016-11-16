@@ -8,10 +8,13 @@ using System;
 
 namespace ViewModels
 {
-    // TODO LATER Enum extension for busget types
+    // TODO LATER Enum extension for budget types
     // TODO LATER localization
     // TODO LATER Move DB to cascade
 
+    /// <summary>
+    /// Container for Spending object.
+    /// </summary>
     public class BudgetBar
     {
         private Spending spending;
@@ -24,6 +27,11 @@ namespace ViewModels
         }
 
         public string Name { get { return category.FullName; } }
+        /// <summary>
+        /// If overspent occured, spent is planned 
+        /// budget.
+        /// if not - spent is actual sum of transactions.
+        /// </summary>
         public decimal Spent
         {
             get
@@ -31,6 +39,11 @@ namespace ViewModels
                 return spending.Value - Overspent;
             }
         }
+        /// <summary>
+        /// If overspent occured, sum to spend is 0m.
+        /// If not - to spend is difference between budget and
+        /// sum of transactions.
+        /// </summary>
         public decimal ToSpend
         {
             get
@@ -38,6 +51,11 @@ namespace ViewModels
                 return spending.Budget - Spent;
             }
         }
+        /// <summary>
+        /// If sum of transactions is greater than budget
+        /// overspent occurs.
+        /// If not - it is 0m.
+        /// </summary>
         public decimal Overspent
         {
             get

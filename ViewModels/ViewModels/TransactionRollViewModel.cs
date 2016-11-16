@@ -5,6 +5,9 @@ using System.Collections.ObjectModel;
 
 namespace ViewModels
 {
+    /// <summary>
+    /// Container for Transaction item.
+    /// </summary>
     public class TransactionItem : BindableBase
     {
         internal Transaction tr;
@@ -93,7 +96,7 @@ namespace ViewModels
                 decimal amount = vm.Amount;
                 string info = vm.Info;
                 CategoryNode catNode = vm.Category;
-
+                // Update transaction.
                 Core.Instance.UpdateTransaction(item.tr, date, amount, info, catNode.category);
             }
         }
