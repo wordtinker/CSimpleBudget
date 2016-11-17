@@ -133,6 +133,9 @@
       <DependentUpon>CategoriesManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindowService.cs" />
+    <Compile Include="Views\Reports\BudgetReport.xaml.cs">
+      <DependentUpon>BudgetReport.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TransactionEditor.xaml.cs">
       <DependentUpon>TransactionEditor.xaml</DependentUpon>
     </Compile>
@@ -176,6 +179,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\Reports\BudgetReport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\TransactionEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

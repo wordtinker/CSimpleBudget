@@ -21,8 +21,11 @@ namespace SimpleBudget
 
         public void ShowBudgetReport()
         {
-            // TODO
-            MessageBox.Show("TODO budget !");
+            BudgetReport window = new BudgetReport();
+            BudgetReportViewModel vm = new BudgetReportViewModel();
+            window.DataContext = vm;
+            window.Owner = mainWindow;
+            window.ShowDialog();
         }
 
         public void ShowMessage(string message)

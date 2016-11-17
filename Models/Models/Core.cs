@@ -411,31 +411,42 @@ namespace Models
         {
             get
             {
-                List<Spending> spendings = new List<Spending>();
-
-                var subcats = from c in Categories
-                              where c.Parent != null
-                              select c;
-
-                foreach (Category cat in subcats)
-                {
-                    // should be positive
-                    decimal budget = Math.Abs(storage.SelectRecordsCombined(currentYear, currentMonth, cat));
-                    decimal spent = Math.Abs(storage.SelectTransactionsCombined(currentYear, currentMonth, cat));
-
-                    if (budget == 0m && spent == 0m)
-                    {
-                        continue;
-                    }
-                    spendings.Add(new Spending
-                    {
-                        Category = cat,
-                        Budget = budget,
-                        Value = spent
-                    });
-                }
-                return spendings;
+                return GetSpendings(currentYear, currentMonth);
             }
+        }
+
+        /// <summary>
+        /// Selects spendings for a given month and year.
+        /// </summary>
+        /// <param name="selectedYear"></param>
+        /// <param name="selectedMonth"></param>
+        /// <returns></returns>
+        public List<Spending> GetSpendings(int selectedYear, int selectedMonth)
+        {
+            List<Spending> spendings = new List<Spending>();
+
+            var subcats = from c in Categories
+                          where c.Parent != null
+                          select c;
+
+            foreach (Category cat in subcats)
+            {
+                // should be positive
+                decimal budget = Math.Abs(storage.SelectRecordsCombined(selectedYear, selectedMonth, cat));
+                decimal spent = Math.Abs(storage.SelectTransactionsCombined(selectedYear, selectedMonth, cat));
+
+                if (budget == 0m && spent == 0m)
+                {
+                    continue;
+                }
+                spendings.Add(new Spending
+                {
+                    Category = cat,
+                    Budget = budget,
+                    Value = spent
+                });
+            }
+            return spendings;
         }
 
         // Private constructor of the singletone.
