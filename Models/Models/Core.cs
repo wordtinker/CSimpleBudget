@@ -218,11 +218,17 @@ namespace Models
             return storage.SelectTransactions(selectedAccount);
         }
 
+        /// <summary>
+        /// Provides list of transactions for a given year,
+        /// month and category.
+        /// </summary>
+        /// <param name="selectedYear"></param>
+        /// <param name="selectedMonth"></param>
+        /// <param name="selectedCategory"></param>
+        /// <returns></returns>
         public List<Transaction> GetTransactions(int selectedYear, int selectedMonth, Category selectedCategory)
         {
-            // TODO Stub
-            Account selectedAccount = Accounts[0];
-            return storage.SelectTransactions(selectedAccount);
+            return storage.SelectTransactions(selectedYear, selectedMonth, selectedCategory);
         }
 
         /// <summary>

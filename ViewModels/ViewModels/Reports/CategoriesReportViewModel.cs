@@ -56,6 +56,7 @@ namespace ViewModels
 
         private void UpdateBars()
         {
+            Transactions.Clear();
             Bars.Clear();
             for (int month = 1; month < 13; month++)
             {
