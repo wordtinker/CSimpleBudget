@@ -7,7 +7,7 @@
         xmlns:datavis="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
         xmlns:chart="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
         mc:Ignorable="d"
-        Title="BudgetReport" Height="300" Width="300">
+        Title="Budget Report" Height="300" Width="300">
     <DockPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
             <Label Content="Month" Margin="0,0,10,0"/>
@@ -17,7 +17,7 @@
             <ComboBox ItemsSource="{Binding Years}" SelectedValue="{Binding SelectedYear}"
                       Width="60"/>
         </StackPanel>
-        <chart:Chart Grid.Column="1" DockPanel.Dock="Top">
+        <chart:Chart DockPanel.Dock="Top">
             <chart:Chart.LegendStyle>
                 <Style TargetType="datavis:Legend">
                     <Setter Property="Width" Value="0" />
