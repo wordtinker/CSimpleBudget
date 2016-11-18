@@ -7,7 +7,7 @@
         xmlns:datavis="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
         xmlns:chart="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
         mc:Ignorable="d"
-        Title="CategoriesReport" Height="300" Width="300">
+        Title="Categories Report" Height="300" Width="600" MinHeight="200" MinWidth="400">
     <DockPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
             <Label Content="Category" Margin="0,0,10,0"/>
@@ -17,7 +17,22 @@
             <ComboBox ItemsSource="{Binding Years}" SelectedValue="{Binding SelectedYear}"
                       Width="60"/>
         </StackPanel>
-        <chart:Chart Grid.Column="1" DockPanel.Dock="Top">
+        <DataGrid DockPanel.Dock="Right" Width="300"
+                  ItemsSource="{Binding Transactions}"
+                  AutoGenerateColumns="False"
+                  SelectionMode="Single"
+                  HeadersVisibility="Column"
+                  GridLinesVisibility="None"
+                  IsReadOnly="True"
+                  BorderThickness="0"
+                  CanUserReorderColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Date" Width="Auto" Binding="{Binding Date, StringFormat=dd/MM/yyyy}"/>
+                <DataGridTextColumn Header="Amount" Width="Auto" Binding="{Binding Value}"/>
+                <DataGridTextColumn Header="Info" Width="*" Binding="{Binding Info}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <chart:Chart DockPanel.Dock="Left">
             <chart:Chart.LegendStyle>
                 <Style TargetType="datavis:Legend">
                     <Setter Property="Width" Value="0" />
@@ -39,6 +54,7 @@
                         <chart:SeriesDefinition.DataPointStyle>
                             <Style TargetType="chart:BarDataPoint">
                                 <Setter Property="Background" Value="Blue"/>
+                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Bar_Click"/>
                             </Style>
                         </chart:SeriesDefinition.DataPointStyle>
                     </chart:SeriesDefinition>
@@ -48,6 +64,7 @@
                         <chart:SeriesDefinition.DataPointStyle>
                             <Style TargetType="chart:BarDataPoint">
                                 <Setter Property="Background" Value="Green"/>
+                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Bar_Click"/>
                             </Style>
                         </chart:SeriesDefinition.DataPointStyle>
                     </chart:SeriesDefinition>
@@ -57,6 +74,7 @@
                         <chart:SeriesDefinition.DataPointStyle>
                             <Style TargetType="chart:BarDataPoint">
                                 <Setter Property="Background" Value="Red"/>
+                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Bar_Click"/>
                             </Style>
                         </chart:SeriesDefinition.DataPointStyle>
                     </chart:SeriesDefinition>

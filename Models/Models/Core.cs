@@ -218,6 +218,13 @@ namespace Models
             return storage.SelectTransactions(selectedAccount);
         }
 
+        public List<Transaction> GetTransactions(int selectedYear, int selectedMonth, Category selectedCategory)
+        {
+            // TODO Stub
+            Account selectedAccount = Accounts[0];
+            return storage.SelectTransactions(selectedAccount);
+        }
+
         /// <summary>
         /// Deletes transaction.
         /// </summary>

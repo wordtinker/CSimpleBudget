@@ -52,6 +52,7 @@ namespace ViewModels
             }
         }
         public ObservableCollection<BudgetBar> Bars { get; } = new ObservableCollection<BudgetBar>();
+        public ObservableCollection<TransactionItem> Transactions { get; } = new ObservableCollection<TransactionItem>();
 
         private void UpdateBars()
         {
@@ -66,6 +67,15 @@ namespace ViewModels
                     }
                 });
             }
+        }
+
+        public void UpdateTransactions(BudgetBar bar)
+        {
+            Transactions.Clear();
+            Core.Instance.GetTransactions(SelectedYear, bar.Month, SelectedCategory.category).ForEach((tr) =>
+            {
+                Transactions.Add(new TransactionItem(tr));
+            });
         }
 
         // ctor

@@ -29,6 +29,7 @@ namespace ViewModels
         }
 
         public string Name { get { return category.FullName; } }
+        public int Month { get { return spending.Month; } }
         public string MonthName { get { return DateTimeFormatInfo.CurrentInfo.MonthNames[spending.Month - 1]; } }
         /// <summary>
         /// If overspent occured, spent is planned 
