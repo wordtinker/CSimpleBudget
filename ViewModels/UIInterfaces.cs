@@ -5,6 +5,7 @@
         void ShowMessage(string message);
         void ShowBudgetReport();
         void ShowBalanceReport();
+        void ShowCategoriesReport();
         void ShowTransactionRoll(AccountItem accItem);
         void ManageAccountTypes();
 		void ManageAccounts();

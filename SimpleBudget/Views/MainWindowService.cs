@@ -28,6 +28,12 @@ namespace SimpleBudget
             window.ShowDialog();
         }
 
+        public void ShowCategoriesReport()
+        {
+            // TODO
+            MessageBox.Show("TODO categories !");
+        }
+
         public void ShowMessage(string message)
         {
             MessageBox.Show(message);

@@ -72,6 +72,7 @@ namespace ViewModels
         private ICommand showHelp;
         private ICommand showBudgetReport;
         private ICommand showBalanceReport;
+        private ICommand showCategoriesReport;
         private ICommand manageAccTypes;
         private ICommand manageAccounts;
         private ICommand manageCategories;
@@ -134,7 +135,23 @@ namespace ViewModels
                 }).ObservesProperty(() => OpenedFile));
             }
         }
-		
+
+        public ICommand ShowCategoriesReport
+        {
+            get
+            {
+                return showCategoriesReport ??
+                (showCategoriesReport = new DelegateCommand(() =>
+                {
+                    windowService.ShowCategoriesReport();
+                }, () =>
+                {
+                    return !string.IsNullOrEmpty(OpenedFile);
+                }).ObservesProperty(() => OpenedFile));
+            }
+        }
+
+
         public ICommand ManageAccTypes
         {
             get

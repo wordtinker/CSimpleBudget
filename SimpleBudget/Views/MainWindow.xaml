@@ -29,6 +29,7 @@
             <MenuItem Header="Reports">
                 <MenuItem Header="Budget" Command="{Binding ShowBudgetReport}"/>
                 <MenuItem Header="Balance" Command="{Binding ShowBalanceReport}"/>
+                <MenuItem Header="Categories" Command="{Binding ShowCategoriesReport}"/>
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_About" Command="{Binding ShowHelp}"/>
