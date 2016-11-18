@@ -30,8 +30,11 @@ namespace SimpleBudget
 
         public void ShowCategoriesReport()
         {
-            // TODO
-            MessageBox.Show("TODO categories !");
+            CategoriesReport window = new CategoriesReport();
+            CategoriesReportViewModel vm = new CategoriesReportViewModel();
+            window.DataContext = vm;
+            window.Owner = mainWindow;
+            window.ShowDialog();
         }
 
         public void ShowMessage(string message)

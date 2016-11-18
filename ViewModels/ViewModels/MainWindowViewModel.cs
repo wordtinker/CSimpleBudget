@@ -5,6 +5,7 @@ using Models;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Globalization;
 
 namespace ViewModels
 {
@@ -20,6 +21,7 @@ namespace ViewModels
         private Spending spending;
         private CategoryNode category;
 
+        // ctor
         public BudgetBar(Spending spending)
         {
             this.spending = spending;
@@ -27,6 +29,7 @@ namespace ViewModels
         }
 
         public string Name { get { return category.FullName; } }
+        public string MonthName { get { return DateTimeFormatInfo.CurrentInfo.MonthNames[spending.Month - 1]; } }
         /// <summary>
         /// If overspent occured, spent is planned 
         /// budget.

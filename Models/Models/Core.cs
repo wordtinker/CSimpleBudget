@@ -443,7 +443,8 @@ namespace Models
                 {
                     Category = cat,
                     Budget = budget,
-                    Value = spent
+                    Value = spent,
+                    Month = selectedMonth
                 });
             }
             return spendings;

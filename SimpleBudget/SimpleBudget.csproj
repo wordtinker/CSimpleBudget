@@ -136,6 +136,9 @@
     <Compile Include="Views\Reports\BudgetReport.xaml.cs">
       <DependentUpon>BudgetReport.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Reports\CategoriesReport.xaml.cs">
+      <DependentUpon>CategoriesReport.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TransactionEditor.xaml.cs">
       <DependentUpon>TransactionEditor.xaml</DependentUpon>
     </Compile>
@@ -180,6 +183,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\Reports\BudgetReport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Reports\CategoriesReport.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

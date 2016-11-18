@@ -1,0 +1,67 @@
+﻿<Window x:Class="SimpleBudget.CategoriesReport"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SimpleBudget"
+        xmlns:datavis="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+        xmlns:chart="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+        mc:Ignorable="d"
+        Title="CategoriesReport" Height="300" Width="300">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+            <Label Content="Category" Margin="0,0,10,0"/>
+            <ComboBox ItemsSource="{Binding Categories}" DisplayMemberPath="FullName" SelectedItem="{Binding SelectedCategory}"
+                      Width="95"/>
+            <Label Content="Year" Margin="10,0,10,0"/>
+            <ComboBox ItemsSource="{Binding Years}" SelectedValue="{Binding SelectedYear}"
+                      Width="60"/>
+        </StackPanel>
+        <chart:Chart Grid.Column="1" DockPanel.Dock="Top">
+            <chart:Chart.LegendStyle>
+                <Style TargetType="datavis:Legend">
+                    <Setter Property="Width" Value="0" />
+                </Style>
+            </chart:Chart.LegendStyle>
+            <chart:Chart.Axes>
+                <chart:LinearAxis Orientation="X" Opacity="0"/>
+            </chart:Chart.Axes>
+            <chart:Chart.PlotAreaStyle>
+                <Style TargetType="Grid">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </chart:Chart.PlotAreaStyle>
+            <chart:Chart.Series>
+                <chart:Stacked100BarSeries>
+                    <chart:SeriesDefinition ItemsSource="{Binding Bars}"
+                                            IndependentValuePath="MonthName"
+                                            DependentValuePath="Spent">
+                        <chart:SeriesDefinition.DataPointStyle>
+                            <Style TargetType="chart:BarDataPoint">
+                                <Setter Property="Background" Value="Blue"/>
+                            </Style>
+                        </chart:SeriesDefinition.DataPointStyle>
+                    </chart:SeriesDefinition>
+                    <chart:SeriesDefinition ItemsSource="{Binding Bars}"
+                                            IndependentValuePath="MonthName"
+                                            DependentValuePath="ToSpend">
+                        <chart:SeriesDefinition.DataPointStyle>
+                            <Style TargetType="chart:BarDataPoint">
+                                <Setter Property="Background" Value="Green"/>
+                            </Style>
+                        </chart:SeriesDefinition.DataPointStyle>
+                    </chart:SeriesDefinition>
+                    <chart:SeriesDefinition ItemsSource="{Binding Bars}"
+                                            IndependentValuePath="MonthName"
+                                            DependentValuePath="Overspent">
+                        <chart:SeriesDefinition.DataPointStyle>
+                            <Style TargetType="chart:BarDataPoint">
+                                <Setter Property="Background" Value="Red"/>
+                            </Style>
+                        </chart:SeriesDefinition.DataPointStyle>
+                    </chart:SeriesDefinition>
+                </chart:Stacked100BarSeries>
+            </chart:Chart.Series>
+        </chart:Chart>
+    </DockPanel>
+</Window>

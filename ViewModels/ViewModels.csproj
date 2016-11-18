@@ -74,6 +74,7 @@
     <Compile Include="ViewModels\CategoriesViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Reports\BudgetReportViewModel.cs" />
+    <Compile Include="ViewModels\Reports\CategoriesReportViewModel.cs" />
     <Compile Include="ViewModels\TransactionEditorViewModel.cs" />
     <Compile Include="ViewModels\TransactionRollViewModel.cs" />
   </ItemGroup>

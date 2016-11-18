@@ -7,7 +7,6 @@
     /// </summary>
     public class Spending
     {
-        // TODO do we need month and year reference?
         // TODO spending for whole year?
 
         public Category Category { get; internal set; }
@@ -15,5 +14,7 @@
         public decimal Budget { get; internal set; }
         // Sum of the transactions.
         public decimal Value { get; internal set; }
+        // Month of the spending
+        public int Month { get; internal set; }
     }
 }
