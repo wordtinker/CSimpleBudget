@@ -36,6 +36,14 @@ namespace ViewModels
             }
         }
 
+        public string Account
+        {
+            get
+            {
+                return tr.Account.Name;
+            }
+        }
+
         public TransactionItem(Transaction tr)
         {
             this.tr = tr;

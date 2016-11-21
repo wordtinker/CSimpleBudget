@@ -38,7 +38,7 @@ namespace Models
         // Unique transaction ID.
         internal int Id { get; }
         // Corresponding account reference.
-        internal Account Account { get; }
+        public Account Account { get; }
 
         // ctor
         public Transaction(int id, Account acc)

@@ -30,6 +30,7 @@
                 <DataGridTextColumn Header="Date" Width="Auto" Binding="{Binding Date, StringFormat=dd/MM/yyyy}"/>
                 <DataGridTextColumn Header="Amount" Width="Auto" Binding="{Binding Value}"/>
                 <DataGridTextColumn Header="Info" Width="*" Binding="{Binding Info}"/>
+                <DataGridTextColumn Header="Account" Width="Auto" Binding="{Binding Account}"/>
             </DataGrid.Columns>
         </DataGrid>
         <chart:Chart DockPanel.Dock="Left">
