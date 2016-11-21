@@ -27,6 +27,8 @@ namespace Models
 
         internal abstract List<Transaction> SelectTransactions(Account acc);
         internal abstract List<Transaction> SelectTransactions(int selectedYear, int selectedMonth, Category selectedCategory);
+        internal abstract DateTime SelectLastTransactionDate(int month, int year);
+        internal abstract decimal SelectTransactionsCombinedUpTo(DateTime date);
         internal abstract decimal SelectTransactionsCombined(int currentYear, int currentMonth, Category cat);
         internal abstract bool DeleteTransaction(Transaction transaction);
         internal abstract bool UpdateTransaction(Transaction tr, DateTime date, decimal amount, string info, Category category);

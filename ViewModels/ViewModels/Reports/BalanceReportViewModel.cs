@@ -74,15 +74,19 @@ namespace ViewModels
         private void UpdateBalance()
         {
             BalanceRecords.Clear();
-            // TODO stub
+
+            DateTime lastTransactionDate;
+            decimal startingBalance = Core.Instance.GetBalanceToDate(SelectedMonth, SelectedYear, out lastTransactionDate);
+            // Add starting balance row
             BalanceRecords.Add(new BalanceItem
             {
-                Date = DateTime.Now,
+                Date = lastTransactionDate,
                 Change = 0m,
-                Total = 2222m,
-                Origin = "Test",
-                Category = "Cat Test"
+                Total = startingBalance,
+                Origin = "Balance",
+                Category = string.Empty
             });
+            // TODO
         }
 
         // ctor

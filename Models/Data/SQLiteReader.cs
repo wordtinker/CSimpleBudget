@@ -683,6 +683,67 @@ namespace Models
         }
 
         /// <summary>
+        /// Provides date of the last in budget account transaction prior to the specified
+        /// month and year.
+        /// </summary>
+        /// <param name="month"></param>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        internal override DateTime SelectLastTransactionDate(int month, int year)
+        {
+            DateTime firstDayOfMonth = new DateTime(year, month, 1);
+            string sql = @"SELECT MAX(date) FROM Transactions as t
+                           INNER JOIN Accounts as a
+                           ON t.acc_id = a.rowid
+                           WHERE date<@firstDay AND exbudget = 0";
+            using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+            {
+                cmd.Parameters.Add(new SQLiteParameter()
+                {
+                    ParameterName = "@firstDay",
+                    DbType = System.Data.DbType.Date,
+                    Value = firstDayOfMonth
+                });
+
+                object result = cmd.ExecuteScalar();
+                if (result == null || result == DBNull.Value)
+                {
+                    // previous day of the month
+                    return firstDayOfMonth.AddSeconds(-1);
+                }
+                else
+                {
+                    return Convert.ToDateTime(result);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns total decimal value of all transactions up to but
+        /// not including specified date.
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        internal override decimal SelectTransactionsCombinedUpTo(DateTime date)
+        {
+            string sql = @"SELECT sum(t.amount) FROM Transactions as t
+                           INNER JOIN Accounts as a
+                           on t.acc_id = a.rowid
+                           WHERE date<@endDate
+                           AND exbudget = 0";
+            using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+            {
+                cmd.Parameters.Add(new SQLiteParameter()
+                {
+                    ParameterName = "@endDate",
+                    DbType = System.Data.DbType.Date,
+                    Value = date
+                });
+                return FromDBValToDecimal(cmd.ExecuteScalar());
+            }
+        }
+
+        /// <summary>
         /// Returns total decimal value of all transactions for specified
         /// year, month and category.
         /// </summary>

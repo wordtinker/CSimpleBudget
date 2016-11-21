@@ -463,6 +463,20 @@ namespace Models
             return spendings;
         }
 
+        /// <summary>
+        /// Provides date of the last account transaction prior to the specified
+        /// month and year and overall account balance after that transaction.
+        /// </summary>
+        /// <param name="selectedMonth"></param>
+        /// <param name="selectedYear"></param>
+        /// <param name="lastTransactionDate"></param>
+        /// <returns></returns>
+        public decimal GetBalanceToDate(int month, int year, out DateTime lastTransactionDate)
+        {
+            lastTransactionDate = storage.SelectLastTransactionDate(month, year);
+            return storage.SelectTransactionsCombinedUpTo(lastTransactionDate.AddDays(1));
+        }
+
         // Private constructor of the singletone.
         private Core() { /* Empty */ }
     }
