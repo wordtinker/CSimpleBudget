@@ -15,8 +15,11 @@ namespace SimpleBudget
 
         public void ShowBalanceReport()
         {
-            // TODO
-            MessageBox.Show("TODO balance !");
+            BalanceReport window = new BalanceReport();
+            BalanceReportViewModel vm = new BalanceReportViewModel();
+            window.DataContext = vm;
+            window.Owner = mainWindow;
+            window.ShowDialog();
         }
 
         public void ShowBudgetReport()
