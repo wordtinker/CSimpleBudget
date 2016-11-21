@@ -623,6 +623,58 @@ namespace Models
         }
 
         /// <summary>
+        /// Selects all transaction for a given month and year.
+        /// </summary>
+        /// <param name="year"></param>
+        /// <param name="month"></param>
+        /// <returns></returns>
+        internal override List<Transaction> SelectTransactions(int year, int month)
+        {
+            DateTime firstDayOfMonth = new DateTime(year, month, 1);
+            DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddSeconds(-1);
+            DateTime lastDayofPrevMonth = firstDayOfMonth.AddSeconds(-1);
+
+            List<Transaction> transactions = new List<Transaction>();
+            string sql = @"SELECT date, amount, info, category_id, t.rowid, t.acc_id FROM Transactions as t
+                           INNER JOIN Accounts as a
+                           on t.acc_id = a.rowid
+                           WHERE date>@startDate and date<=@endDate
+                           AND exbudget = 0
+                           ORDER BY date DESC";
+            using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+            {
+                cmd.Parameters.Add(new SQLiteParameter()
+                {
+                    ParameterName = "@startDate",
+                    DbType = System.Data.DbType.Date,
+                    Value = lastDayofPrevMonth
+                });
+                cmd.Parameters.Add(new SQLiteParameter()
+                {
+                    ParameterName = "@endDate",
+                    DbType = System.Data.DbType.Date,
+                    Value = lastDayOfMonth
+                });
+                SQLiteDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    Account acc = (from a in Core.Instance.Accounts
+                                   where a.Id == dr.GetInt32(5)
+                                   select a).First();
+                    transactions.Add(new Transaction(dr.GetInt32(4), acc)
+                    {
+                        Date = dr.GetDateTime(0),
+                        Amount = FromDBValToDecimal(dr.GetDecimal(1)),
+                        Info = dr.GetString(2),
+                        Category = GetCategoryForId(dr.GetInt32(3))
+                    });
+                }
+                dr.Close();
+            }
+            return transactions;
+        }
+
+        /// <summary>
         /// Selects all transaction for a given month, year and category.
         /// </summary>
         /// <param name="year"></param>

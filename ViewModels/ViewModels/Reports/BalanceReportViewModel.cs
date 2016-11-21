@@ -10,7 +10,6 @@ namespace ViewModels
 {
     public class BalanceItem
     {
-        // TODO dummy
         public DateTime Date { get; set; }
         public decimal Change { get; set; }
         public decimal Total { get; set; }
@@ -86,7 +85,44 @@ namespace ViewModels
                 Origin = "Balance",
                 Category = string.Empty
             });
-            // TODO
+            // Add all transactions for a selected period
+            List<Transaction> transactions = Core.Instance.GetTransactions(SelectedYear, SelectedMonth);
+            transactions.Reverse();
+            foreach (Transaction tr in transactions)
+            {
+                // filter out transaction before the last transaction date
+                if (tr.Date > lastTransactionDate)
+                {
+                    startingBalance += tr.Amount;
+                    BalanceRecords.Add(new BalanceItem
+                    {
+                        Date = tr.Date,
+                        Change = tr.Amount,
+                        Total = startingBalance,
+                        Origin = "Transaction",
+                        Category = (new CategoryNode(tr.Category)).FullName
+                    });
+                }
+            }
+            // Add all predictors for a selected period.
+            DateTime actualDate = DateTime.Today;
+            // Repeat for every month before selected
+            while (actualDate.Month <= SelectedMonth && actualDate.Year <= SelectedYear)
+            {
+                foreach (Prediction pr in Predictor.Predict(actualDate))
+                {
+                    startingBalance += pr.Amount;
+                    BalanceRecords.Add(new BalanceItem
+                    {
+                        Date = pr.Date,
+                        Change = pr.Amount,
+                        Total = startingBalance,
+                        Origin = "Prediction",
+                        Category = (new CategoryNode(pr.Category)).FullName
+                    });
+                }
+                actualDate = actualDate.AddMonths(1);
+            }
         }
 
         // ctor

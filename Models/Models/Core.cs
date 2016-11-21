@@ -232,6 +232,18 @@ namespace Models
         }
 
         /// <summary>
+        /// Provides list of transactions for a given year
+        /// and month.
+        /// </summary>
+        /// <param name="selectedYear"></param>
+        /// <param name="selectedMonth"></param>
+        /// <returns></returns>
+        public List<Transaction> GetTransactions(int selectedYear, int selectedMonth)
+        {
+            return storage.SelectTransactions(selectedYear, selectedMonth);
+        }
+
+        /// <summary>
         /// Deletes transaction.
         /// </summary>
         /// <param name="transaction"></param>
