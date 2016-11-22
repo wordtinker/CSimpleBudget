@@ -77,6 +77,7 @@ namespace ViewModels
             DateTime lastTransactionDate;
             decimal startingBalance = Core.Instance.GetBalanceToDate(SelectedMonth, SelectedYear, out lastTransactionDate);
             // Add starting balance row
+            // TODO !!! bug
             BalanceRecords.Add(new BalanceItem
             {
                 Date = lastTransactionDate,

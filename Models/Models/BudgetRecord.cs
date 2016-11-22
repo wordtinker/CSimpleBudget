@@ -8,8 +8,6 @@ namespace Models
     /// </summary>
     public enum BudgetType
     {
-        // TODO check
-        // TODO description of the timeframe. Budget is expired before date etc.
         Monthly, // One time spending, forecast spending is on the last day of the month
         Point, // One time spending on the specified day of the month
         Daily, // Spending is evenly divided among days of the month

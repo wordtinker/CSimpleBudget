@@ -7,8 +7,6 @@
     /// </summary>
     public class Spending
     {
-        // TODO spending for whole year?
-
         public Category Category { get; internal set; }
         // Sum of the planned budget records.
         public decimal Budget { get; internal set; }
