@@ -64,8 +64,11 @@ namespace Models
         /// <param name="maxYear"></param>
         public void GetActiveBudgetYears(out int minYear, out int maxYear)
         {
+            // Ensure that we set current year if we have no record of year in storage
             minYear = storage.GetMinimumYear() ?? DateTime.Today.Year;
             maxYear = storage.GetMaximumYear() ?? DateTime.Today.Year;
+            // Set current year if budget year is way behind
+            maxYear = Math.Max(maxYear, DateTime.Today.Year);
         }
 
         /// <summary>

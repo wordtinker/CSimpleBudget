@@ -49,7 +49,6 @@ namespace ViewModels
         {
             get
             {
-                // TODO check which years 
                 int minYear, maxYear;
                 Core.Instance.GetActiveBudgetYears(out minYear, out maxYear);
                 return Enumerable.Range(minYear, 1 + maxYear - minYear);

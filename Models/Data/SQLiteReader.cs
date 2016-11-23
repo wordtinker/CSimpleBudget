@@ -1331,40 +1331,77 @@ namespace Models
         /// <returns></returns>
         internal override int? GetMaximumYear()
         {
+            int? maxYearBudget;
             string sql = "SELECT MAX(year) FROM Budget";
             using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
             {
                 object toConvert = cmd.ExecuteScalar();
                 if (Convert.IsDBNull(toConvert))
                 {
-                    return null;
+                    maxYearBudget = null;
                 }
                 else
                 {
-                    return Convert.ToInt32(toConvert);
+                    maxYearBudget = Convert.ToInt32(toConvert);
                 }
             }
+
+            int? maxYearTransaction;
+            sql = "SELECT MAX(Date) FROM Transactions";
+            using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+            {
+                object toConvert = cmd.ExecuteScalar();
+                if (Convert.IsDBNull(toConvert))
+                {
+                    maxYearTransaction = null;
+                }
+                else
+                {
+                    maxYearTransaction = Convert.ToDateTime(toConvert).Year;
+                }
+            }
+
+            return maxYearBudget > maxYearTransaction ? maxYearBudget : maxYearTransaction;
         }
 
         /// <summary>
-        /// Returns the earliest year of the available budget records.
+        /// Returns the earliest year of the available budget records
+        /// or transactions.
         /// </summary>
         /// <returns></returns>
         internal override int? GetMinimumYear()
         {
+            int? minYearBudget;
             string sql = "SELECT MIN(year) FROM Budget";
             using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
             {
                 object toConvert = cmd.ExecuteScalar();
                 if (Convert.IsDBNull(toConvert))
                 {
-                    return null;
+                    minYearBudget = null;
                 }
                 else
                 {
-                    return Convert.ToInt32(toConvert);
+                    minYearBudget =  Convert.ToInt32(toConvert);
                 }
             }
+
+            int? minYearTransaction;
+            sql = "SELECT MIN(Date) FROM Transactions";
+            using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
+            {
+                object toConvert = cmd.ExecuteScalar();
+                if (Convert.IsDBNull(toConvert))
+                {
+                    minYearTransaction = null;
+                }
+                else
+                {
+                    minYearTransaction = Convert.ToDateTime(toConvert).Year;
+                }
+            }
+
+            return minYearTransaction < minYearBudget ? minYearTransaction : minYearBudget;
         }
 
         /************** File *****************/
