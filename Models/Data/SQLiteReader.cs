@@ -761,7 +761,7 @@ namespace Models
                 if (result == null || result == DBNull.Value)
                 {
                     // previous day of the month
-                    return firstDayOfMonth.AddSeconds(-1);
+                    return firstDayOfMonth.AddDays(-1);
                 }
                 else
                 {
