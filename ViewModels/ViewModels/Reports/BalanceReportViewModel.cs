@@ -13,6 +13,7 @@ namespace ViewModels
         public DateTime Date { get; set; }
         public decimal Change { get; set; }
         public decimal Total { get; set; }
+        public bool IsNegative { get { return Total < 0; } }
         public string Origin { get; set; }
         public string Category { get; set; }
     }

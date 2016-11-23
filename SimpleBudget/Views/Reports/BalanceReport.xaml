@@ -25,6 +25,15 @@
                   BorderThickness="0"
                   CanUserReorderColumns="False"
                   CanUserSortColumns="False">
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsNegative}" Value="True">
+                            <Setter Property="Background" Value="LightPink" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Date" Width="Auto" Binding="{Binding Date, StringFormat=dd/MM/yyyy}"/>
                 <DataGridTextColumn Header="Change" Width="Auto" Binding="{Binding Change, StringFormat=F}"/>
