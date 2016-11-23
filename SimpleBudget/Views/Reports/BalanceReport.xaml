@@ -27,8 +27,8 @@
                   CanUserSortColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Date" Width="Auto" Binding="{Binding Date, StringFormat=dd/MM/yyyy}"/>
-                <DataGridTextColumn Header="Change" Width="Auto" Binding="{Binding Change}"/>
-                <DataGridTextColumn Header="Total" Width="Auto" Binding="{Binding Total}"/>
+                <DataGridTextColumn Header="Change" Width="Auto" Binding="{Binding Change, StringFormat=F}"/>
+                <DataGridTextColumn Header="Total" Width="Auto" Binding="{Binding Total, StringFormat=F}"/>
                 <DataGridTextColumn Header="Origin" Width="Auto" Binding="{Binding Origin}"/>
                 <DataGridTextColumn Header="Category" Width="*" Binding="{Binding Category}"/>
             </DataGrid.Columns>
