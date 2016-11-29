@@ -106,8 +106,10 @@ namespace ViewModels
             }
             // Add all predictors for a selected period.
             DateTime actualDate = DateTime.Today;
+            DateTime futureDate = new DateTime(SelectedYear, SelectedMonth,
+                DateTime.DaysInMonth(SelectedYear, SelectedMonth));
             // Repeat for every month before selected
-            while (actualDate.Month <= SelectedMonth && actualDate.Year <= SelectedYear)
+            while (actualDate <= futureDate)
             {
                 foreach (Prediction pr in Predictor.Predict(actualDate))
                 {

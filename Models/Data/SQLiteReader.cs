@@ -743,25 +743,25 @@ namespace Models
         /// <returns></returns>
         internal override DateTime SelectLastTransactionDate(int month, int year)
         {
-            DateTime firstDayOfMonth = new DateTime(year, month, 1);
+            DateTime lastDayOfMonth = new DateTime(year, month, 1).AddDays(-1);
             string sql = @"SELECT MAX(date) FROM Transactions as t
                            INNER JOIN Accounts as a
                            ON t.acc_id = a.rowid
-                           WHERE date<@firstDay AND exbudget = 0";
+                           WHERE date<=@firstDay AND exbudget = 0";
             using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
             {
                 cmd.Parameters.Add(new SQLiteParameter()
                 {
                     ParameterName = "@firstDay",
                     DbType = System.Data.DbType.Date,
-                    Value = firstDayOfMonth
+                    Value = lastDayOfMonth
                 });
 
                 object result = cmd.ExecuteScalar();
                 if (result == null || result == DBNull.Value)
                 {
                     // previous day of the month
-                    return firstDayOfMonth.AddDays(-1);
+                    return lastDayOfMonth;
                 }
                 else
                 {
@@ -781,7 +781,7 @@ namespace Models
             string sql = @"SELECT sum(t.amount) FROM Transactions as t
                            INNER JOIN Accounts as a
                            on t.acc_id = a.rowid
-                           WHERE date<@endDate
+                           WHERE date<=@endDate
                            AND exbudget = 0";
             using (SQLiteCommand cmd = new SQLiteCommand(sql, connection))
             {

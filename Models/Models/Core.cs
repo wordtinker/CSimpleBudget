@@ -489,7 +489,7 @@ namespace Models
         public decimal GetBalanceToDate(int month, int year, out DateTime lastTransactionDate)
         {
             lastTransactionDate = storage.SelectLastTransactionDate(month, year);
-            return storage.SelectTransactionsCombinedUpTo(lastTransactionDate.AddDays(1));
+            return storage.SelectTransactionsCombinedUpTo(lastTransactionDate);
         }
 
         // Private constructor of the singletone.
