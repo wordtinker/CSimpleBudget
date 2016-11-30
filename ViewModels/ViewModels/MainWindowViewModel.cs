@@ -87,12 +87,30 @@ namespace ViewModels
         private ICommand openFile;
         private string openedFile;
 
+        /// <summary>
+        /// Property showing that we have enough
+        /// info for reports.
+        /// </summary>
+        public bool CanShowReport
+        {
+            get
+            {
+                bool catExists = (from c in core.Categories
+                                  where c.Parent != null
+                                  select c).Any();
+                return !string.IsNullOrEmpty(OpenedFile) && catExists;
+            }
+        }
+
         public string OpenedFile
         {
             get { return openedFile; }
             set
             {
-                SetProperty(ref openedFile, value);
+               if (SetProperty(ref openedFile, value))
+                {
+                    OnPropertyChanged(() => CanShowReport);
+                }
             }
         }
 
@@ -120,8 +138,8 @@ namespace ViewModels
                     windowService.ShowBudgetReport();
                 }, () =>
                 {
-                    return !string.IsNullOrEmpty(OpenedFile);
-                }).ObservesProperty(() => OpenedFile));
+                    return CanShowReport;
+                }).ObservesProperty(() => CanShowReport));
             }
         }
 
@@ -135,8 +153,8 @@ namespace ViewModels
                     windowService.ShowBalanceReport();
                 }, () =>
                 {
-                    return !string.IsNullOrEmpty(OpenedFile);
-                }).ObservesProperty(() => OpenedFile));
+                    return CanShowReport;
+                }).ObservesProperty(() => CanShowReport));
             }
         }
 
@@ -150,8 +168,8 @@ namespace ViewModels
                     windowService.ShowCategoriesReport();
                 }, () =>
                 {
-                    return !string.IsNullOrEmpty(OpenedFile);
-                }).ObservesProperty(() => OpenedFile));
+                    return CanShowReport;
+                }).ObservesProperty(() => CanShowReport));
             }
         }
 
@@ -393,6 +411,10 @@ namespace ViewModels
             core.Accounts.ListChanged += (sender, e) =>
             {
                 OnPropertyChanged(() => Accounts);
+            };
+            core.Categories.CollectionChanged += (sender, r) =>
+            {
+                OnPropertyChanged(() => CanShowReport);
             };
             core.PropertyChanged += (sender, e) =>
             {
