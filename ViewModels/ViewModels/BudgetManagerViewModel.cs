@@ -130,25 +130,18 @@ namespace ViewModels
         /// </summary>
         public void ShowRecordEditor()
         {
-            if (Core.Instance.Categories.Count == 0)
+            BudgetRecordEditorViewModel vm = new BudgetRecordEditorViewModel();
+            if (windowService.ShowBudgetRecordEditor(vm) == true)
             {
-                windowService.ShowMessage("Set categories first!");
-            }
-            else
-            {
-                BudgetRecordEditorViewModel vm = new BudgetRecordEditorViewModel();
-                if (windowService.ShowBudgetRecordEditor(vm) == true)
+                BudgetRecord newRecord;
+                if (Core.Instance.AddRecord(
+                    vm.Amount, vm.Category.category,
+                    vm.BudgetType, vm.OnDay,
+                    vm.Month, vm.Year, out newRecord))
                 {
-                    BudgetRecord newRecord;
-                    if (Core.Instance.AddRecord(
-                        vm.Amount, vm.Category.category,
-                        vm.BudgetType, vm.OnDay,
-                        vm.Month, vm.Year, out newRecord))
+                    if (newRecord.Month == SelectedMonth && newRecord.Year == SelectedYear)
                     {
-                        if (newRecord.Month == SelectedMonth && newRecord.Year == SelectedYear)
-                        {
-                            Records.Add(new RecordItem(newRecord));
-                        }
+                        Records.Add(new RecordItem(newRecord));
                     }
                 }
             }

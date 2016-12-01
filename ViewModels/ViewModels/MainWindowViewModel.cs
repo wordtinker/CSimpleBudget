@@ -236,8 +236,8 @@ namespace ViewModels
                     windowService.ManageBudget();
                 }, () =>
                 {
-                    return !string.IsNullOrEmpty(OpenedFile);
-                }).ObservesProperty(() => OpenedFile));
+                    return CanShowReport;
+                }).ObservesProperty(() => CanShowReport));
             }
         }
 
