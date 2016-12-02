@@ -336,7 +336,7 @@ namespace ViewModels
         {
             if (item.Aggregated == false)
             {
-                if (core.Categories.Count == 0)
+                if (!CanShowReport)
                 {
                     windowService.ShowMessage("Set categories first!");
                 }
