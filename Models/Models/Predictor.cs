@@ -56,6 +56,7 @@ namespace Models
                         Spending spending =
                             Core.Instance.GetSpendings(date.Year, date.Month)
                             .Where((s) => s.Category == record.Category)
+                            .DefaultIfEmpty(new Spending {Budget = 0m, Value = 0m})
                             .First();
                         // Spending are abs values, have to make budget record abs too.
                         decimal absAmount = Math.Abs(record.Amount);
