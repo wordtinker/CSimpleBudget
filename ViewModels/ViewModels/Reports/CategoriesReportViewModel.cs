@@ -83,6 +83,7 @@ namespace ViewModels
         {
             Categories = (from c in Core.Instance.Categories
                          where c.Parent != null
+                         orderby c.Parent.Name, c.Name
                          select new CategoryNode(c)).ToList();
             SelectedCategory = Categories[0];
             UpdateBars();

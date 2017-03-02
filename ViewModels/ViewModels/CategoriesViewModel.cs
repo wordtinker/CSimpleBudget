@@ -29,7 +29,7 @@ namespace ViewModels
         {
             category = cat;
             Items = new ObservableCollection<CategoryNode>();
-            foreach (Category item in cat.Children)
+            foreach (Category item in cat.Children.OrderBy(c => c.Name))
             {
                 Items.Add(new CategoryNode(item));
             }
