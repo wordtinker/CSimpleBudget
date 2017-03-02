@@ -381,7 +381,7 @@ namespace ViewModels
 
         public void LoadLastOpenedFile()
         {
-            string fileName = windowService.GetConfig("LastFile");
+            string fileName = windowService.LastSavedFileName;
             if (fileName != string.Empty)
             {
                 FileReader fileHandler = new SQLiteReader();
@@ -400,7 +400,7 @@ namespace ViewModels
         public void SaveLastOpenedFile(string fileName)
         {
             OpenedFile = fileName;
-            windowService.SetConfig("LastFile", fileName);
+            windowService.LastSavedFileName = fileName;
         }
 
         // ctor

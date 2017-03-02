@@ -12,8 +12,7 @@
 		void ManageCategories();
 		void ManageBudget();
         void Shutdown();
-        void SetConfig(string key, string value);
-        string GetConfig(string key);
+        string LastSavedFileName { get; set; }
         string SaveFileDialog(string fileExtension);
         string OpenFileDialog(string fileExtension);
     }

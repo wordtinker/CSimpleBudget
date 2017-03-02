@@ -125,14 +125,16 @@ namespace SimpleBudget
             }
         }
 
-        public void SetConfig(string key, string value)
+        public string LastSavedFileName
         {
-            Config.AddUpdateConfig(key, value);
-        }
-
-        public string GetConfig(string key)
-        {
-            return Config.ReadSetting(key);
+            get
+            {
+                return Config.RetrieveFileName();
+            }
+            set
+            {
+                Config.StoreFileName(value);
+            }
         }
     }
 }

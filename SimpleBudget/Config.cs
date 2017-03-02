@@ -1,40 +1,44 @@
-﻿using System.Configuration;
+﻿using System;
+using System.IO;
 
 namespace SimpleBudget
 {
     static class Config
     {
-        public static string ReadSetting(string key)
+        private const string CONFIG = "app.config";
+        private const string APPDIR = "SimpleBudget";
+        private static string path = string.Empty;
+
+        static Config()
         {
             try
             {
-                var appSettings = ConfigurationManager.AppSettings;
-                return appSettings[key] ?? string.Empty;
+                string dirPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), APPDIR);
+                Directory.CreateDirectory(dirPath);
+                path = Path.Combine(dirPath, CONFIG);
             }
-            catch (ConfigurationErrorsException)
+            catch (Exception) { }
+        }
+
+        public static string RetrieveFileName()
+        {
+            try
+            {
+                return File.ReadAllLines(path)[0];
+            }
+            catch (Exception)
             {
                 return string.Empty;
             }
         }
 
-        public static void AddUpdateConfig(string key, string value)
+        public static void StoreFileName(string fileName)
         {
             try
             {
-                Configuration configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                var settings = configFile.AppSettings.Settings;
-                if (settings[key] == null)
-                {
-                    settings.Add(key, value);
-                }
-                else
-                {
-                    settings[key].Value = value;
-                }
-                configFile.Save(ConfigurationSaveMode.Modified);
-                ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
+                File.WriteAllText(path, fileName);
             }
-            catch (System.Exception) { }
+            catch (Exception) { }
         }
     }
 }
