@@ -94,7 +94,7 @@ namespace ViewModels
         {
             Core.Instance.Accounts.ListChanged += (sender, e) =>
             {
-                OnPropertyChanged(() => Accounts);
+                RaisePropertyChanged(nameof(Accounts));
             };
         }
     }

@@ -49,7 +49,7 @@ namespace ViewModels
             this.tr = tr;
             tr.PropertyChanged += (sender, e) => {
                 // Raise all properties changed.
-                OnPropertyChanged(string.Empty);
+                RaisePropertyChanged(string.Empty);
             };
         }
     }

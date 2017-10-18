@@ -109,7 +109,7 @@ namespace ViewModels
             {
                if (SetProperty(ref openedFile, value))
                 {
-                    OnPropertyChanged(() => CanShowReport);
+                    RaisePropertyChanged(nameof(CanShowReport));
                 }
             }
         }
@@ -410,17 +410,17 @@ namespace ViewModels
             core = Core.Instance;
             core.Accounts.ListChanged += (sender, e) =>
             {
-                OnPropertyChanged(() => Accounts);
+                RaisePropertyChanged(nameof(Accounts));
             };
             core.Categories.CollectionChanged += (sender, r) =>
             {
-                OnPropertyChanged(() => CanShowReport);
+                RaisePropertyChanged(nameof(CanShowReport));
             };
             core.PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName == "CurrentMonthSpendings")
                 {
-                    OnPropertyChanged(() => Bars);
+                    RaisePropertyChanged(nameof(Bars));
                 }
             };
             LoadLastOpenedFile();

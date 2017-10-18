@@ -44,7 +44,7 @@ namespace ViewModels
         {
             Core.Instance.AccountTypes.CollectionChanged += (sender, e) =>
             {
-                OnPropertyChanged(() => AccTypes);
+                RaisePropertyChanged(nameof(AccTypes));
             };
         }
     }

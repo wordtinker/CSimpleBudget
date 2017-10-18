@@ -52,7 +52,7 @@ namespace Models
                     return false;
                 }
             }
-            OnPropertyChanged(() => CurrentMonthSpendings);
+            RaisePropertyChanged(nameof(CurrentMonthSpendings));
             return true;
         }
 
@@ -126,7 +126,7 @@ namespace Models
             storage.UpdateAccount(acc);
 
             // exbudget on/off could change spending view 
-            OnPropertyChanged(() => CurrentMonthSpendings);
+            RaisePropertyChanged(nameof(CurrentMonthSpendings));
         }
 
         /// <summary>
@@ -258,7 +258,7 @@ namespace Models
                 if (transaction.Date.Year == currentYear && transaction.Date.Month == currentMonth)
                 {
                     // Spending table has changed
-                    OnPropertyChanged(() => CurrentMonthSpendings);
+                    RaisePropertyChanged(nameof(CurrentMonthSpendings));
                 }
                 return true;
             }
@@ -286,7 +286,7 @@ namespace Models
                 if (newTransaction.Date.Year == currentYear && newTransaction.Date.Month == currentMonth)
                 {
                     // Spending table has changed
-                    OnPropertyChanged(() => CurrentMonthSpendings);
+                    RaisePropertyChanged(nameof(CurrentMonthSpendings));
                 }
                 return true;
             }
@@ -313,7 +313,7 @@ namespace Models
                 if (updateFlag)
                 {
                     // Spending table has changed
-                    OnPropertyChanged(() => CurrentMonthSpendings);
+                    RaisePropertyChanged(nameof(CurrentMonthSpendings));
                 }
             }
         }
@@ -358,7 +358,7 @@ namespace Models
                 if (record.Month == currentMonth && record.Year == currentYear)
                 {
                     // Spending table has changed
-                    OnPropertyChanged(() => CurrentMonthSpendings);
+                    RaisePropertyChanged(nameof(CurrentMonthSpendings));
                 }
                 return true;
             }
@@ -390,7 +390,7 @@ namespace Models
                 if (newRecord.Month == currentMonth && newRecord.Year == currentYear)
                 {
                     // Spending table has changed
-                    OnPropertyChanged(() => CurrentMonthSpendings);
+                    RaisePropertyChanged(nameof(CurrentMonthSpendings));
                 }
                 return true;
             }
@@ -422,7 +422,7 @@ namespace Models
                 if (updateFlag)
                 {
                     // Spending table has changed
-                    OnPropertyChanged(() => CurrentMonthSpendings);
+                    RaisePropertyChanged(nameof(CurrentMonthSpendings));
                 }
                 return true;
             }

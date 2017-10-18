@@ -78,7 +78,7 @@ namespace ViewModels
         {
             Core.Instance.Categories.CollectionChanged += (sender, e) =>
             {
-                OnPropertyChanged(() => Categories);
+                RaisePropertyChanged(nameof(Categories));
             };
         }
     }

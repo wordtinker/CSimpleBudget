@@ -43,7 +43,7 @@ namespace ViewModels
             rec.PropertyChanged += (sender, e) =>
             {
                 // Raise all properties changed.
-                OnPropertyChanged(string.Empty);
+                RaisePropertyChanged(string.Empty);
             };
         }
     }
