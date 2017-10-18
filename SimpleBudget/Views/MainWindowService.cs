@@ -129,6 +129,7 @@ namespace SimpleBudget
         {
             get
             {
+                // Fetch filename from config file, it could be empty.
                 return Properties.Settings.Default.FileName;
             }
             set
