@@ -129,11 +129,12 @@ namespace SimpleBudget
         {
             get
             {
-                return Config.RetrieveFileName();
+                return Properties.Settings.Default.FileName;
             }
             set
             {
-                Config.StoreFileName(value);
+                Properties.Settings.Default.FileName = value;
+                Properties.Settings.Default.Save();
             }
         }
     }

@@ -112,7 +112,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Config.cs" />
     <Compile Include="Views\AccountsManager.xaml.cs">
       <DependentUpon>AccountsManager.xaml</DependentUpon>
     </Compile>
